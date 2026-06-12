@@ -12,7 +12,9 @@ const FRACTIONS_DATA = {
     ufsb: {
         name: "УФСБ",
         description: "Федеральная служба безопасности — обеспечение государственной безопасности, борьба с терроризмом и экстремизмом.",
-        color: "#2c3e50"
+        color: "#2c3e50",
+        // УФСБ теперь имеет свою отдельную страницу
+        hasCustomPage: true
     },
     pravitelstvo: {
         name: "Правительство",
@@ -84,14 +86,31 @@ const FractionsManager = {
     renderSimpleFraction(container, fractionId) {
         const fraction = this.getFractionById(fractionId);
         if (fraction) {
+            // Если у фракции есть кастомная страница, показываем сообщение о редиректе
+            if (fraction.hasCustomPage) {
+                container.innerHTML = `
+                    <div class="info-block" style="text-align: center; padding: 40px;">
+                        <i class="fas fa-arrow-right" style="font-size: 48px; color: var(--accent); margin-bottom: 20px; display: inline-block;"></i>
+                        <h3 style="margin-bottom: 10px;">Страница фракции была обновлена</h3>
+                        <p style="margin-bottom: 20px;">Вы будете перенаправлены на актуальную страницу через несколько секунд...</p>
+                        <a href="fraction-ufsb.html" class="about-site-btn" style="display: inline-block; padding: 10px 25px; background: var(--accent); color: #fff; border-radius: 8px; text-decoration: none;">Перейти сейчас →</a>
+                    </div>
+                `;
+                // Автоматический редирект через 2 секунды
+                setTimeout(() => {
+                    window.location.href = 'fraction-ufsb.html';
+                }, 2000);
+                return;
+            }
+            
             container.innerHTML = `
                 <h1 class="page-title">${escapeHtml(fraction.name)}</h1>
                 <div class="info-block">
-                    <h3>📋 О фракции</h3>
+                    <h3>О фракции</h3>
                     <p>${escapeHtml(fraction.description)}</p>
                 </div>
                 <div class="info-block">
-                    <h3>📌 Подробная информация</h3>
+                    <h3>Подробная информация</h3>
                     <p>Страница данной фракции находится в разработке. Следите за обновлениями!</p>
                     <ul class="info-list">
                         <li>Данные о требованиях скоро появятся</li>
@@ -105,7 +124,7 @@ const FractionsManager = {
         }
     },
     
-        renderArmyFraction(container, level = 3) {
+    renderArmyFraction(container, level = 3) {
         const army = ARMY_DATA;
         
         // Функция для расчета зарплаты с учетом выслуги
@@ -192,6 +211,7 @@ const FractionsManager = {
         
         container.innerHTML = `
             <h1 class="page-title">${army.name}</h1>
+			<p class="page-subtitle"></p>
             <div class="info-block"><p>${army.description}</p></div>
             
             <div class="info-block">
@@ -309,7 +329,6 @@ const FractionsManager = {
         this.init3DSystem(uniforms);
     },
    
-	
     // Инициализация 3D системы
     init3DSystem(uniforms) {
         // Загружаем скрипты динамически
@@ -334,17 +353,17 @@ const FractionsManager = {
     },
     
     setup3DScene(uniforms) {
-		const originalConsoleLog = console.log;
-		console.log = function(...args) {
-			// Пропускаем сообщения от dff-loader
-			if (args[0] && typeof args[0] === 'string' && 
-				(args[0].includes('TXDLoader') || 
-				 args[0].includes('DFFLoader') ||
-				 args[0].includes('Triangle'))) {
-				return;
-			}
-			originalConsoleLog.apply(console, args);
-		};
+        const originalConsoleLog = console.log;
+        console.log = function(...args) {
+            // Пропускаем сообщения от dff-loader
+            if (args[0] && typeof args[0] === 'string' && 
+                (args[0].includes('TXDLoader') || 
+                 args[0].includes('DFFLoader') ||
+                 args[0].includes('Triangle'))) {
+                return;
+            }
+            originalConsoleLog.apply(console, args);
+        };
         
         const container = document.getElementById('uniform3dContainer');
         if (!container) return;
@@ -497,7 +516,7 @@ const FractionsManager = {
             
             try {
                 const dffUrl = `../models/uniforms/army/${uniformFile}.dff`;
-				const txdUrl = `../models/uniforms/army/${uniformFile}.txd`;	
+                const txdUrl = `../models/uniforms/army/${uniformFile}.txd`;    
                 
                 const dffResponse = await fetch(dffUrl);
                 if (!dffResponse.ok) throw new Error(`DFF файл не найден: ${uniformFile}.dff`);

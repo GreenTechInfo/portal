@@ -749,7 +749,367 @@ const SYSTEMS_DATA = [
 				}
 			]
 		}
-	}
+	},
+	
+	{
+		id: "business",
+		name: "Система бизнесов",
+		icon: "fa-store",
+		color: "#06b6d4",
+		description: "Управление собственным делом: покупка, продажа, ценообразование и финансы",
+		details: {
+			overview: `<p>На сервере GreenTech RP вы можете приобрести собственный бизнес и стать предпринимателем. Управление бизнесом открывает возможности для заработка, взаимодействия с игроками и развития собственного дела.</p>
+			<p>Управление бизнесом осуществляется через специальное меню, которое вызывается у чекпоинта бизнеса.</p>
+			<div style="margin: 16px 0; text-align: center;">
+				${renderImage("../images/systems/business/business_menu.png", null, "450px")}
+			</div>`,
+			
+			sections: [
+				{
+					title: "Закрыть/открыть дверь",
+					icon: "fa-door-closed",
+					content: `<p>С помощью данного пункта Вы можете закрыть свой бизнес на время. Когда бизнес закрыт, игроки не могут заходить внутрь и пользоваться его услугами.</p>`
+				},
+				{
+					title: "Продажа бизнеса",
+					icon: "fa-hand-holding-usd",
+					content: `<p>Существует два способа продать бизнес:</p>
+					<ul class="info-list">
+						<li><strong>Продажа государству</strong> — вы получите 50% от государственной цены бизнеса. Для этого выберите пункт "Продать государству" в меню бизнеса.</li>
+					</ul>
+					${renderImage("../images/systems/business/sell_to_state.png", null, "450px")}
+					<ul class="info-list">
+						<li><strong>Продажа другому игроку</strong> — возможна только через нотариуса.</li>
+					</ul>
+					<p><strong>Как найти нотариуса:</strong> <code>/gps → 19. Найти ближайшего нотариуса</code></p>
+					${renderImage("../images/systems/business/notary_gps.png", null, "450px")}
+					<p>У нотариуса Вы можете продать свой бизнес другому игроку, либо же обменять на другой бизнес.</p>
+					<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
+						${renderImage("../images/systems/business/notary_interior.png", null, "600px")}
+						${renderImage("../images/systems/business/notary_menu.png", null, "350px")}
+					</div>`,
+					commands: [
+						{ cmd: "/gps → 19", desc: "Найти ближайшего нотариуса" }
+					]
+				},
+				{
+					title: "Установка цен на товары",
+					icon: "fa-tags",
+					content: `<p>С помощью данного пункта Вы можете установить свои расценки на продаваемый товар. Это позволяет гибко подходить к ценообразованию в зависимости от рыночной ситуации.</p>
+					${renderImage("../images/systems/business/set_prices.png", null, "450px")}`,
+					steps: [
+						"Откройте меню бизнеса через чекпоинт",
+						'Выберите пункт "Поставить свои цены"',
+						"В появившемся окне введите желаемую цену для каждого товара",
+						'Нажмите "Сохранить" для применения изменений'
+					]
+				},
+				{
+					title: "Налоги на бизнес",
+					icon: "fa-file-invoice-dollar",
+					content: `<p>Оплата налогов за бизнес доступна через банковские терминалы (подробнее в разделе "<a href="systems.html#atm" target="_blank" style="color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);">Система банкоматов</a>").</p>
+					<p>Своевременная оплата налогов позволяет избежать штрафов и проблем с бизнесом.</p>`
+				},
+				{
+					title: "Финансы бизнеса (Банк)",
+					icon: "fa-university",
+					content: `<p>С помощью данного пункта Вы можете узнать баланс Вашего бизнеса и снять с него деньги.</p>
+					${renderImage("../images/systems/business/business_bank.png", null, "450px")}`,
+					steps: [
+						"Откройте меню бизнеса",
+						'Выберите пункт "Банк"',
+						"Вы увидите текущий баланс бизнеса",
+						"Введите сумму для снятия и подтвердите действие"
+					]
+				},
+				{
+					title: "Статистика бизнеса",
+					icon: "fa-chart-simple",
+					content: `<p>С помощью статистики можно получить полную информацию о бизнесе:</p>
+					<ul class="info-list">
+						<li><strong>Тип бизнеса</strong> — какая деятельность осуществляется</li>
+						<li><strong>Банк бизнеса</strong> — текущий баланс на счёте</li>
+						<li><strong>Оплаченный налог</strong> — до какой даты оплачен налог</li>
+						<li><strong>Количество товара</strong> — остаток товара на складе</li>
+						<li><strong>Посетителей за последний час</strong> — статистика посещаемости</li>
+					</ul>
+					${renderImage("../images/systems/business/business_stats.png", null, "450px")}`,
+					commands: [
+						{ cmd: "/bizzmenu", desc: "Открыть меню управления бизнесом" }
+					]
+				}
+			]
+		}
+	},
+
+	    {
+        id: "phone",
+        name: "Система телефона",
+        icon: "fa-mobile-alt",
+        color: "#ec4899",
+        description: "Звонки, СМС, контакты, электронная почта, GreenShop, BoxBet и оплата штрафов через QR",
+        details: {
+            overview: `<p>На сервере GreenTech RP имеется полноценная система смартфона, с помощью которой вы можете совершать звонки, отправлять СМС-сообщения, добавлять контакты, пользоваться электронной почтой, проверять автомобили через GreenShop, делать ставки в BoxBet и даже оплачивать штрафы через QR-код.</p>
+            <div style="text-align: center; margin: 16px 0;">
+                ${renderImage("../images/systems/phone/phone_interface.png", null, "300px")}
+            </div>
+            <p><strong>Как открыть телефон:</strong> Используйте команду <code>/phone</code> или клавишу U.</p>`,
+
+            sections: [
+                {
+                    title: "Контакты",
+                    icon: "fa-address-book",
+                    content: `<p>Приложение "Контакты" позволяет сохранять номера телефонов других игроков для быстрого доступа к звонкам и сообщениям.</p>
+                    ${renderImage("../images/systems/phone/contacts_icon.png", null, "300px")}
+                    <p><strong>Добавление контакта:</strong></p>
+                    <ul class="info-list">
+                        <li>Нажмите на иконку приложения «Контакты».</li>
+                        <li>В открывшемся приложении нажмите на значок «+» в правом верхнем углу.</li>
+                    </ul>
+					
+					<ul class="info-list">
+                        <li>Заполните карточку контакта — введите имя и номер телефона.</li>
+                        <li>Нажмите кнопку «Готово» в правом верхнем углу. Контакт будет сохранен.</li>
+                    </ul>
+					<p>ㅤ</p>
+                    <p><strong>Редактирование или удаление контакта:</strong></p>
+                    <ul class="info-list">
+                        <li>Откройте приложение «Контакты» и выберите нужный контакт.</li>
+                        <li>В правом верхнем углу нажмите кнопку «Править».</li>
+                        <li>Для редактирования — измените поля и нажмите «Готово».</li>
+						<li>Для удаления — нажмите «Удалить контакт» и подтвердите действие.</li>
+                    </ul>`
+                },
+                {
+                    title: "СМС сообщения",
+                    icon: "fa-envelope",
+                    content: `<p>Приложение "Сообщения" позволяет отправлять и получать текстовые сообщения.</p>
+                    ${renderImage("../images/systems/phone/sms_icon.png", null, "300px")}
+                    <p><strong>Отправка СМС контакту:</strong></p>
+                    <ul class="info-list">
+                        <li>Откройте приложение «Контакты» и выберите нужный контакт.</li>
+                        <li>Нажмите кнопку «Написать».</li>
+						<li>Введите текст сообщения и нажмите кнопку отправки.</li>
+                    </ul>
+					<p>ㅤ</p>
+                    <p><strong>Отправка СМС по номеру телефона:</strong></p>
+                    <ul class="info-list">
+                        <li>Откройте приложение «Сообщения».</li>
+                        <li>Нажмите на иконку создания нового сообщения.</li>
+                        <li>Введите номер телефона в поле «Кому» и текст сообщения ниже.</li>
+						<li>Нажмите кнопку отправки.</li>
+                    </ul>`
+                },
+                {
+                    title: "Звонки",
+                    icon: "fa-phone-alt",
+                    content: `<p>Приложение "Телефон" позволяет совершать голосовые звонки другим игрокам.</p>
+					${renderImage("../images/systems/phone/call_icon.png", null, "300px")}
+                    <p><strong>Звонок контакту:</strong></p>
+                    <ul class="info-list">
+                        <li>Откройте приложение «Контакты» и выберите нужный контакт.</li>
+                        <li>Нажмите кнопку «Вызов».</li>
+						<li>После окончания разговора нажмите красную кнопку завершения вызова.</li>
+                    </ul>
+					<p>ㅤ</p>
+                    <p><strong>Звонок по номеру:</strong></p>
+                    <ul class="info-list">
+                        <li>Откройте приложение «Телефон».</li>
+                        <li>Введите номер телефона на цифровой клавиатуре.</li>
+						<li>Нажмите зеленую кнопку вызова.</li>
+						<li>После окончания разговора нажмите красную кнопку завершения.</li>
+                    </ul>`
+                },
+                {
+                    title: "Электронная почта",
+                    icon: "fa-inbox",
+                    content: `<p>Электронная почта используется для общения с друзьями, а также для получения писем от органов власти (штрафы, повестки и другие рассылки).</p>
+                    ${renderImage("../images/systems/phone/mail_icon.png", null, "300px")}
+                    <p><strong>Просмотр входящих писем:</strong></p>
+                    <ul class="info-list">
+                        <li>Откройте приложение «Электронная почта».</li>
+                        <li>Папка «Входящие» открывается автоматически.</li>
+						<li>Нажмите на нужное письмо, чтобы прочитать его.</li>
+                        <li>Для возврата нажмите «< Входящие».</li>
+                    </ul>
+					<p>ㅤ</p>
+                    <p><strong>Отправка письма:</strong></p>
+                    <ul class="info-list">
+                        <li>В приложении нажмите кнопку «Написать письмо».</li>
+                        <li>Заполните поля: электронная почта получателя, тема (по желанию), текст письма.</li>
+                        <li>Нажмите «Отправить» в правом верхнем углу.</li>
+						<li>Исходящие письма доступны в разделе «Исходящие».</li>
+                    </ul>`
+                },
+                {
+                    title: "GreenShop — проверка автомобиля по VIN",
+                    icon: "fa-car",
+                    content: `<p>Приложение «GreenShop» предназначено для проверки истории автомобиля перед покупкой. С его помощью можно узнать:</p>
+                    <ul class="info-list">
+                        <li>Реальный пробег</li>
+                        <li>Участие в ДТП</li>
+						<li>Ограничения на регистрацию</li>
+                        <li>Историю обслуживания</li>
+                        <li>Наличие ОСАГО</li>
+						<li>Среднюю стоимость автомобиля</li>
+						<li>Неоплаченные штрафы</li>
+                    </ul>
+					${renderImage("../images/systems/phone/greenshop_icon.png", null, "300px")}
+                    <ul class="info-list">
+                        <li>Нажмите на иконку приложения «GreenShop».</li>
+                        <li>Введите VIN номер автомобиля (можно узнать командой <code>/sts [ID]</code>).</li>
+                        <li>Нажмите "Поиск" и смотрите полную информацию.</li>
+                    </ul>
+                    <div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin: 16px 0;">
+						${renderImage("../images/systems/phone/GreenShop_1.png", null, "400px")}
+						${renderImage("../images/systems/phone/GreenShop_2.png", null, "400px")}
+						${renderImage("../images/systems/phone/GreenShop_3.png", null, "400px")}
+						${renderImage("../images/systems/phone/GreenShop_4.png", null, "400px")}
+						${renderImage("../images/systems/phone/GreenShop_5.png", null, "400px")}
+					</div>`
+                },
+                {
+                    title: "BoxBet — ставки на матчи",
+                    icon: "fa-dice",
+                    content: `<p>Приложение «BoxBet» позволяет делать ставки на матчи, а также пополнять и выводить средства со счета.</p>
+                    ${renderImage("../images/systems/phone/boxbet_icon.png", null, "300px")}
+                    <p><strong>Пополнение счета / вывод средств:</strong></p>
+                    <ul class="info-list">
+                        <li>Откройте приложение «BoxBet».</li>
+                        <li>Нажмите «Пополнить» или «Снять».</li>
+						<li>Введите сумму и подтвердите операцию. Деньги спишутся/зачислятся на банковский счет.</li>
+                    </ul>
+					<p>ㅤ</p>
+                    <p><strong>Создание новой ставки:</strong></p>
+                    <ul class="info-list">
+                        <li>Перейдите на вкладку со списком матчей.</li>
+                        <li>Выберите матч и исход: П1 (победа первой команды), П2 (победа второй команды) или Нич.</li>
+                        <li>Введите сумму и подтвердите ставку.</li>
+                    </ul>
+					<p>ㅤ</p>
+                    <p><strong>Просмотр своих ставок:</strong></p>
+					<ul class="info-list">
+						<li>Нажмите на иконку справа снизу.</li>
+						<li>Откроется список всех сделанных вами ставок с информацией о статусе.</li>
+					</ul>`
+                },
+                {
+                    title: "Оплата штрафов по QR-коду",
+                    icon: "fa-qrcode",
+                    content: `<p>Вы можете оплатить административный штраф с помощью телефона, отсканировав QR-код из письма на электронной почте.</p>
+                    <ul class="info-list">
+                        <li>Откройте "Электронную почту", найдите письмо со штрафом.</li>
+                        <li>Пролистайте письмо до QR-кода.</li>
+                        <li>Отсканируйте QR-код реальным телефоном (через камеру или приложение-сканер).</li>
+                        <li>На открывшейся странице нажмите "Оплатить".</li>
+                        <li>Дождитесь подтверждения оплаты — деньги спишутся с игрового счета.</li>
+						<li>В игре появится уведомление об успешной оплате.</li>
+                    </ul>
+                    <div class="note-block"><i class="fas fa-info-circle"></i> Для оплаты нужно быть авторизованным в личном кабинете на сайте проекта.</div>`
+                }
+            ]
+        }
+    },
+	
+	{
+        id: "vehicle-trade",
+        name: "Продажа и обмен ТС между игроками",
+        icon: "fa-car-side",
+        color: "#ef4444",
+        description: "Официальная продажа, покупка и обмен автомобилями с другими игроками через МРЭО ГИБДД",
+        details: {
+            overview: `<p>На сервере GreenTech RP существует возможность не только покупать транспорт в автосалонах, но и совершать сделки напрямую с другими игроками. Вы можете продать свой автомобиль, купить машину у другого игрока или обменяться транспортными средствами.</p>
+            <p>Все законные сделки купли-продажи и обмена транспортными средствами между игроками проводятся исключительно в здании <strong>МРЭО ГИБДД</strong>.</p>
+            
+            <h4 style="color: var(--accent); margin: 20px 0 10px;">Как найти МРЭО (Переоформление):</h4>
+            <ul class="info-list">
+                <li>Откройте навигатор: <code>/gps</code></li>
+                <li>Выберите раздел: <strong>1. Государственные учреждения</strong></li>
+                <li>Выберите пункт: <strong>11. МРЭО (Переоформление)</strong></li>
+            </ul>
+            
+            <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
+                ${renderImage("../images/systems/vehicle_trade/mreo_gps_1.png", null, "300px")}
+                ${renderImage("../images/systems/vehicle_trade/mreo_gps_2.png", null, "300px")}
+            </div>
+            
+            <p>Здание МРЭО находится у автовокзала в Батырево.</p>
+            ${renderImage("../images/systems/vehicle_trade/mreo_exterior.png", null, "600px")}
+            
+            <h4 style="color: var(--accent); margin: 20px 0 10px;">Процесс оформления:</h4>
+            <ul class="info-list">
+                <li>Зайдите внутрь здания МРЭО.</li>
+                <li>Подойдите к основной стойке и встаньте на чекпоинт.</li>
+                <li>Нажмите клавишу <strong>ALT</strong>, чтобы открыть меню оформления.</li>
+            </ul>
+            ${renderImage("../images/systems/vehicle_trade/mreo_interior.png", null, "600px")}
+            
+            <div class="note-block">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Важно!</strong> Перед началом сделки второй игрок (покупатель или участник обмена) должен прописать команду <code>/dogovor [Ваш ID]</code>, чтобы подтвердить готовность к сделке.
+            </div>`,
+            
+            sections: [
+                {
+                    title: "Продажа автомобиля",
+                    icon: "fa-coins",
+                    content: `<p>Продажа своего автомобиля другому игроку — самый распространённый тип сделки.</p>
+                    <p><strong>Минимальная и максимальная цена автомобиля</strong> указаны на странице со <a href="vehicles.html" target="_blank" style="color: var(--accent);">списком всех автомобилей</a>.</p>
+					<p>ㅤ</p>
+					<strong>Шаг 1:</strong> В меню МРЭО выберите пункт <strong>«Продажа Т/С»</strong>.
+                    ${renderImage("../images/systems/vehicle_trade/mreo_menu.png", null, "400px")}
+                    <strong>Шаг 2:</strong> Выберите из списка автомобиль, который хотите продать.
+                    ${renderImage("../images/systems/vehicle_trade/sell_select_car.png", null, "400px")}
+					<strong>Шаг 3:</strong> Введите ID игрока-покупателя.
+					${renderImage("../images/systems/vehicle_trade/sell_enter_id.png", null, "400px")}
+					<strong>Шаг 4:</strong> Укажите стоимость продажи.
+					${renderImage("../images/systems/vehicle_trade/sell_enter_price.png", null, "400px")}
+					<strong>Шаг 5:</strong> Внимательно проверьте все данные сделки и нажмите <strong>«Да»</strong>.
+					${renderImage("../images/systems/vehicle_trade/sell_confirm.png",null, "400px")}
+					<strong>Шаг 6:</strong> Дождитесь, пока покупатель подтвердит сделку. После подтверждения деньги поступят на ваш счёт, а автомобиль переместится на парковку МРЭО.`,
+                },
+                {
+                    title: "Обмен автомобилями (без доплаты)",
+                    icon: "fa-arrows-alt-h",
+                    content: `<p>Равноценный обмен автомобилями между двумя игроками.</p>
+					<p>ㅤ</p>
+					<strong>Шаг 1:</strong> В меню МРЭО выберите пункт <strong>«Обмен Т/С»</strong>.
+					${renderImage("../images/systems/vehicle_trade/Obm1.png", null, "400px")}
+					<strong>Шаг 2:</strong> Выберите свой автомобиль, который хотите обменять.
+					${renderImage("../images/systems/vehicle_trade/Obm2.png", null, "400px")}
+					<strong>Шаг 3:</strong> Введите ID игрока, с которым хотите совершить обмен.
+					${renderImage("../images/systems/vehicle_trade/Obm3.png", null, "400px")}
+					<strong>Шаг 4:</strong> Выберите автомобиль второго игрока, который хотите получить.
+					${renderImage("../images/systems/vehicle_trade/Obm4.png", null, "400px")}
+					<strong>Шаг 5:</strong> Проверьте детали обмена и нажмите <strong>«Да»</strong>.
+					${renderImage("../images/systems/vehicle_trade/Obm5.png", null, "400px")}
+					<strong>Шаг 6:</strong> Дождитесь согласия второго игрока. После подтверждения оба автомобиля переместятся на парковку МРЭО.`,
+                },
+                {
+                    title: "Обмен автомобилями с доплатой",
+                    icon: "fa-exchange-alt",
+                    content: `<p>Если автомобили имеют разную стоимость, один из участников сделки доплачивает другому.</p>
+					<p>ㅤ</p>
+					<strong>Шаг 1:</strong> В меню МРЭО выберите пункт <strong>«Обмен Т/С»</strong>.",
+					${renderImage("../images/systems/vehicle_trade/Obmd1.png", null, "400px")}
+					<strong>Шаг 2:</strong> Выберите свой автомобиль.
+					${renderImage("../images/systems/vehicle_trade/Obm2.png", null, "400px")}
+					<strong>Шаг 3:</strong> Введите ID игрока для обмена.
+					${renderImage("../images/systems/vehicle_trade/Obm3.png", null, "400px")}
+					<strong>Шаг 4:</strong> Выберите автомобиль второго игрока.
+					${renderImage("../images/systems/vehicle_trade/Obm4.png", null, "400px")}
+					<strong>Шаг 5:</strong> Введите сумму доплаты.
+					${renderImage("../images/systems/vehicle_trade/Obmd5.png", null, "400px")}
+					<strong>Шаг 6:</strong> Выберите, кто будет доплачивать: <strong>«Я доплачиваю»</strong> или <strong>«Мне доплачивают»</strong>.
+					${renderImage("../images/systems/vehicle_trade/Obmd6.png", null, "400px")}
+					<strong>Шаг 7:</strong> Проверьте все данные и нажмите <strong>«Да»</strong>.
+					${renderImage("../images/systems/vehicle_trade/Obmd7.png", null, "400px")}
+					<strong>Шаг 8:</strong> Дождитесь согласия второго игрока. После подтверждения автомобили переместятся на парковку, а доплата перейдёт соответствующему игроку.`,
+                    note: "Будьте внимательны при совершении сделок! Всегда проверяйте ID игрока, стоимость автомобиля и условия обмена перед подтверждением. Администрация не возвращает ошибочно проданные или обменянные автомобили."
+                }
+            ]
+        }
+    }
 ];
 
 let showingDetail = false;
