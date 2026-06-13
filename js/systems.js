@@ -1109,7 +1109,206 @@ const SYSTEMS_DATA = [
                 }
             ]
         }
-    }
+    },
+	
+	{
+        id: "car-dealerships",
+        name: "Покупка автомобилей",
+        icon: "fa-car",
+        color: "#14b8a6",
+        description: "Где и как купить машину или лодку: два автосалона, тест-драйв, выбор цвета и оплата",
+        details: {
+            overview: `<p>Для покупки транспорта на сервере доступны два автосалона, расположенных в Южном и Арзамасе. Здесь вы можете приобрести автомобили, мотоциклы и даже лодки.</p>
+            <p><strong>Важно:</strong> Узнать, в каком автосалоне продается конкретный автомобиль, можно на странице со <a href="vehicles.html" target="_blank" style="color: var(--accent);">списком всех автомобилей</a>.</p>`,
+
+            sections: [
+                {
+                    title: "Автосалон «Южный»",
+                    icon: "fa-building",
+                    content: `<p>Автосалон в Южном находится рядом с АЗС у Макдональдса. В этом салоне вы можете купить основную часть автомобилей, представленных на сервере, а также мототранспорт.</p>
+                    ${renderImage("../images/systems/car-dealerships/dealership_south.png", null, "800px")}
+                    <p><strong>Как купить автомобиль в Южном:</strong></p>
+                    <ul class="info-list">
+                        <li><strong>Шаг 1:</strong> Зайдите внутрь автосалона.</li>
+                        <li><strong>Шаг 2:</strong> Подойдите к стойке и нажмите клавишу <strong>ALT</strong>.</li>
+                    </ul>
+                    ${renderImage("../images/systems/car-dealerships/dealership_south_interior.png", null, "800px")}
+                    <ul class="info-list">
+                        <li><strong>Шаг 3:</strong> Перед вами откроется меню выбора транспорта.</li>
+                    </ul>
+                    ${renderImage("../images/systems/car-dealerships/dealership_menu.png", null, "800px")}
+                    <ul class="info-list">
+                        <li><strong>Шаг 4:</strong> Используйте стрелочки по бокам от названия автомобиля, чтобы выбрать желаемую модель. В меню отображаются основные характеристики.</li>
+                        <li><strong>Шаг 5:</strong> Справа выберите желаемый цвет автомобиля.</li>
+                        <li><strong>Шаг 6:</strong> Нажмите кнопку <strong>«Тест-драйв»</strong>, чтобы протестировать автомобиль в течение 3-х минут.</li>
+                        ${renderImage("../images/systems/car-dealerships/test_drive.png", null, "800px")}
+                        <li><strong>Шаг 7:</strong> Чтобы завершить тест-драйв досрочно, нажмите <strong>ALT</strong> и выберите кнопку <strong>«Завершить»</strong>.</li>
+                        <li><strong>Шаг 8:</strong> Выбрав автомобиль и цвет, нажмите кнопку <strong>«Купить»</strong>.</li>
+                        <li><strong>Шаг 9:</strong> Выберите способ оплаты (наличные или с банковской карты).</li>
+                        <li><strong>Шаг 10:</strong> После успешной оплаты автомобиль появится в автосалоне.</li>
+                    </ul>`,
+					note: "Обратите внимание, в режиме Тест-драйва необходимо соблюдать правила Проекта и не совершать неролевого вождения."
+                },
+                {
+                    title: "Автосалон «Арзамас»",
+                    icon: "fa-building",
+                    content: `<p>Автосалон в Арзамасе находится рядом с МУ МВД, напротив Набережной. Здесь можно приобрести дорогостоящие автомобили.</p>
+                    ${renderImage("../images/systems/car-dealerships/dealership_arzamas.png", null, "800px")}
+                    <p><strong>Как купить автомобиль в Арзамасе:</strong></p>
+                    <ul class="info-list">
+                        <li><strong>Шаг 1:</strong> Зайдите внутрь автосалона.</li>
+                        <li><strong>Шаг 2:</strong> Подойдите к стойке и нажмите клавишу <strong>ALT</strong>.</li>
+                    </ul>
+                    ${renderImage("../images/systems/car-dealerships/dealership_arzamas_interior.png", null, "800px")}
+                    <ul class="info-list">
+                        <li><strong>Шаг 3:</strong> Выберите пункт <strong>«Автомобили»</strong>.</li>
+                    </ul>
+                    ${renderImage("../images/systems/car-dealerships/dealership_arzamas_menu.png", null, "450px")}
+                     <ul class="info-list">
+                        <li><strong>Шаг 4:</strong> Далее процесс идентичен покупке в Южном: выберите авто с помощью стрелок, цвет и нажмите <strong>«Купить»</strong>.</li>
+                        <li><strong>Шаг 5:</strong> Для покупки лодки нажмите <strong>«Лодки»</strong> в главном меню и повторите шаги.</li>
+                    </ul>
+                    ${renderImage("../images/systems/car-dealerships/dealership_arzamas_menu.png", null, "450px")}`
+                }
+            ]
+        }
+    },
+	
+	{
+        id: "car-selling",
+        name: "Продажа автомобиля (утилизация и скупщик)",
+        icon: "fa-hand-holding-usd",
+        color: "#f97316", // ← Оранжевый (не используется: у отдыха #f59e0b - другой оттенок)
+        description: "Как продать автомобиль: сдать в утилизацию или продать скупщику на Б/У рынке",
+        details: {
+            overview: `<p>Помимо продажи или обмена автомобиля с другим игроком, на сервере есть два способа быстро продать транспорт государству — сдать в утилизацию или продать специальному скупщику на рынке б/у автомобилей.</p>
+            <div class="note-block">
+                <i class="fas fa-info-circle"></i> 
+                <strong>Важно!</strong> Перед продажей рекомендуется ознакомиться с факторами, влияющими на цену автомобиля.
+            </div>`,
+
+            sections: [
+                {
+                    title: "Сдача автомобиля в утилизацию",
+                    icon: "fa-recycle",
+                    content: `<p>Пункт приема автомобилей в утилизацию находится на въезде в Батырево со стороны дамбы.</p>
+                    ${renderImage("../images/systems/car-selling/utilization_point.png", null, "800px")}
+                    
+                    <p><strong>Как найти на карте:</strong></p>
+                    <ul class="info-list">
+                        <li>Введите <code>/gps</code></li>
+                        <li>Выберите <strong>4. Прочее</strong></li>
+                        <li>Выберите <strong>2. Утилизация авто</strong></li>
+                    </ul>
+                    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
+                        ${renderImage("../images/systems/car-selling/utilization_gps_1.png", null, "300px")}
+                        ${renderImage("../images/systems/car-selling/utilization_gps_2.png", null, "300px")}
+                    </div>
+                    
+                    <div class="note-block">
+                        <i class="fas fa-exclamation-triangle"></i> 
+                        <strong>Важно!</strong> Сдать в утилизацию можно только автомобили, у которых <strong>БОЛЕЕ 500 километров</strong> пробега. <strong>После утилизации автомобиль назад НЕ ВЕРНУТЬ!</strong>
+                    </div>
+                    <p>ㅤ</p>
+                    <p><strong>Процесс утилизации:</strong></p>
+                    <ul class="info-list">
+                        <li><strong>Шаг 1:</strong> Заедьте внутрь пункта утилизации.</li>
+                        <li><strong>Шаг 2:</strong> Подъедьте на автомобиле к надписи <strong>«Посигнальте, чтобы сдать т/с на утилизацию»</strong>.</li>
+                        ${renderImage("../images/systems/car-selling/utilization_checkpoint.png", null, "800px")}
+                        <li><strong>Шаг 3:</strong> Находясь на чекпоинте, посигнальте (клавиша <strong>H</strong>).</li>
+                        <li><strong>Шаг 4:</strong> У вас высветится окошко с предлагаемой стоимостью автомобиля.</li>
+                        ${renderImage("../images/systems/car-selling/utilization_offer.png", null, "800px")}
+                        <li><strong>Шаг 5:</strong> Если стоимость устраивает — нажмите <strong>«Принять»</strong>. Автомобиль утилизируется, а вам зачислится указанная сумма.</li>
+                        <li><strong>Шаг 6:</strong> Если стоимость не устраивает — нажмите <strong>«Отмена»</strong>.</li>
+                    </ul>`
+                },
+                {
+                    title: "Продажа автомобиля скупщику (Б/У рынок)",
+                    icon: "fa-hand-holding-usd",
+                    content: `<p>Скупщик находится на рынке б/у автомобилей в Батырево напротив автовокзала.</p>
+                    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
+                        ${renderImage("../images/systems/car-selling/buyer_market.png", null, "600px")}
+                        ${renderImage("../images/systems/car-selling/buyer_location.png", null, "600px")}
+                    </div>
+                    
+                    <p><strong>Как найти на карте:</strong></p>
+                    <ul class="info-list">
+                        <li>Введите <code>/gps</code></li>
+                        <li>Выберите <strong>4. Прочее</strong></li>
+                        <li>Выберите <strong>3. БУ Рынок</strong></li>
+                    </ul>
+                    <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
+                        ${renderImage("../images/systems/car-selling/buyer_gps_1.png", null, "300px")}
+                        ${renderImage("../images/systems/car-selling/buyer_gps_2.png", null, "300px")}
+                    </div>
+                    
+                    <p><strong>Процесс продажи скупщику:</strong></p>
+                    <ul class="info-list">
+                        <li><strong>Шаг 1:</strong> Заедьте внутрь рынка.</li>
+                        <li><strong>Шаг 2:</strong> Встаньте автомобилем на синий чекпоинт, заглушив двигатель.</li>
+                        ${renderImage("../images/systems/car-selling/buyer_checkpoint.png", null, "800px")}
+                        <li><strong>Шаг 3:</strong> Чтобы вызвать меню скупщика — посигнальте (клавиша <strong>H</strong>).</li>
+                        ${renderImage("../images/systems/car-selling/buyer_menu.png", null, "800px")}
+                        <li><strong>Шаг 4:</strong> Ознакомьтесь с предложенной ценой.</li>
+                        <li><strong>Шаг 5 (Опционально):</strong> Нажмите кнопку <strong>«Торговаться»</strong>, чтобы попытаться повысить цену.</li>
+                        ${renderImage("../images/systems/car-selling/buyer_haggle.png", null, "800px")}
+                        <li><strong>Шаг 6:</strong> Если цена устраивает — нажмите <strong>«Продать»</strong>. Скупщик передаст вам деньги.</li>
+                        <li><strong>Шаг 7:</strong> Если цена не устраивает — нажмите <strong>«Отказать»</strong>.</li>
+                    </ul>
+                    
+                    <div class="note-block">
+                        <i class="fas fa-info-circle"></i> 
+                        <strong>Особенности торговли со скупщиком:</strong><br>
+                        — Торговаться можно только один раз в 30 минут.<br>
+                        — С определенной вероятностью скупщик может повысить, снизить или оставить цену прежней.<br>
+                        — После нажатия кнопки «Торговаться» вернуть первоначальную цену нельзя.<br>
+                        — Повторно совершить попытку торговли можно через 30 минут.
+                    </div>
+                    
+                    ${renderImage("../images/systems/car-selling/buyer_timeout.png", null, "400px")}
+                    
+                    <h4 style="color: var(--accent); margin: 20px 0 10px;">Из чего складывается цена автомобиля:</h4>
+                    <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px;">
+                        <div style="flex: 1; background: rgba(46, 164, 79, 0.1); border-left: 3px solid var(--accent); padding: 12px; border-radius: 8px;">
+                            <strong style="color: var(--accent);"><i class="fas fa-plus-circle"></i> Повышает стоимость:</strong>
+                            <ul style="margin-top: 8px; list-style: none; padding-left: 0;">
+                                <li>· Наличие дисков на автомобиле</li>
+                                <li>· Наличие покрасочных работ (винил)</li>
+                                <li>· Повышенная максимальная скорость</li>
+                                <li>· Повышенный разгон автомобиля</li>
+                            </ul>
+                        </div>
+                        <div style="flex: 1; background: rgba(248, 81, 73, 0.1); border-left: 3px solid var(--danger); padding: 12px; border-radius: 8px;">
+                            <strong style="color: var(--danger);"><i class="fas fa-minus-circle"></i> Снижает стоимость:</strong>
+                            <ul style="margin-top: 8px; list-style: none; padding-left: 0;">
+                                <li>· Дальность пробега автомобиля</li>
+                                <li>· Износ автомобиля (количество ремонтов)</li>
+                                <li>· Техническое состояние (поломки)</li>
+                                <li>· Участие автомобиля в ДТП</li>
+                            </ul>
+                        </div>
+                    </div>`
+                }
+            ]
+        }
+    },
+	
+    {
+		id: "sgu-mayaki",
+		name: "СГУ и проблесковые маячки",
+		icon: "fa-solid fa-lightbulb",
+		color: "#dc2626",
+		description: "Управление спецсигналами на патрульных автомобилях: маячки, сирена, мегафон",
+		details: {
+			overview: `<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 40px; width: 100%; box-sizing: border-box;">
+				<i class="fas fa-hard-hat" style="font-size: 64px; color: var(--text-secondary); margin-bottom: 20px;"></i>
+				<p style="color: var(--text-secondary); max-width: 800px; margin: 0 auto;">Информации о системе СГУ и проблесковых маячках пока нет. Если у вас есть подробная информация и вы хотите помочь — пишите нам!</p>
+				<div style="margin-top: 20px; font-size: 0.85rem; color: var(--text-secondary); width: 100%;">
+				</div>
+			</div>`,
+			sections: []
+		}
+	},
 ];
 
 let showingDetail = false;
