@@ -1294,7 +1294,7 @@ const SYSTEMS_DATA = [
     },
 	
     {
-		id: "sgu-mayaki",
+		id: "sgu",
 		name: "СГУ и проблесковые маячки",
 		icon: "fa-solid fa-lightbulb",
 		color: "#dc2626",

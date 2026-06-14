@@ -23,16 +23,14 @@
     <nav class="sidebar" id="sidebar"></nav>
 
     <main class="content" id="fractionContent">
-        <h1 class="page-title">Министерство Обороны</h1>
+        <h1 class="page-title">Вооруженные силы Российской Федерации</h1>
         <p class="page-subtitle"></p>
-        
-        <!-- Основное описание фракции -->
+
         <div class="info-block">
             <h3>О фракции</h3>
             <p>Армия является школой жизни для молодых людей, воспитывает в них настоящих мужчин и патриотов. Вооруженные Силы Российской Федерации на сервере представлены 29-й отдельной гвардейской десантно-штурмовой Нижегородской бригадой, военной комендатурой 1-го разряда и 49-й территориальной военной автомобильной инспекцией.</p>
         </div>
 
-        <!-- Требования для вступления -->
         <div class="info-block">
             <h3>Требования для вступления</h3>
             
@@ -66,13 +64,11 @@
             </div>
         </div>
 
-        <!-- Срочная служба -->
         <div class="info-block">
             <h3>Срочная служба</h3>
             <p>За время срочной службы, которая длится 2 реальные недели, вам предстоит ежедневно с 17 до 20 часов посещать обязательные занятия, где вы будете получать необходимые знания, при этом на весь период действует строгий запрет на самовольное покидание воинской части. Служба проходится в звании рядового, однако за особые отличия (успехи в учёбе, дисциплину, выполнение специальных заданий) вы можете быть повышены до ефрейтора. По окончании срочной службы вам будет выдан военный билет.</p>
         </div>
-        
-        <!-- Основные команды -->
+
         <div class="info-block">
             <h3>Основные команды</h3>
             <div style="overflow-x: auto;">
@@ -89,7 +85,7 @@
                         <tr><td><code>/r [Текст]</code></td><td>RP рации внутри фракции.</td></tr>
                         <tr><td><code>/ro [Текст]</code></td><td>NonRP чат рации внутри фракции.</td></tr>
                         <tr><td><code>/d [Текст]</code></td><td>RP чат рации депортамента.</td></tr>
-                        <tr><td><code>/do [Текст]</code></td><td>NonRP чат рации департамента.</td></tr>
+                        <tr><td><code>/od [Текст]</code></td><td>NonRP чат рации департамента.</td></tr>
                         <tr><td><code>/members</code></td><td>Список игроков во фракции онлайн.</td></tr>
                         <tr><td><code>/attach</code></td><td>Открыть меню выбора аттачей.</td></tr>
                         <tr><td><code>/givebil</code></td><td>Выдать военный билет.</td></tr>
@@ -115,7 +111,6 @@
             </div>
         </div>
 
-        <!-- Денежное довольствие -->
         <div class="info-block">
             <h3>Денежное довольствие военнослужащих</h3>
             <p style="margin-bottom: 20px; font-size: 0.9rem;">* Указаны базовые оклады. Итоговая сумма формируется с учетом всех надбавок.</p>
@@ -170,8 +165,7 @@
                 </div>
             </details>
         </div>
-		
-		<!-- 3D Просмотр формы Армии -->
+
         <div class="info-block uniform-3d-block">
             <h3>Форма военнослужащих</h3>
             <div class="uniform-controls">
@@ -202,19 +196,15 @@
             </div>
         </div>
 
-        <!-- Вооружение Армии -->
         <div class="info-block">
             <h3>Оружейная (Армия)</h3>
             <div class="weapons-grid" id="armyWeaponsGrid">
-                <!-- Карточки оружия будут сгенерированы через JS -->
             </div>
         </div>
 
-        <!-- Вооружение ВП и ВАИ -->
         <div class="info-block">
             <h3>Оружейная (ВП и ВАИ)</h3>
             <div class="weapons-grid" id="vaiWeaponsGrid">
-                <!-- Карточки оружия будут сгенерированы через JS -->
             </div>
         </div>
     </main>
@@ -241,7 +231,6 @@
 <script src="../js/navigation.js"></script>
 
 <script>
-    // Данные о форме Армии
     const ARMY_UNIFORMS = [
         { name: "Форма №5", file: "forma5", label: "Форма №5" },
         { name: "Офисная форма", file: "office_form", label: "Офисная форма" },
@@ -255,7 +244,6 @@
         { name: "[ВАИ] Форма ВАИ", file: "VAI_form", label: "[ВАИ] Форма ВАИ" }
     ];
 
-    // Данные о вооружении Армии
     const ARMY_WEAPONS = [
         { name: "Пистолет Макарова", image: "pm.png", category: "army" },
         { name: "ПЯ Грач", image: "grach.png", category: "army" },
@@ -269,7 +257,6 @@
         { name: "Пулемёт", image: "machinegun.png", category: "army" }
     ];
 
-    // Данные о вооружении ВП/ВАИ
     const VAI_WEAPONS = [
         { name: "Бронежилет", image: "armor.png", category: "vai" },
         { name: "Дубинка", image: "batton.png", category: "vai" },
@@ -281,7 +268,6 @@
         { name: "АК-12 в обвесах", image: "ak12_tactical.png", category: "vai" }
     ];
 
-    // Данные о зарплатах
     const SALARY_DATA = {
         command: [
             { title: "Командир отряда", salary: 60000 },
@@ -344,7 +330,6 @@
         ]
     };
 
-    // Функция для экранирования HTML
     function escapeHtml(str) {
         if (!str) return '';
         return String(str).replace(/[&<>]/g, function(m) {
@@ -355,7 +340,6 @@
         });
     }
 
-    // Функция для рендера оружия
     function renderWeapons(containerId, weapons) {
         const container = document.getElementById(containerId);
         if (!container) return;
@@ -377,41 +361,34 @@
         container.innerHTML = weaponsHtml;
     }
 
-    // Функция для рендера таблиц зарплат
     function renderSalaryTables() {
-        // Надбавки
         const bonusRows = SALARY_DATA.seniorityBonuses.map(bonus => 
             `<tr><td>${escapeHtml(bonus.years)}</td><td>+${bonus.percent}%</td></tr>`
         ).join('');
         document.getElementById('bonusTable').querySelector('tbody').innerHTML = bonusRows;
 
-        // Руководство
         const commandRows = SALARY_DATA.command.map(item => {
             const salary = item.salary > 0 ? item.salary.toLocaleString() + " ₽" : "—";
             return `<tr><td>${escapeHtml(item.title)}</td><td>${salary}</td></tr>`;
         }).join('');
         document.getElementById('commandTable').querySelector('tbody').innerHTML = commandRows;
 
-        // Медики
         const medicalRows = SALARY_DATA.medical.map(item => 
             `<tr><td>${escapeHtml(item.title)}</td><td>${item.salary.toLocaleString()} ₽</td></tr>`
         ).join('');
         document.getElementById('medicalTable').querySelector('tbody').innerHTML = medicalRows;
 
-        // Личный состав
         const personnelRows = SALARY_DATA.personnel.map(item => 
             `<tr><td>${escapeHtml(item.title)}</td><td>${item.salary.toLocaleString()} ₽</td></tr>`
         ).join('');
         document.getElementById('personnelTable').querySelector('tbody').innerHTML = personnelRows;
 
-        // Звания
         const rankRows = SALARY_DATA.ranks.map(rank => 
             `<tr><td>${escapeHtml(rank.rank)}</td><td>${rank.salary.toLocaleString()} ₽</td></tr>`
         ).join('');
         document.getElementById('ranksTable').querySelector('tbody').innerHTML = rankRows;
     }
 
-    // Инициализация 3D просмотрщика
     function init3DViewer() {
         if (typeof THREE === 'undefined') {
             loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js', () => {
@@ -486,8 +463,7 @@
             RIGHT: THREE.MOUSE.PAN
         };
         controls.target.set(0, 0, 0);
-        
-        // Освещение
+
         const ambientLight = new THREE.AmbientLight(0x606080, 0.7);
         scene.add(ambientLight);
         
@@ -516,27 +492,21 @@
         scene.add(topLight);
         
         function fixSkinnedMeshMaterials(modelGroup) {
-            modelGroup.traverse((child) => {
-                if (child.isSkinnedMesh) {
-                    if (child.material) {
-                        if (Array.isArray(child.material)) {
-                            child.material.forEach(mat => {
-                                mat.skinning = true;
-                                mat.shadowSide = THREE.FrontSide;
-                            });
-                        } else {
-                            child.material.skinning = true;
-                            child.material.shadowSide = THREE.FrontSide;
-                        }
-                    }
-                    child.castShadow = false;
-                    child.receiveShadow = false;
-                } else if (child.isMesh) {
-                    child.castShadow = false;
-                    child.receiveShadow = false;
-                }
-            });
-        }
+			modelGroup.traverse((child) => {
+				if (child.isSkinnedMesh) {
+					child.isSkinnedMesh = false;
+					if (child.material) {
+						if (Array.isArray(child.material)) {
+							child.material.forEach(mat => {
+								mat.skinning = false;
+							});
+						} else {
+							child.material.skinning = false;
+						}
+					}
+				}
+			});
+		}
         
         async function loadUniformModel(uniformFile, uniformName) {
             if (currentModel) {
@@ -550,10 +520,16 @@
                     });
                 }
             }
+
+            if (loadingEl) {
+                loadingEl.style.display = 'flex';
+                loadingEl.innerHTML = '<i class="fas fa-spinner fa-pulse"></i><p>Загрузка модели...</p>';
+            }
             
             try {
-                const dffUrl = `../models/uniforms/army/${uniformFile}.dff`;
-                const txdUrl = `../models/uniforms/army/${uniformFile}.txd`;    
+                const path = `../models/uniforms/army/`;
+                const dffUrl = `${path}${uniformFile}.dff`;
+                const txdUrl = `${path}${uniformFile}.txd`;    
                 
                 const dffResponse = await fetch(dffUrl);
                 if (!dffResponse.ok) throw new Error(`DFF файл не найден: ${uniformFile}.dff`);
@@ -570,9 +546,36 @@
                 
                 const dffLoader = new DFFLoader();
                 dffLoader.setTextureDictionary(texturesMap);
-                const modelGroup = dffLoader.parse(dffData);
                 
-                fixSkinnedMeshMaterials(modelGroup);
+                dffLoader.ignoreVertexColors = true;
+                
+                const modelGroup = dffLoader.parse(dffData);
+
+                modelGroup.traverse((child) => {
+                    if (child.isMesh && child.material) {
+                        if (Array.isArray(child.material)) {
+                            child.material.forEach(mat => {
+                                if (mat.vertexColors !== undefined) mat.vertexColors = false;
+                            });
+                        } else {
+                            if (child.material.vertexColors !== undefined) child.material.vertexColors = false;
+                        }
+                    }
+                    if (child.isSkinnedMesh) {
+                        child.isSkinnedMesh = false;
+                        if (child.material) {
+                            if (Array.isArray(child.material)) {
+                                child.material.forEach(mat => {
+                                    mat.skinning = false;
+                                    if (mat.vertexColors !== undefined) mat.vertexColors = false;
+                                });
+                            } else {
+                                child.material.skinning = false;
+                                if (child.material.vertexColors !== undefined) child.material.vertexColors = false;
+                            }
+                        }
+                    }
+                });
                 
                 modelGroup.rotation.x = MODEL_ROTATION.x;
                 modelGroup.rotation.y = MODEL_ROTATION.y;
@@ -591,22 +594,28 @@
                 modelGroup.position.y = -minY;
                 
                 const distance = modelSize * 1.5;
-                camera.position.set(distance * 0.8, distance * 0.6, distance);
+                camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
                 controls.target.set(0, modelCenterY, 0);
                 controls.update();
                 
                 scene.add(modelGroup);
                 currentModel = modelGroup;
+
+                if (loadingEl) loadingEl.style.display = 'none';
                 
             } catch (error) {
                 console.error('Ошибка загрузки формы:', error);
+                if (loadingEl) {
+                    loadingEl.style.display = 'flex';
+                    loadingEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>Ошибка загрузки 3D модели</p>';
+                }
             }
         }
         
         function resetCamera() {
             if (currentModel) {
                 const distance = modelSize * 1.5;
-                camera.position.set(distance * 0.8, distance * 0.6, distance);
+                camera.position.set(distance * 0.7, distance * 0.7, distance*0.5);
                 controls.target.set(0, modelCenterY, 0);
                 controls.update();
             } else {
@@ -654,7 +663,6 @@
         });
     }
 
-    // Запуск при загрузке страницы
     document.addEventListener('DOMContentLoaded', function() {
         renderWeapons('armyWeaponsGrid', ARMY_WEAPONS);
         renderWeapons('vaiWeaponsGrid', VAI_WEAPONS);

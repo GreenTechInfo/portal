@@ -1567,3 +1567,63 @@ transform: translateY(0);
 height: 350px;
     }
 }
+
+/* Адаптивность изображений в системах и других разделах */
+.content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Специально для контейнеров с изображениями в системах */
+.content .flex-images,
+.content .image-row,
+.content div[style*="display: flex"] img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Горизонтальные скроллы для контейнеров с множеством изображений */
+.content .image-gallery,
+.content div[style*="display: flex"][style*="gap"] {
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+/* Для мобильных - убираем горизонтальный скролл у таблиц и контейнеров */
+@media (max-width: 768px) {
+    .system-detail-body {
+        padding: 20px 16px;
+        overflow-x: auto;
+    }
+    
+    /* Таблицы на мобильных */
+    .commands-table,
+    .info-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+    
+    /* Изображения в локациях */
+    .locations-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    /* Любые flex-контейнеры с изображениями */
+    [style*="display: flex"][style*="gap"] {
+        flex-wrap: wrap;
+    }
+    
+    /* Убираем фиксированные ширины у inline-стилей изображений */
+    .content img[style*="width"] {
+        max-width: 100% !important;
+        height: auto !important;
+    }
+    
+    /* Контейнеры с overflow: auto должны нормально работать */
+    [style*="overflow-x: auto"] {
+        max-width: 100%;
+    }
