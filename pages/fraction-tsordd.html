@@ -69,7 +69,7 @@
                 <div style="background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; border-left: 3px solid var(--accent);">
                     <i class="fas fa-road" style="font-size: 32px; color: var(--accent); margin-bottom: 12px; display: block;"></i>
                     <h4 style="color: var(--accent); margin-bottom: 10px;">Нижегородская административная дорожная инспекция (НАДИ)</h4>
-                    <p style="font-size: 0.9rem; line-height: 1.5;">Осуществляет контроль за соблюдением правил благоустройства и содержания дорог, а также выявляет и устраняет нарушения, влияющие на безопасность дорожного движения.</p>
+                    <p style="font-size: 0.9rem; line-height: 1.5;">Занимается фиксацией нарушений скоростного режима при помощи передвижного комплекса фото-видеофиксации.</p>
                 </div>
             </div>
         </div>
@@ -114,7 +114,6 @@
 						<tr><td><code>/d [текст]</code></td><td>RP чат рации департамента</td></tr>
 						<tr><td><code>/od [текст]</code></td><td>NonRP чат рации департамента</td></tr>
 						<tr><td><code>/members</code></td><td>Список сотрудников фракции онлайн</td></tr>
-
 						<tr><td><code>/zl</code></td><td>Достать/убрать жезл регулировщика</td></tr>
 						<tr><td><code>/racia</code></td><td>Голосовая рация</td></tr>
 						<tr><td><code>/ud</code></td><td>Показать служебное удостоверение</td></tr>
@@ -124,21 +123,17 @@
 						<tr><td><code>/lastvu</code></td><td>Открыть последнее просмотренное водительское удостоверение</td></tr>
 						<tr><td><code>/showdtp</code></td><td>Передать копию европротокола</td></tr>
 						<tr><td><code>/os</code></td><td>Анимация остановки транспортного средства</td></tr>
-
 						<tr><td><code>/animcordd 1</code></td><td>Анимация: Остановить транспортное средство</td></tr>
 						<tr><td><code>/animcordd 2</code></td><td>Анимация: Рука поднята вверх</td></tr>
 						<tr><td><code>/animcordd 3</code></td><td>Анимация: Руки в стороны</td></tr>
 						<tr><td><code>/animcordd 4</code></td><td>Анимация: Рука вперед</td></tr>
 						<tr><td><code>/animcordd 5</code></td><td>Анимация: Руки за спиной</td></tr>
-
 						<tr><td><code>/towcord</code></td><td>Погрузить автомобиль на платформу эвакуатора (MAN)</td></tr>
 						<tr><td><code>/tow</code></td><td>Погрузить автомобиль на платформу эвакуатора (ГАЗель NEXT)</td></tr>
 						<tr><td><code>/untow</code></td><td>Выгрузить автомобиль с платформы эвакуатора</td></tr>
 						<tr><td><code>/shtraf</code></td><td>Поставить автомобиль на штрафстоянку</td></tr>
-
 						<tr><td><code>/activeradar [скорость]</code></td><td>Активировать радар на ПКФ (пример: /activeradar 60)</td></tr>
 						<tr><td><code>/deactiveradar</code></td><td>Деактивировать радар на ПКФ</td></tr>
-
 						<tr><td><code>/createvesa</code></td><td>Создать автомобильные весы</td></tr>
 						<tr><td><code>/delvesa</code></td><td>Удалить автомобильные весы</td></tr>
 					</tbody>
@@ -206,121 +201,117 @@
     </div>
 </div>
 
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+</script>
+
 <script src="../js/common.js"></script>
 <script src="../js/navigation.js"></script>
 
-<script>
-    const FLEET_IMAGES = [
-        { src: "../images/tsordd/fleet/fleet1.png", caption: "ГАЗель NEXT (эвакуатор)" },
-        { src: "../images/tsordd/fleet/fleet2.png", caption: "Ford Transit" },
-        { src: "../images/tsordd/fleet/fleet3.png", caption: "Volkswagen Amarok" },
-        { src: "../images/tsordd/fleet/fleet4.png", caption: "MAN TGL" },
-        { src: "../images/tsordd/fleet/fleet5.png", caption: "ГАЗель NEXT (жираф)" }
-    ];
+<script type="module">
+    import { GTACharacterViewer } from '../js/gta-viewer.js';
 
-    const FAQ_ITEMS = [
-        { q: "Какой уровень необходим для трудоустройства?", a: "Для трудоустройства необходим минимум <strong>5-й игровой уровень</strong>." },
-        { q: "Нужно ли владеть квартирой/домом или быть прописанным?", a: "Нет, для трудоустройства не нужно владеть квартирой/домом или быть прописанным." },
-        { q: "Нужен ли военный билет для трудоустройства?", a: "Нет, для трудоустройства не нужен военный билет." },
-        { q: "Какие категории водительского удостоверения необходимы?", a: "Для трудоустройства необходимо иметь ВУ с категориями <strong>В и С</strong>." },
-        { q: "Что если у меня имеются неоплаченные штрафы?", a: "Вам необходимо их оплатить, иначе Вам будет отказано в трудоустройстве, без исключений." },
-        { q: "Что происходит после одобрения заявления?", a: "Вы попадаете в <strong>учебный центр</strong>, где на протяжении недели проходите стажировку с инструкторами - опытными работниками организации." },
-        { q: "Можно ли пройти обучение экстерном?", a: "Да, такой вариант обучения допускается, но только с личного согласия руководителя организации." },
-        { q: "Что если я передумаю работать во время стажировки?", a: "Вы будете уволены с <strong>черным списком</strong> организации. Он распространяется на все Ваши аккаунты." },
-        { q: "В каком формате проходит обучение?", a: "На протяжении всего срока обучения Вы будете изучать учебное пособие, посещать занятия с инструкторами, выходить в патруль. В конце нужно будет сдать экзамен по вождению и теоретический экзамен." },
-        { q: "Что если нужно уволиться досрочно по серьезным обстоятельствам?", a: "Ваш случай будет вынесен на рассмотрение руководства. При уважительных причинах возможно увольнение без черного списка или выдача неактива." },
-        { q: "Где брать деньги на налоги во время стажировки?", a: "В свободное время можно подрабатывать на различных работах. По окончании стажировки выплачивается <strong>50 000 рублей</strong> единоразово." },
-        { q: "Я получил отказ в трудоустройстве. Почему?", a: "Причина отказа пишется в приложении под отказом (спойлер «Приложение»). Нажмите на спойлер, чтобы посмотреть причину." }
-    ];
+    const MODELS_BASE_PATH = '../models/uniforms/tsordd/';
 
-    const TSORDD_UNIFORMS = [
-        { name: "Форма 1", file: "forma1", label: "Форма 1" },
-        { name: "Форма 2", file: "forma2", label: "Форма 2" },
-        { name: "Женская форма", file: "female_form", label: "Женская форма" }
-    ];
+    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
+    
+    const UNIFORM_MODELS = {
+        forma1: {
+            name: "Форма 1",
+            dff: `${MODELS_BASE_PATH}forma1.dff`,
+            txd: `${MODELS_BASE_PATH}forma1.txd`,
+            gender: "male"
+        },
+        forma2: {
+            name: "Форма 2",
+            dff: `${MODELS_BASE_PATH}forma2.dff`,
+            txd: `${MODELS_BASE_PATH}forma2.txd`,
+            gender: "male" 
+        },
+        female_form: {
+            name: "Женская форма",
+            dff: `${MODELS_BASE_PATH}female_form.dff`,
+            txd: `${MODELS_BASE_PATH}female_form.txd`,
+            gender: "female" 
+        }
+    };
 
-    function renderFleetGallery() {
-        const galleryContainer = document.getElementById('fleetGallery');
-        if (!galleryContainer) return;
+    let viewer = null;
+    let currentUniform = "forma1";
 
-        const imagesHtml = FLEET_IMAGES.map(img => `
-            <div class="vinyl-image-item">
-                <img src="${img.src}" 
-                     alt="${img.caption}" 
-                     class="clickable-image vinyl-img"
-                     data-full-img="${img.src}"
-                     data-caption="${img.caption}"
-                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'vehicle-img-placeholder\'>Изображение не найдено</div>'">
-            </div>
-        `).join('');
-
-        galleryContainer.innerHTML = imagesHtml;
+    async function initViewer() {
+        const container = document.getElementById('uniform3dContainer');
+        const loadingEl = document.getElementById('uniform3dLoading');
         
-        // Добавляем обработчики для модального окна
-        const images = document.querySelectorAll('.clickable-image');
-        images.forEach(img => {
-            img.addEventListener('click', (e) => {
-                e.stopPropagation();
-                const fullImgSrc = img.getAttribute('data-full-img') || img.src;
-                const caption = img.getAttribute('data-caption') || img.alt;
-                openImageModal(fullImgSrc, caption);
-            });
-        });
+        viewer = new GTACharacterViewer(container);
+        
+        setTimeout(() => {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }, 500);
+        
+        await loadUniform(currentUniform);
     }
 
-    function renderFAQ() {
-        const faqContainer = document.getElementById('faqContainer');
-        if (!faqContainer) return;
+    async function loadUniform(uniformId) {
+        const config = UNIFORM_MODELS[uniformId];
+        if (!config) {
+            console.error('Unknown uniform:', uniformId);
+            return;
+        }
+        
+        const loadingEl = document.getElementById('uniform3dLoading');
+        
+        if (loadingEl) loadingEl.style.display = 'flex';
+        
+        try {
+            await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
 
-        const faqHtml = FAQ_ITEMS.map(item => `
-            <div class="faq-item" style="border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden;">
-                <div class="faq-question" style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; background: rgba(255,255,255,0.02);">
-                    <i class="fas fa-question-circle" style="color: var(--accent);"></i>
-                    <span style="flex: 1; font-weight: 500;">${escapeHtml(item.q)}</span>
-                    <i class="fas fa-chevron-down faq-toggle-icon" style="transition: transform 0.3s ease;"></i>
-                </div>
-                <div class="faq-answer" style="display: none; padding: 14px 18px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border);">
-                    <p style="margin: 0;">${item.a}</p>
-                </div>
-            </div>
-        `).join('');
+            const availableAnims = viewer.getAnimationNames();
 
-        faqContainer.innerHTML = faqHtml;
-        initFAQAccordion();
-    }
-
-    function initFAQAccordion() {
-        const faqItems = document.querySelectorAll('.faq-item');
-        faqItems.forEach(item => {
-            const question = item.querySelector('.faq-question');
-            const answer = item.querySelector('.faq-answer');
-            const icon = question.querySelector('.faq-toggle-icon');
+            let targetAnim = null;
             
-            if (question && answer) {
-                const newQuestion = question.cloneNode(true);
-                question.parentNode.replaceChild(newQuestion, question);
-                
-                newQuestion.addEventListener('click', () => {
-                    const newAnswer = newQuestion.parentElement.querySelector('.faq-answer');
-                    const newIcon = newQuestion.querySelector('.faq-toggle-icon');
-                    const isOpen = newAnswer.style.display === 'block';
-                    newAnswer.style.display = isOpen ? 'none' : 'block';
-                    if (newIcon) {
-                        newIcon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
+            if (config.gender === "female") {
+                const femaleAnims = ["woman_idlestance", "woman_idle", "idle_female", "female_idle"];
+                for (const anim of femaleAnims) {
+                    if (availableAnims.includes(anim)) {
+                        targetAnim = anim;
+                        break;
                     }
-                });
+                }
+            } else {
+                const maleAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed"];
+                for (const anim of maleAnims) {
+                    if (availableAnims.includes(anim)) {
+                        targetAnim = anim;
+                        break;
+                    }
+                }
             }
-        });
+
+            if (!targetAnim && availableAnims.length > 0) {
+                targetAnim = availableAnims[0];
+            }
+            
+            if (targetAnim) {
+                viewer.playAnimation(targetAnim);
+            }
+            
+        } catch (error) {
+            console.error('Failed to load uniform:', error);
+        } finally {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }
     }
 
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
+    function resetCamera() {
+        if (viewer) {
+            viewer.resetCamera();
+        }
     }
 
     function addImageModal() {
@@ -399,277 +390,101 @@
         }
     };
 
-    function init3DViewer() {
-        if (typeof THREE === 'undefined') {
-            loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js', () => {
-                loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js', () => {
-                    loadScript('https://unpkg.com/dff-loader@1.0.1', () => {
-                        setup3DScene();
-                    });
-                });
-            });
-        } else {
-            setup3DScene();
-        }
+    const FLEET_IMAGES = [
+        { src: "../images/tsordd/fleet/fleet1.png", caption: "ГАЗель NEXT (эвакуатор)" },
+        { src: "../images/tsordd/fleet/fleet2.png", caption: "Ford Transit" },
+        { src: "../images/tsordd/fleet/fleet3.png", caption: "Volkswagen Amarok" },
+        { src: "../images/tsordd/fleet/fleet4.png", caption: "MAN TGL" },
+        { src: "../images/tsordd/fleet/fleet5.png", caption: "ГАЗель NEXT (жираф)" }
+    ];
+
+    const FAQ_ITEMS = [
+        { q: "Какой уровень необходим для трудоустройства?", a: "Для трудоустройства необходим минимум <strong>5-й игровой уровень</strong>." },
+        { q: "Нужно ли владеть квартирой/домом или быть прописанным?", a: "Нет, для трудоустройства не нужно владеть квартирой/домом или быть прописанным." },
+        { q: "Нужен ли военный билет для трудоустройства?", a: "Нет, для трудоустройства не нужен военный билет." },
+        { q: "Какие категории водительского удостоверения необходимы?", a: "Для трудоустройства необходимо иметь ВУ с категориями <strong>В и С</strong>." },
+        { q: "Что если у меня имеются неоплаченные штрафы?", a: "Вам необходимо их оплатить, иначе Вам будет отказано в трудоустройстве, без исключений." },
+        { q: "Что происходит после одобрения заявления?", a: "Вы попадаете в <strong>учебный центр</strong>, где на протяжении недели проходите стажировку с инструкторами - опытными работниками организации." },
+        { q: "Можно ли пройти обучение экстерном?", a: "Да, такой вариант обучения допускается, но только с личного согласия руководителя организации." },
+        { q: "Что если я передумаю работать во время стажировки?", a: "Вы будете уволены с <strong>черным списком</strong> организации. Он распространяется на все Ваши аккаунты." },
+        { q: "В каком формате проходит обучение?", a: "На протяжении всего срока обучения Вы будете изучать учебное пособие, посещать занятия с инструкторами, выходить в патруль. В конце нужно будет сдать экзамен по вождению и теоретический экзамен." },
+        { q: "Что если нужно уволиться досрочно по серьезным обстоятельствам?", a: "Ваш случай будет вынесен на рассмотрение руководства. При уважительных причинах возможно увольнение без черного списка или выдача неактива." },
+        { q: "Где брать деньги на налоги во время стажировки?", a: "В свободное время можно подрабатывать на различных работах. По окончании стажировки выплачивается <strong>50 000 рублей</strong> единоразово." },
+        { q: "Я получил отказ в трудоустройстве. Почему?", a: "Причина отказа пишется в приложении под отказом (спойлер «Приложение»). Нажмите на спойлер, чтобы посмотреть причину." }
+    ];
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
-    function loadScript(src, callback) {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = callback;
-        document.head.appendChild(script);
+    function renderFleetGallery() {
+        const galleryContainer = document.getElementById('fleetGallery');
+        if (!galleryContainer) return;
+
+        const imagesHtml = FLEET_IMAGES.map(img => `
+            <div class="vinyl-image-item">
+                <img src="${img.src}" 
+                     alt="${img.caption}" 
+                     class="clickable-image vinyl-img"
+                     data-full-img="${img.src}"
+                     data-caption="${img.caption}"
+                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'vehicle-img-placeholder\'>Изображение не найдено</div>'">
+            </div>
+        `).join('');
+
+        galleryContainer.innerHTML = imagesHtml;
+        
+        const images = document.querySelectorAll('.clickable-image');
+        images.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const fullImgSrc = img.getAttribute('data-full-img') || img.src;
+                const caption = img.getAttribute('data-caption') || img.alt;
+                window.openImageModal(fullImgSrc, caption);
+            });
+        });
     }
 
-    function setup3DScene() {
-        const originalConsoleLog = console.log;
-        console.log = function(...args) {
-            if (args[0] && typeof args[0] === 'string' && 
-                (args[0].includes('TXDLoader') || 
-                 args[0].includes('DFFLoader') ||
-                 args[0].includes('Triangle'))) {
-                return;
-            }
-            originalConsoleLog.apply(console, args);
-        };
-        
-        const container = document.getElementById('uniform3dContainer');
-        if (!container) return;
-        
-        const loadingEl = document.getElementById('uniform3dLoading');
-        if (loadingEl) loadingEl.style.display = 'none';
+    function renderFAQ() {
+        const faqContainer = document.getElementById('faqContainer');
+        if (!faqContainer) return;
 
-        const MODEL_ROTATION = {
-            x: -90 * Math.PI / 180,
-            y: 90 * Math.PI / 180,
-            z: 0
-        };
-        
-        let scene, camera, renderer, controls, currentModel = null;
-        let modelCenterY = 0, modelSize = 1;
-        
-        scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0e14);
-        
-        camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(5, 3, 8);
-        
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.shadowMap.enabled = false;
-        container.innerHTML = '';
-        container.appendChild(renderer.domElement);
-        
-        controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.rotateSpeed = 1.0;
-        controls.zoomSpeed = 1.2;
-        controls.enableZoom = true;
-        controls.enablePan = true;
-        controls.panSpeed = 0.8;
-        controls.mouseButtons = {
-            LEFT: THREE.MOUSE.ROTATE,
-            MIDDLE: THREE.MOUSE.ZOOM,
-            RIGHT: THREE.MOUSE.PAN
-        };
-        controls.target.set(0, 0, 0);
+        const faqHtml = FAQ_ITEMS.map(item => `
+            <div class="faq-item" style="border: 1px solid var(--border); border-radius: 10px; margin-bottom: 12px; overflow: hidden;">
+                <div class="faq-question" style="display: flex; align-items: center; gap: 12px; padding: 14px 18px; cursor: pointer; background: rgba(255,255,255,0.02);">
+                    <i class="fas fa-question-circle" style="color: var(--accent);"></i>
+                    <span style="flex: 1; font-weight: 500;">${escapeHtml(item.q)}</span>
+                    <i class="fas fa-chevron-down faq-toggle-icon" style="transition: transform 0.3s ease;"></i>
+                </div>
+                <div class="faq-answer" style="display: none; padding: 14px 18px; background: rgba(0,0,0,0.2); border-top: 1px solid var(--border);">
+                    <p style="margin: 0;">${item.a}</p>
+                </div>
+            </div>
+        `).join('');
 
-        const ambientLight = new THREE.AmbientLight(0x606080, 0.7);
-        scene.add(ambientLight);
-        
-        const mainLight = new THREE.DirectionalLight(0xfff5e6, 0.9);
-        mainLight.position.set(2, 5, 3);
-        scene.add(mainLight);
-        
-        const backFillLight = new THREE.DirectionalLight(0x88aaff, 0.6);
-        backFillLight.position.set(-2, 3, -4);
-        scene.add(backFillLight);
-        
-        const leftLight = new THREE.DirectionalLight(0xffcc88, 0.6);
-        leftLight.position.set(-4, 2, 2);
-        scene.add(leftLight);
-        
-        const rightLight = new THREE.DirectionalLight(0x88ccff, 0.6);
-        rightLight.position.set(4, 2, 2);
-        scene.add(rightLight);
-        
-        const bottomLight = new THREE.PointLight(0x6688aa, 0.4);
-        bottomLight.position.set(0, -3, 0);
-        scene.add(bottomLight);
-        
-        const topLight = new THREE.PointLight(0xffccaa, 0.5);
-        topLight.position.set(0, 5, 0);
-        scene.add(topLight);
-        
-        function fixSkinnedMeshMaterials(modelGroup) {
-            modelGroup.traverse((child) => {
-                if (child.isSkinnedMesh) {
-                    child.isSkinnedMesh = false;
-                    if (child.material) {
-                        if (Array.isArray(child.material)) {
-                            child.material.forEach(mat => {
-                                mat.skinning = false;
-                            });
-                        } else {
-                            child.material.skinning = false;
-                        }
-                    }
-                }
-            });
-        }
+        faqContainer.innerHTML = faqHtml;
 
-        async function loadUniformModel(uniformFile, uniformName) {
-            if (currentModel) {
-                scene.remove(currentModel);
-                if (currentModel.traverse) {
-                    currentModel.traverse((child) => {
-                        if (child.isMesh && child.material) {
-                            if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
-                            else child.material.dispose();
-                        }
-                    });
-                }
-            }
-
-            if (loadingEl) {
-                loadingEl.style.display = 'flex';
-                loadingEl.innerHTML = '<i class="fas fa-spinner fa-pulse"></i><p>Загрузка модели...</p>';
-            }
+        const faqItems = document.querySelectorAll('.faq-item');
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            const answer = item.querySelector('.faq-answer');
+            const icon = question.querySelector('.faq-toggle-icon');
             
-            try {
-                const path = `../models/uniforms/tsordd/`;
-                const dffUrl = `${path}${uniformFile}.dff`;
-                const txdUrl = `${path}${uniformFile}.txd`;    
-                
-                const dffResponse = await fetch(dffUrl);
-                if (!dffResponse.ok) throw new Error(`DFF файл не найден: ${uniformFile}.dff`);
-                const dffData = await dffResponse.arrayBuffer();
-                
-                const txdResponse = await fetch(txdUrl);
-                if (!txdResponse.ok) throw new Error(`TXD файл не найден: ${uniformFile}.txd`);
-                const txdData = await txdResponse.arrayBuffer();
-                
-                const { TXDLoader, DFFLoader } = window.DFFLoader;
-                
-                const txdLoader = new TXDLoader();
-                const texturesMap = txdLoader.parse(txdData);
-                
-                const dffLoader = new DFFLoader();
-                dffLoader.setTextureDictionary(texturesMap);
-                
-                dffLoader.ignoreVertexColors = true;
-                
-                const modelGroup = dffLoader.parse(dffData);
-
-                modelGroup.traverse((child) => {
-                    if (child.isMesh && child.material) {
-                        if (Array.isArray(child.material)) {
-                            child.material.forEach(mat => {
-                                if (mat.vertexColors !== undefined) mat.vertexColors = false;
-                            });
-                        } else {
-                            if (child.material.vertexColors !== undefined) child.material.vertexColors = false;
-                        }
-                    }
-                    if (child.isSkinnedMesh) {
-                        child.isSkinnedMesh = false;
-                        if (child.material) {
-                            if (Array.isArray(child.material)) {
-                                child.material.forEach(mat => {
-                                    mat.skinning = false;
-                                    if (mat.vertexColors !== undefined) mat.vertexColors = false;
-                                });
-                            } else {
-                                child.material.skinning = false;
-                                if (child.material.vertexColors !== undefined) child.material.vertexColors = false;
-                            }
-                        }
+            if (question && answer) {
+                question.addEventListener('click', () => {
+                    const isOpen = answer.style.display === 'block';
+                    answer.style.display = isOpen ? 'none' : 'block';
+                    if (icon) {
+                        icon.style.transform = isOpen ? 'rotate(0deg)' : 'rotate(180deg)';
                     }
                 });
-                
-                modelGroup.rotation.x = MODEL_ROTATION.x;
-                modelGroup.rotation.y = MODEL_ROTATION.y;
-                modelGroup.rotation.z = MODEL_ROTATION.z;
-                
-                const box = new THREE.Box3().setFromObject(modelGroup);
-                const center = box.getCenter(new THREE.Vector3());
-                const minY = box.min.y;
-                const size = box.getSize(new THREE.Vector3());
-                
-                modelSize = Math.max(size.x, size.y, size.z);
-                modelCenterY = size.y / 2;
-                
-                modelGroup.position.x = -center.x;
-                modelGroup.position.z = -center.z;
-                modelGroup.position.y = -minY;
-                
-                const distance = modelSize * 1.5;
-                camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
-                controls.target.set(0, modelCenterY, 0);
-                controls.update();
-                
-                scene.add(modelGroup);
-                currentModel = modelGroup;
-
-                if (loadingEl) loadingEl.style.display = 'none';
-                
-            } catch (error) {
-                console.error('Ошибка загрузки формы:', error);
-                if (loadingEl) {
-                    loadingEl.style.display = 'flex';
-                    loadingEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>Ошибка загрузки 3D модели</p>';
-                }
             }
-        }
-
-        function resetCamera() {
-            if (currentModel) {
-                const distance = modelSize * 1.5;
-                camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
-                controls.target.set(0, modelCenterY, 0);
-                controls.update();
-            } else {
-                camera.position.set(5, 3, 8);
-                controls.target.set(0, 0, 0);
-                controls.update();
-            }
-        }
-        
-        const uniformSelect = document.getElementById('uniformSelect');
-        if (uniformSelect) {
-            uniformSelect.addEventListener('change', (e) => {
-                const selectedOption = e.target.options[e.target.selectedIndex];
-                const uniformFile = e.target.value;
-                const uniformName = selectedOption.getAttribute('data-name') || selectedOption.textContent;
-                loadUniformModel(uniformFile, uniformName);
-            });
-
-            setTimeout(() => {
-                loadUniformModel(TSORDD_UNIFORMS[0].file, TSORDD_UNIFORMS[0].name);
-            }, 500);
-        }
-        
-        const resetBtn = document.getElementById('resetUniformCamera');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', resetCamera);
-        }
-        
-        function animate() {
-            requestAnimationFrame(animate);
-            if (controls) controls.update();
-            if (renderer && scene && camera) renderer.render(scene, camera);
-        }
-        animate();
-        
-        window.addEventListener('resize', () => {
-            if (!container) return;
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            if (camera) {
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-            }
-            if (renderer) renderer.setSize(width, height);
         });
     }
 
@@ -683,25 +498,39 @@
         if (modal) modal.style.display = 'none';
     }
 
-    document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('DOMContentLoaded', () => {
         addImageModal();
         renderFleetGallery();
         renderFAQ();
-        init3DViewer();
-
+        initViewer();
+        
+        const uniformSelect = document.getElementById('uniformSelect');
+        const resetCameraBtn = document.getElementById('resetUniformCamera');
         const gearBtn = document.getElementById('gearButton');
-        if (gearBtn) gearBtn.addEventListener('click', showGearModal);
-
-        const closeModalBtn = document.getElementById('closeGearModal');
-        const closeModalBtn2 = document.getElementById('closeGearModalBtn');
-        const modal = document.getElementById('gearModal');
+        const closeGearModal = document.getElementById('closeGearModal');
+        const closeGearModalBtn = document.getElementById('closeGearModalBtn');
+        const gearModal = document.getElementById('gearModal');
         
-        if (closeModalBtn) closeModalBtn.addEventListener('click', hideGearModal);
-        if (closeModalBtn2) closeModalBtn2.addEventListener('click', hideGearModal);
+        if (uniformSelect) {
+            uniformSelect.addEventListener('change', (e) => {
+                currentUniform = e.target.value;
+                loadUniform(currentUniform);
+            });
+        }
         
-        if (modal) {
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) hideGearModal();
+        if (resetCameraBtn) {
+            resetCameraBtn.addEventListener('click', resetCamera);
+        }
+        
+        if (gearBtn && gearModal) {
+            gearBtn.addEventListener('click', showGearModal);
+        }
+        
+        if (closeGearModal) closeGearModal.addEventListener('click', hideGearModal);
+        if (closeGearModalBtn) closeGearModalBtn.addEventListener('click', hideGearModal);
+        if (gearModal) {
+            gearModal.addEventListener('click', (e) => {
+                if (e.target === gearModal) hideGearModal();
             });
         }
     });

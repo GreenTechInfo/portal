@@ -7,6 +7,7 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    
 </head>
 <body>
 
@@ -149,23 +150,23 @@
                         </tr>
                         <tr>
                             <td><code>/r [текст]</code></td>
-                            <td>RP рация внутри фракции</span></td>
+                            <td>RP рация внутри фракции</td>
                         </tr>
                         <tr>
                             <td><code>/ro [текст]</code></td>
-                            <td>NonRP чат рации внутри фракции</span></td>
+                            <td>NonRP чат рации внутри фракции</td>
                         </tr>
                         <tr>
                             <td><code>/d [текст]</code></td>
-                            <td>RP чат рации департамента</span></td>
+                            <td>RP чат рации департамента</td>
                         </tr>
                         <tr>
                             <td><code>/od [текст]</code></td>
-                            <td>NonRP чат рации департамента</span></td>
+                            <td>NonRP чат рации департамента</td>
                         </tr>
                         <tr>
-                            <td><code>/members</code></span></td>
-                            <td>Список сотрудников фракции онлайн</span></td>
+                            <td><code>/members</code></td>
+                            <td>Список сотрудников фракции онлайн</td>
                         </tr>
                     </tbody>
                 </table>
@@ -192,6 +193,7 @@
                     <i class="fas fa-sync-alt"></i> Сброс камеры
                 </button>
             </div>
+
             <div id="uniform3dContainer" class="uniform-3d-container">
                 <div id="uniform3dLoading" class="uniform-3d-loading">
                     <i class="fas fa-cube"></i>
@@ -243,355 +245,185 @@
     </div>
 </div>
 
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+</script>
+
 <script src="../js/common.js"></script>
 <script src="../js/navigation.js"></script>
 
-<script>
-    const FSVNG_UNIFORMS = [
-        { name: "Синий мох", file: "siniy_moh", label: "Синий мох" },
-        { name: "Чёрная ночь", file: "chernaya_noch", label: "Чёрная ночь" },
-        { name: "Зелёный мох", file: "zeleniy_moh", label: "Зелёный мох" },
-        { name: "Форма боевая 1", file: "boevaya_1", label: "Форма боевая 1" },
-        { name: "Форма боевая 2", file: "boevaya_2", label: "Форма боевая 2" },
-        { name: "Свободная форма", file: "svobodnaya", label: "Свободная форма" },
-        { name: "Форма лидера", file: "leader", label: "Форма лидера" },
-        { name: "Форма Разминирование", file: "razminirovanie", label: "Форма Разминирование" }
-    ];
+<script type="module">
+    import { GTACharacterViewer } from '../js/gta-viewer.js';
 
-    const FSVNG_WEAPONS = [
-        { name: "Наручники и тазер", image: "handcuffs_and_taser.png" },
-        { name: "Газовый баллончик", image: "pepper_spray.png" },
-        { name: "Дубинка", image: "batton.png" },
-        { name: "Пистолет Макарова", image: "pm.png" },
-        { name: "ПЯ Грач", image: "grach.png" },
-        { name: "АК-74М в обвесах", image: "ak74m_tactical.png" },
-        { name: "АК-74М", image: "ak74m.png" },
-        { name: "СВД", image: "svd.png" },
-        { name: "Дымовая шашка", image: "smoke_grenade.png" },
-        { name: "АКС-У", image: "aks74u.png" },
-        { name: "Пулемёт", image: "machinegun.png" },
-        { name: "ПП Кедр", image: "kedr.png" },
-        { name: "Кувалда", image: "sledgehammer.png" },
-        { name: "Бензорез", image: "grinder.png" }
-    ];
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return String(str).replace(/[&<>]/g, function(m) {
-            if (m === '&') return '&amp;';
-            if (m === '<') return '&lt;';
-            if (m === '>') return '&gt;';
-            return m;
-        });
-    }
-
-    function renderWeapons() {
-        const container = document.getElementById('fsvngWeaponsGrid');
-        if (!container) return;
-
-        const weaponsHtml = FSVNG_WEAPONS.map(weapon => {
-            const imagePath = `../images/weapons/${weapon.image}`;
-            return `
-                <div class="weapon-card">
-                    <div class="weapon-card-image">
-                        <img src="${imagePath}" 
-                             alt="${escapeHtml(weapon.name)}"
-                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'weapon-img-placeholder\'><i class=\'fas fa-shield-alt\'></i><br>${escapeHtml(weapon.name)}</div>'">
-                    </div>
-                    <div class="weapon-card-name">${escapeHtml(weapon.name)}</div>
-                </div>
-            `;
-        }).join('');
-
-        container.innerHTML = weaponsHtml;
-    }
-
-    function showGearModal() {
-        const modal = document.getElementById('gearModal');
-        if (modal) modal.style.display = 'flex';
-    }
-
-    function hideGearModal() {
-        const modal = document.getElementById('gearModal');
-        if (modal) modal.style.display = 'none';
-    }
-
-    function init3DViewer() {
-        if (typeof THREE === 'undefined') {
-            loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js', () => {
-                loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js', () => {
-                    loadScript('https://unpkg.com/dff-loader@1.0.1', () => {
-                        setup3DScene();
-                    });
-                });
-            });
-        } else {
-            setup3DScene();
+    // Конфигурация моделей для каждой формы
+    // Пути относительно корня сайта (начинаются с ../ так как мы в pages/)
+    const MODELS_BASE_PATH = '../models/uniforms/fsvng/';
+    
+    const UNIFORM_MODELS = {
+        siniy_moh: {
+            name: "Синий мох",
+            dff: `${MODELS_BASE_PATH}siniy_moh.dff`,
+            txd: `${MODELS_BASE_PATH}siniy_moh.txd`
+        },
+        chernaya_noch: {
+            name: "Чёрная ночь",
+            dff: `${MODELS_BASE_PATH}chernaya_noch.dff`,
+            txd: `${MODELS_BASE_PATH}chernaya_noch.txd`
+        },
+        zeleniy_moh: {
+            name: "Зелёный мох",
+            dff: `${MODELS_BASE_PATH}zeleniy_moh.dff`,
+            txd: `${MODELS_BASE_PATH}zeleniy_moh.txd`
+        },
+        boevaya_1: {
+            name: "Форма боевая 1",
+            dff: `${MODELS_BASE_PATH}boevaya_1.dff`,
+            txd: `${MODELS_BASE_PATH}boevaya_1.txd`
+        },
+        boevaya_2: {
+            name: "Форма боевая 2",
+            dff: `${MODELS_BASE_PATH}boevaya_2.dff`,
+            txd: `${MODELS_BASE_PATH}boevaya_2.txd`
+        },
+        svobodnaya: {
+            name: "Свободная форма",
+            dff: `${MODELS_BASE_PATH}svobodnaya.dff`,
+            txd: `${MODELS_BASE_PATH}svobodnaya.txd`
+        },
+        leader: {
+            name: "Форма лидера",
+            dff: `${MODELS_BASE_PATH}leader.dff`,
+            txd: `${MODELS_BASE_PATH}leader.txd`
+        },
+        razminirovanie: {
+            name: "Форма Разминирование",
+            dff: `${MODELS_BASE_PATH}razminirovanie.dff`,
+            txd: `${MODELS_BASE_PATH}razminirovanie.txd`
         }
-    }
+    };
 
-    function loadScript(src, callback) {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = callback;
-        document.head.appendChild(script);
-    }
+    // Общий путь к анимациям
+    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
 
-    function setup3DScene() {
-        const originalConsoleLog = console.log;
-        console.log = function(...args) {
-            if (args[0] && typeof args[0] === 'string' && 
-                (args[0].includes('TXDLoader') || 
-                 args[0].includes('DFFLoader') ||
-                 args[0].includes('Triangle'))) {
-                return;
-            }
-            originalConsoleLog.apply(console, args);
-        };
-        
+    let viewer = null;
+    let currentUniform = "siniy_moh";
+    
+    // Инициализация просмотрщика
+    async function initViewer() {
         const container = document.getElementById('uniform3dContainer');
-        if (!container) return;
+        const loadingEl = document.getElementById('uniform3dLoading');
+        
+        viewer = new GTACharacterViewer(container);
+        
+        setTimeout(() => {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }, 500);
+        
+        await loadUniform(currentUniform);
+    }
+    
+    // Загрузка выбранной формы
+    async function loadUniform(uniformId) {
+        const config = UNIFORM_MODELS[uniformId];
+        if (!config) {
+            console.error('Unknown uniform:', uniformId);
+            return;
+        }
         
         const loadingEl = document.getElementById('uniform3dLoading');
-        if (loadingEl) loadingEl.style.display = 'none';
         
-        const MODEL_ROTATION = {
-            x: -90 * Math.PI / 180,
-            y: 90 * Math.PI / 180,
-            z: 0
-        };
+        if (loadingEl) loadingEl.style.display = 'flex';
         
-        let scene, camera, renderer, controls, currentModel = null;
-        let modelCenterY = 0, modelSize = 1;
-        
-        scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0e14);
-        
-        camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(5, 3, 8);
-        
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.shadowMap.enabled = false;
-        container.innerHTML = '';
-        container.appendChild(renderer.domElement);
-        
-        controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.rotateSpeed = 1.0;
-        controls.zoomSpeed = 1.2;
-        controls.enableZoom = true;
-        controls.enablePan = true;
-        controls.panSpeed = 0.8;
-        controls.mouseButtons = {
-            LEFT: THREE.MOUSE.ROTATE,
-            MIDDLE: THREE.MOUSE.ZOOM,
-            RIGHT: THREE.MOUSE.PAN
-        };
-        controls.target.set(0, 0, 0);
-
-        const ambientLight = new THREE.AmbientLight(0x606080, 0.7);
-        scene.add(ambientLight);
-        
-        const mainLight = new THREE.DirectionalLight(0xfff5e6, 0.9);
-        mainLight.position.set(2, 5, 3);
-        scene.add(mainLight);
-        
-        const backFillLight = new THREE.DirectionalLight(0x88aaff, 0.6);
-        backFillLight.position.set(-2, 3, -4);
-        scene.add(backFillLight);
-        
-        const leftLight = new THREE.DirectionalLight(0xffcc88, 0.6);
-        leftLight.position.set(-4, 2, 2);
-        scene.add(leftLight);
-        
-        const rightLight = new THREE.DirectionalLight(0x88ccff, 0.6);
-        rightLight.position.set(4, 2, 2);
-        scene.add(rightLight);
-        
-        const bottomLight = new THREE.PointLight(0x6688aa, 0.4);
-        bottomLight.position.set(0, -3, 0);
-        scene.add(bottomLight);
-        
-        const topLight = new THREE.PointLight(0xffccaa, 0.5);
-        topLight.position.set(0, 5, 0);
-        scene.add(topLight);
-        
-        async function loadUniformModel(uniformFile, uniformName) {
-            if (currentModel) {
-                scene.remove(currentModel);
-                if (currentModel.traverse) {
-                    currentModel.traverse((child) => {
-                        if (child.isMesh && child.material) {
-                            if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
-                            else child.material.dispose();
-                        }
-                    });
+        try {
+            console.log('Loading DFF:', config.dff);
+            console.log('Loading TXD:', config.txd);
+            console.log('Loading IFP:', ANIM_IFP_PATH);
+            
+            // Загружаем модель и анимации
+            await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
+            
+            // После загрузки модели, запускаем подходящую анимацию
+            const availableAnims = viewer.getAnimationNames();
+            console.log('Available animations:', availableAnims);
+            
+            // Пробуем найти стандартные анимации
+            const preferredAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed"];
+            let targetAnim = null;
+            
+            for (const anim of preferredAnims) {
+                if (availableAnims.includes(anim)) {
+                    targetAnim = anim;
+                    break;
                 }
-            }
-
-            if (loadingEl) {
-                loadingEl.style.display = 'flex';
-                loadingEl.innerHTML = '<i class="fas fa-spinner fa-pulse"></i><p>Загрузка модели...</p>';
             }
             
-            try {
-                const path = `../models/uniforms/fsvng/`;
-                const dffUrl = `${path}${uniformFile}.dff`;
-                const txdUrl = `${path}${uniformFile}.txd`;    
-                
-                const dffResponse = await fetch(dffUrl);
-                if (!dffResponse.ok) throw new Error(`DFF файл не найден: ${uniformFile}.dff`);
-                const dffData = await dffResponse.arrayBuffer();
-                
-                const txdResponse = await fetch(txdUrl);
-                if (!txdResponse.ok) throw new Error(`TXD файл не найден: ${uniformFile}.txd`);
-                const txdData = await txdResponse.arrayBuffer();
-                
-                const { TXDLoader, DFFLoader } = window.DFFLoader;
-                
-                const txdLoader = new TXDLoader();
-                const texturesMap = txdLoader.parse(txdData);
-                
-                const dffLoader = new DFFLoader();
-                dffLoader.setTextureDictionary(texturesMap);
-                
-                dffLoader.ignoreVertexColors = true;
-                
-                const modelGroup = dffLoader.parse(dffData);
-
-                modelGroup.traverse((child) => {
-                    if (child.isMesh && child.material) {
-                        if (Array.isArray(child.material)) {
-                            child.material.forEach(mat => {
-                                if (mat.vertexColors !== undefined) mat.vertexColors = false;
-                            });
-                        } else {
-                            if (child.material.vertexColors !== undefined) child.material.vertexColors = false;
-                        }
-                    }
-                    if (child.isSkinnedMesh) {
-                        child.isSkinnedMesh = false;
-                        if (child.material) {
-                            if (Array.isArray(child.material)) {
-                                child.material.forEach(mat => {
-                                    mat.skinning = false;
-                                    if (mat.vertexColors !== undefined) mat.vertexColors = false;
-                                });
-                            } else {
-                                child.material.skinning = false;
-                                if (child.material.vertexColors !== undefined) child.material.vertexColors = false;
-                            }
-                        }
-                    }
-                });
-                
-                modelGroup.rotation.x = MODEL_ROTATION.x;
-                modelGroup.rotation.y = MODEL_ROTATION.y;
-                modelGroup.rotation.z = MODEL_ROTATION.z;
-                
-                const box = new THREE.Box3().setFromObject(modelGroup);
-                const center = box.getCenter(new THREE.Vector3());
-                const minY = box.min.y;
-                const size = box.getSize(new THREE.Vector3());
-                
-                modelSize = Math.max(size.x, size.y, size.z);
-                modelCenterY = size.y / 2;
-                
-                modelGroup.position.x = -center.x;
-                modelGroup.position.z = -center.z;
-                modelGroup.position.y = -minY;
-                
-                const distance = modelSize * 1.5;
-                camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
-                controls.target.set(0, modelCenterY, 0);
-                controls.update();
-                
-                scene.add(modelGroup);
-                currentModel = modelGroup;
-
-                if (loadingEl) loadingEl.style.display = 'none';
-                
-            } catch (error) {
-                console.error('Ошибка загрузки формы:', error);
-                if (loadingEl) {
-                    loadingEl.style.display = 'flex';
-                    loadingEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>Ошибка загрузки 3D модели</p>';
-                }
+            // Если не нашли, берем первую доступную
+            if (!targetAnim && availableAnims.length > 0) {
+                targetAnim = availableAnims[0];
             }
-        }
-        
-        function resetCamera() {
-            if (currentModel) {
-                const distance = modelSize * 1.5;
-                camera.position.set(distance * 0.7, distance * 0.7, distance*0.5);
-                controls.target.set(0, modelCenterY, 0);
-                controls.update();
-            } else {
-                camera.position.set(5, 3, 8);
-                controls.target.set(0, 0, 0);
-                controls.update();
+            
+            if (targetAnim) {
+                viewer.playAnimation(targetAnim);
+                console.log('Playing animation:', targetAnim);
             }
+            
+        } catch (error) {
+            console.error('Failed to load uniform:', error);
+        } finally {
+            if (loadingEl) loadingEl.style.display = 'none';
         }
+    }
+    
+    // Сброс камеры
+    function resetCamera() {
+        if (viewer) {
+            viewer.resetCamera();
+        }
+    }
+    
+    // Обработчики событий
+    document.addEventListener('DOMContentLoaded', () => {
+        initViewer();
         
         const uniformSelect = document.getElementById('uniformSelect');
+        const resetCameraBtn = document.getElementById('resetUniformCamera');
+        const gearBtn = document.getElementById('gearButton');
+        const closeGearModal = document.getElementById('closeGearModal');
+        const closeGearModalBtn = document.getElementById('closeGearModalBtn');
+        const gearModal = document.getElementById('gearModal');
+        
         if (uniformSelect) {
             uniformSelect.addEventListener('change', (e) => {
-                const selectedOption = e.target.options[e.target.selectedIndex];
-                const uniformFile = e.target.value;
-                const uniformName = selectedOption.getAttribute('data-name') || selectedOption.textContent;
-                loadUniformModel(uniformFile, uniformName);
+                currentUniform = e.target.value;
+                loadUniform(currentUniform);
             });
-            
-            setTimeout(() => {
-                loadUniformModel(FSVNG_UNIFORMS[0].file, FSVNG_UNIFORMS[0].name);
-            }, 500);
         }
         
-        const resetBtn = document.getElementById('resetUniformCamera');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', resetCamera);
+        if (resetCameraBtn) {
+            resetCameraBtn.addEventListener('click', resetCamera);
         }
         
-        function animate() {
-            requestAnimationFrame(animate);
-            if (controls) controls.update();
-            if (renderer && scene && camera) renderer.render(scene, camera);
+        // Модальное окно снаряжения
+        if (gearBtn && gearModal) {
+            gearBtn.addEventListener('click', () => {
+                gearModal.style.display = 'flex';
+            });
         }
-        animate();
         
-        window.addEventListener('resize', () => {
-            if (!container) return;
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            if (camera) {
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-            }
-            if (renderer) renderer.setSize(width, height);
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        renderWeapons();
-        init3DViewer();
-
-        const gearBtn = document.getElementById('gearButton');
-        if (gearBtn) {
-            gearBtn.addEventListener('click', showGearModal);
-        }
-
-        const closeModalBtn = document.getElementById('closeGearModal');
-        const closeModalBtn2 = document.getElementById('closeGearModalBtn');
-        const modal = document.getElementById('gearModal');
+        const closeModal = () => {
+            if (gearModal) gearModal.style.display = 'none';
+        };
         
-        if (closeModalBtn) closeModalBtn.addEventListener('click', hideGearModal);
-        if (closeModalBtn2) closeModalBtn2.addEventListener('click', hideGearModal);
-        
-        if (modal) {
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) hideGearModal();
+        if (closeGearModal) closeGearModal.addEventListener('click', closeModal);
+        if (closeGearModalBtn) closeGearModalBtn.addEventListener('click', closeModal);
+        if (gearModal) {
+            gearModal.addEventListener('click', (e) => {
+                if (e.target === gearModal) closeModal();
             });
         }
     });
