@@ -1,8 +1,8 @@
 const NAVIGATION_DATA = {
-    // Здесь ТОЛЬКО обычные ссылки (без выпадающих меню)
     mainLinks: [
         { href: "index.html", icon: "home.png", text: "Главная" },
         { href: "pages/about.html", icon: "about.png", text: "О сервере" },
+		{ href: "pages/rules.html", icon: "rules.png", text: "Правила сервера" },
         { href: "pages/systems.html", icon: "systems.png", text: "Системы сервера" },
         { href: "pages/animations.html", icon: "animations.png", text: "Анимации" }
     ],
@@ -39,7 +39,6 @@ const NAVIGATION_DATA = {
     }
 };
 
-// Определяем, на какой странице мы находимся
 function getCurrentPageInfo() {
     const path = window.location.pathname;
     const isInPagesFolder = path.includes('/pages/') && !path.endsWith('/index.html');
@@ -49,14 +48,12 @@ function getCurrentPageInfo() {
     };
 }
 
-// Функция для получения правильного пути к иконкам
 function getIconPath(iconName) {
     const pageInfo = getCurrentPageInfo();
     const basePath = pageInfo.isInPagesFolder ? '../images/icons/' : 'images/icons/';
     return basePath + iconName;
 }
 
-// Функция для получения правильного href ссылки
 function getCorrectHref(href) {
     const pageInfo = getCurrentPageInfo();
     
@@ -73,7 +70,6 @@ function getCorrectHref(href) {
     return href;
 }
 
-// Генерация сайдбара
 function generateSidebar() {
     const buildMainLinks = () => {
         return NAVIGATION_DATA.mainLinks.map(link => {
@@ -113,6 +109,9 @@ function generateSidebar() {
 			${buildMainLinks()}
 			${buildSubmenu(NAVIGATION_DATA.vehiclesSubmenu, 'vehicles')}
 			${buildSubmenu(NAVIGATION_DATA.fractionsSubmenu, 'fractions')}
+			<li><a href="${getCorrectHref('pages/commands.html')}">
+				<img src="${getIconPath('commands.png')}" alt="Команды" class="nav-icon">Команды
+			</a></li>
 			<li><a href="${getCorrectHref('pages/faq.html')}">
 				<img src="${getIconPath('faq.png')}" alt="FAQ" class="nav-icon">FAQ
 			</a></li>
