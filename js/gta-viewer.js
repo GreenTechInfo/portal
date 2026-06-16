@@ -35,10 +35,8 @@ export class GTACharacterViewer {
     }
     
     init() {
-        // Очищаем контейнер
         this.container.innerHTML = '';
         
-        // Создаем canvas
         const canvas = document.createElement('canvas');
         canvas.id = 'gta-viewer-canvas';
         canvas.style.width = '100%';
@@ -51,8 +49,7 @@ export class GTACharacterViewer {
         
         this.scene = new THREE.Scene();
         this.scene.background = new THREE.Color(BG_COLOR);
-        
-        // Камера - как в УФСБ (PerspectiveCamera 45 градусов)
+
         this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
         this.camera.position.set(5, 3, 8);
         
@@ -60,8 +57,7 @@ export class GTACharacterViewer {
         this.renderer.setSize(width, height);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.outputColorSpace = THREE.SRGBColorSpace;
-        
-        // Controls - как в УФСБ
+
         this.controls = new OrbitControls(this.camera, canvas);
         this.controls.enableDamping = true;
         this.controls.dampingFactor = 0.05;
@@ -77,43 +73,33 @@ export class GTACharacterViewer {
         };
         this.controls.target.set(0, 0, 0);
         
-        // РАВНОМЕРНОЕ МАТОВОЕ ОСВЕЩЕНИЕ
-        // Ambient light - базовое равномерное освещение
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.9);
         this.scene.add(ambientLight);
         
-        // Создаем 6 направленных источников света со всех сторон (сниженная интенсивность для матовости)
-        // Спереди
         const frontLight = new THREE.DirectionalLight(0xffffff, 0.4);
         frontLight.position.set(0, 2, 5);
         this.scene.add(frontLight);
         
-        // Сзади
         const backLight = new THREE.DirectionalLight(0xffffff, 0.4);
         backLight.position.set(0, 2, -5);
         this.scene.add(backLight);
         
-        // Слева
         const leftLight = new THREE.DirectionalLight(0xffffff, 0.4);
         leftLight.position.set(-5, 2, 0);
         this.scene.add(leftLight);
         
-        // Справа
         const rightLight = new THREE.DirectionalLight(0xffffff, 0.4);
         rightLight.position.set(5, 2, 0);
         this.scene.add(rightLight);
         
-        // Сверху
         const topLight = new THREE.DirectionalLight(0xffffff, 0.4);
         topLight.position.set(0, 5, 0);
         this.scene.add(topLight);
         
-        // Снизу (очень слабо)
         const bottomLight = new THREE.DirectionalLight(0xffffff, 0.2);
         bottomLight.position.set(0, -3, 0);
         this.scene.add(bottomLight);
-        
-        // Мягкие точечные источники для равномерного заполнения (без резких бликов)
+		
         const fillLight1 = new THREE.PointLight(0xffffff, 0.25);
         fillLight1.position.set(3, 2, 3);
         this.scene.add(fillLight1);
@@ -129,11 +115,9 @@ export class GTACharacterViewer {
         const fillLight4 = new THREE.PointLight(0xffffff, 0.25);
         fillLight4.position.set(-3, 1, 3);
         this.scene.add(fillLight4);
-        
-        // Обработка resize
+
         window.addEventListener('resize', () => this.onResize());
-        
-        // Запуск анимации
+
         this.animate();
     }
     
@@ -158,7 +142,6 @@ export class GTACharacterViewer {
     }
     
     async loadModel(dffPath, txdPath, ifpPath) {
-        // Сброс состояния
         if (this.currentModel) {
             this.scene.remove(this.currentModel);
             this.currentModel = null;
@@ -175,17 +158,14 @@ export class GTACharacterViewer {
         this.currentAnim = null;
         
         try {
-            // Загружаем текстуры
             if (txdPath) {
                 await this.loadTXD(txdPath);
             }
-            
-            // Загружаем модель
+
             if (dffPath) {
                 await this.loadDFF(dffPath);
             }
-            
-            // Загружаем анимации
+
             if (ifpPath) {
                 await this.loadIFP(ifpPath);
             }
@@ -239,13 +219,11 @@ export class GTACharacterViewer {
                 if (mat.userData?.textureName && this.textures.has(mat.userData.textureName)) {
                     mat.map = this.textures.get(mat.userData.textureName);
                     mat.color.setRGB(1, 1, 1);
-                    // Отключаем vertexColors (prelight)
                     mat.vertexColors = false;
                 }
                 if (mat.userData?.maskName && this.textures.has(mat.userData.maskName)) {
                     mat.alphaMap = this.textures.get(mat.userData.maskName);
                 }
-                // Делаем материал матовым
                 mat.roughness = 0.9;
                 mat.metalness = 0.0;
                 this.updateMaterialAlpha(mat);
@@ -274,20 +252,16 @@ export class GTACharacterViewer {
         
         this.displayModel(this.createMesh(dff));
     }
-    
-    // Функция для применения матовых настроек ко всем материалам
+
     makeMatte(modelGroup) {
         modelGroup.traverse((child) => {
             if (child.isMesh || child.isSkinnedMesh) {
                 const materials = Array.isArray(child.material) ? child.material : [child.material];
                 for (const mat of materials) {
                     if (mat) {
-                        // Отключаем vertex colors (prelight)
                         mat.vertexColors = false;
-                        // Делаем материал матовым (без бликов)
                         mat.roughness = 0.9;
                         mat.metalness = 0.0;
-                        // Принудительно делаем материал светлым для корректного отображения текстур
                         if (!mat.map) {
                             mat.color.setRGB(1, 1, 1);
                         }
@@ -306,8 +280,7 @@ export class GTACharacterViewer {
         this.modelHasSkin = false;
         this.nonSkinnedMeshes = [];
         this.frameObjects = null;
-        
-        // Строим карту HAnim nodeId → frameIndex
+
         const nodeIdToFrame = new Map();
         const frameToNodeId = new Map();
         let rootHANodes = null;
@@ -375,8 +348,7 @@ export class GTACharacterViewer {
                 : allBones.slice(1);
             this.boneHierarchyRoot = rootBones[0];
         }
-        
-        // Обрабатываем геометрии
+
         for (const geom of dff.RWGeometryList) {
             const geo = new THREE.BufferGeometry();
             const skin = geom.RWExtension?.CHUNK_SKIN;
@@ -411,7 +383,6 @@ export class GTACharacterViewer {
             const posArray = new Float32Array(totalTris * 9);
             const normArray = geom.morphTargets[0]?.hasNormals ? new Float32Array(totalTris * 9) : null;
             const uvArray = geom.texCoords ? new Float32Array(totalTris * 6) : null;
-            // Игнорируем prelitcolor (вершинные цвета)
             const colArray = null;
             const skinIdxArray = hasSkin ? new Float32Array(totalTris * 12) : null;
             const skinWgtArray = hasSkin ? new Float32Array(totalTris * 12) : null;
@@ -466,14 +437,13 @@ export class GTACharacterViewer {
                 geo.setAttribute("skinWeight", new THREE.BufferAttribute(skinWgtArray, 4));
             }
             geo.computeBoundingSphere();
-            
-            // Материалы - полностью матовые
+
             const materials = geom.RWMaterialList.map((matData) => {
                 const mat = new THREE.MeshStandardMaterial({
                     vertexColors: false,
-                    roughness: 0.9,      // Максимальная шероховатость (матовый)
-                    metalness: 0.0,      // Нет металличности
-                    emissive: 0x000000,  // Нет свечения
+                    roughness: 0.9, 
+                    metalness: 0.0,     
+                    emissive: 0x000000, 
                     side: THREE.DoubleSide
                 });
                 if (matData.RWMaterial.color) {
@@ -565,8 +535,7 @@ export class GTACharacterViewer {
                 this.nonSkinnedMeshes.push({ mesh, geomIndex: dff.RWGeometryList.indexOf(geom) });
             }
         }
-        
-        // Применяем матовые настройки ко всем материалам
+
         this.makeMatte(group);
         
         group.rotation.set(-Math.PI / 2, 0, 0);
@@ -603,8 +572,7 @@ export class GTACharacterViewer {
         }
         
         this.scene.add(model);
-        
-        // Вычисление размеров и центрирование модели
+
         const box = new THREE.Box3().setFromObject(model);
         const center = box.getCenter(new THREE.Vector3());
         const minY = box.min.y;
@@ -612,14 +580,12 @@ export class GTACharacterViewer {
         
         this.modelSize = Math.max(size.x, size.y, size.z);
         this.modelCenterY = size.y / 2;
-        
-        // Смещаем модель так, чтобы она стояла на "полу"
+
         model.position.x = -center.x;
         model.position.z = -center.z;
         model.position.y = -minY;
 		
-        
-        // Настройка камеры
+
         const distance = this.modelSize * 1.5;
         this.camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
         this.controls.target.set(0, this.modelCenterY, 0);
@@ -633,8 +599,7 @@ export class GTACharacterViewer {
         const buffer = await response.arrayBuffer();
         const ifp = new IFPReader().parse(buffer);
         this.animations = ifp.animations;
-        
-        // Если модель уже загружена, запускаем первую анимацию
+
         if (this.currentModel && this.animations.length > 0) {
             this.playAnimation(this.animations[0].name);
         }

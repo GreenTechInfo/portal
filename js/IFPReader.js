@@ -16,10 +16,8 @@ export class IFPReader {
     throw new Error("Unknown IFP format: " + magic);
   }
 
-  // ─── ANP3 (GTA III / Vice City) ────────────────────────────
-
   parseANP3() {
-    this.skip(8); // magic + fileSize
+    this.skip(8);
     const name = this.readStr(24);
     const objCount = this.readI32();
     const anims = [];
@@ -34,7 +32,7 @@ export class IFPReader {
   parseANP3Object() {
     const name = this.readStr(24);
     const boneCount = this.readI32();
-    this.skip(8); // field_1, flags
+    this.skip(8);
     const bones = [];
 
     for (let i = 0; i < boneCount; i++) {
@@ -70,10 +68,8 @@ export class IFPReader {
     return { name, bones };
   }
 
-  // ─── ANPK (GTA San Andreas) ────────────────────────────────
-
   parseANPK() {
-    this.skip(12); // magic, version, subHeader, padding
+    this.skip(12);
     const animCount = this.readI32();
     const name = this.readPaddedStr();
     const anims = [];
@@ -86,11 +82,11 @@ export class IFPReader {
   }
 
   parseANPKAnim() {
-    this.skip(8); // header + size
+    this.skip(8);
     const name = this.readPaddedStr();
-    this.skip(4); // subHeader
+    this.skip(4); 
     const boneEnd = this.pos + this.readU32();
-    this.skip(4); // keyframeHeader
+    this.skip(4); 
     const kfStart = this.pos + this.readU32();
 
     this.pos = kfStart;
@@ -117,11 +113,11 @@ export class IFPReader {
       return null;
     }
 
-    this.skip(4); // subHeader
+    this.skip(4); 
     const kfInfoEnd = this.pos + this.readU32();
     const name = this.readStr(28);
     const frameCount = this.readI32();
-    this.skip(8); // boneIdField, flags
+    this.skip(8); 
     const boneId = kfInfoEnd - this.pos >= 44 ? this.readI32() : undefined;
 
     this.pos = kfInfoEnd;
@@ -161,8 +157,6 @@ export class IFPReader {
     this.pos = end;
     return { name, boneId, isRoot, keyframes };
   }
-
-  // ─── Примитивы чтения ──────────────────────────────────────
 
   peekStr(n) {
     let s = "";

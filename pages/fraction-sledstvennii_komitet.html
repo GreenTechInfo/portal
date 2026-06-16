@@ -69,40 +69,16 @@
             <div style="overflow-x: auto;">
                 <table class="info-table">
                     <thead>
-                        <tr>
-                            <th>Команда</th>
-                            <th>Назначение</th>
-                        </tr>
+                        <tr><th>Команда</th><th>Назначение</th></tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><code>/duty</code></td>
-                            <td>Заступить на службу (надеть форму)</td>
-                        </tr>
-                        <tr>
-                            <td><code>/offduty</code></td>
-                            <td>Завершить службу (переодеться в гражданское)</td>
-                        </tr>
-                        <tr>
-                            <td><code>/r [текст]</code></td>
-                            <td>RP рация внутри фракции</span></td>
-                        </tr>
-                        <tr>
-                            <td><code>/ro [текст]</code></td>
-                            <td>NonRP чат рации внутри фракции</span></td>
-                        </tr>
-                        <tr>
-                            <td><code>/d [текст]</code></td>
-                            <td>RP чат рации департамента</span></td>
-                        </tr>
-                        <tr>
-                            <td><code>/od [текст]</code></td>
-                            <td>NonRP чат рации департамента</span></td>
-                        </tr>
-                        <tr>
-                            <td><code>/members</code></span></td>
-                            <td>Список сотрудников фракции онлайн</span></td>
-                        </tr>
+                        <tr><td><code>/duty</code></span></td><td>Заступить на службу (надеть форму)</td></tr>
+                        <tr><td><code>/offduty</code></span></td><td>Завершить службу (переодеться в гражданское)</td></tr>
+                        <tr><td><code>/r [текст]</code></span></td><td>RP рация внутри фракции</span></td></tr>
+                        <tr><td><code>/ro [текст]</code></span></td><td>NonRP чат рации внутри фракции</span></td></tr>
+                        <tr><td><code>/d [текст]</code></span></td><td>RP чат рации департамента</span></td></tr>
+                        <tr><td><code>/od [текст]</code></span></td><td>NonRP чат рации департамента</span></td></tr>
+                        <tr><td><code>/members</code></span></td><td>Список сотрудников фракции онлайн</span></td></tr>
                     </tbody>
                 </table>
             </div>
@@ -138,8 +114,7 @@
 
         <div class="info-block">
             <h3>Спецсредства и оборудование</h3>
-            <div class="weapons-grid" id="skWeaponsGrid">
-            </div>
+            <div class="weapons-grid" id="skWeaponsGrid"></div>
         </div>
         
     </main>
@@ -177,18 +152,206 @@
     </div>
 </div>
 
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+</script>
+
 <script src="../js/common.js"></script>
 <script src="../js/navigation.js"></script>
 
-<script>
-    const SK_UNIFORMS = [
-        { name: "Повседневная форма", file: "everyday", label: "Повседневная форма" },
-        { name: "ЭКО", file: "eko", label: "ЭКО" },
-        { name: "Генеральская форма", file: "general", label: "Генеральская форма" },
-        { name: "Парадная форма", file: "parade", label: "Парадная форма" },
-        { name: "Женская форма", file: "female", label: "Женская форма" }
-    ];
-    
+<script type="module">
+    import { GTACharacterViewer } from '../js/gta-viewer.js';
+
+    const MODELS_BASE_PATH = '../models/uniforms/sledkom/';
+    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
+
+    const UNIFORM_MODELS = {
+        everyday: {
+            name: "Повседневная форма",
+            dff: `${MODELS_BASE_PATH}everyday.dff`,
+            txd: `${MODELS_BASE_PATH}everyday.txd`,
+            gender: "male"
+        },
+        eko: {
+            name: "ЭКО",
+            dff: `${MODELS_BASE_PATH}eko.dff`,
+            txd: `${MODELS_BASE_PATH}eko.txd`,
+            gender: "male"
+        },
+        general: {
+            name: "Генеральская форма",
+            dff: `${MODELS_BASE_PATH}general.dff`,
+            txd: `${MODELS_BASE_PATH}general.txd`,
+            gender: "male"
+        },
+        parade: {
+            name: "Парадная форма",
+            dff: `${MODELS_BASE_PATH}parade.dff`,
+            txd: `${MODELS_BASE_PATH}parade.txd`,
+            gender: "male"
+        },
+        female: {
+            name: "Женская форма",
+            dff: `${MODELS_BASE_PATH}female.dff`,
+            txd: `${MODELS_BASE_PATH}female.txd`,
+            gender: "female"
+        }
+    };
+
+    let viewer = null;
+    let currentUniform = "everyday";
+
+    async function initViewer() {
+        const container = document.getElementById('uniform3dContainer');
+        const loadingEl = document.getElementById('uniform3dLoading');
+        
+        viewer = new GTACharacterViewer(container);
+        
+        setTimeout(() => {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }, 500);
+        
+        await loadUniform(currentUniform);
+    }
+
+    async function loadUniform(uniformId) {
+        const config = UNIFORM_MODELS[uniformId];
+        if (!config) {
+            console.error('Unknown uniform:', uniformId);
+            return;
+        }
+        
+        const loadingEl = document.getElementById('uniform3dLoading');
+        
+        if (loadingEl) loadingEl.style.display = 'flex';
+        
+        try {
+            await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
+
+            const availableAnims = viewer.getAnimationNames();
+
+            let targetAnim = null;
+            
+            if (config.gender === "female") {
+                const femaleAnims = ["woman_idlestance", "woman_idle", "idle_female", "female_idle"];
+                for (const anim of femaleAnims) {
+                    if (availableAnims.includes(anim)) {
+                        targetAnim = anim;
+                        break;
+                    }
+                }
+            } else {
+                const maleAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed", "IDLE"];
+                for (const anim of maleAnims) {
+                    if (availableAnims.includes(anim)) {
+                        targetAnim = anim;
+                        break;
+                    }
+                }
+            }
+
+            if (!targetAnim && availableAnims.length > 0) {
+                targetAnim = availableAnims[0];
+            }
+            
+            if (targetAnim) {
+                viewer.playAnimation(targetAnim);
+            }
+            
+        } catch (error) {
+            console.error('Failed to load uniform:', error);
+        } finally {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }
+    }
+
+    function resetCamera() {
+        if (viewer) {
+            viewer.resetCamera();
+        }
+    }
+
+    function addImageModal() {
+        if (document.getElementById('globalImageModal')) return;
+
+        const modal = document.createElement('div');
+        modal.id = 'globalImageModal';
+        modal.style.cssText = `
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        `;
+
+        modal.innerHTML = `
+            <div style="position: relative; max-width: 90%; max-height: 85vh;">
+                <img id="globalModalImage" src="" alt="Увеличенное изображение" style="max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px;">
+                <button id="globalCloseModalBtn" style="
+                    position: absolute;
+                    top: -50px;
+                    right: -50px;
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 32px;
+                    cursor: pointer;
+                    padding: 8px;
+                    transition: transform 0.2s;
+                ">✕</button>
+            </div>
+            <div id="globalModalCaption" style="
+                margin-top: 16px;
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+                text-align: center;
+                max-width: 80%;
+                background: rgba(0,0,0,0.6);
+                padding: 8px 16px;
+                border-radius: 8px;
+            "></div>
+        `;
+
+        document.body.appendChild(modal);
+
+        const modalImg = document.getElementById('globalModalImage');
+        const modalCaption = document.getElementById('globalModalCaption');
+        const closeBtn = document.getElementById('globalCloseModalBtn');
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        modal.addEventListener('click', closeModal);
+        if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'flex') closeModal(); });
+    }
+
+    window.openImageModal = (src, caption) => {
+        const modal = document.getElementById('globalImageModal');
+        const modalImg = document.getElementById('globalModalImage');
+        const modalCaption = document.getElementById('globalModalCaption');
+        if (modal && modalImg) {
+            modalImg.src = src;
+            modalCaption.textContent = caption || '';
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
     const SK_WEAPONS = [
         { name: "Наручники и тазер", image: "handcuffs_and_taser.png", category: "sk" },
         { name: "Газовый баллончик", image: "pepper_spray.png", category: "sk" },
@@ -217,6 +380,9 @@
                     <div class="weapon-card-image">
                         <img src="${imagePath}" 
                              alt="${escapeHtml(weapon.name)}"
+                             class="clickable-weapon-img"
+                             data-full-img="${imagePath}"
+                             data-caption="${escapeHtml(weapon.name)}"
                              onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'weapon-img-placeholder\'><i class=\'fas fa-camera\'></i><br>${escapeHtml(weapon.name)}</div>'">
                     </div>
                     <div class="weapon-card-name">${escapeHtml(weapon.name)}</div>
@@ -225,6 +391,16 @@
         }).join('');
 
         container.innerHTML = weaponsHtml;
+        
+        const weaponImages = document.querySelectorAll('.clickable-weapon-img');
+        weaponImages.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const fullImgSrc = img.getAttribute('data-full-img') || img.src;
+                const caption = img.getAttribute('data-caption') || img.alt;
+                window.openImageModal(fullImgSrc, caption);
+            });
+        });
     }
 
     function showGearModal() {
@@ -237,299 +413,38 @@
         if (modal) modal.style.display = 'none';
     }
 
-    function init3DViewer() {
-        if (typeof THREE === 'undefined') {
-            loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js', () => {
-                loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js', () => {
-                    loadScript('https://unpkg.com/dff-loader@1.0.1', () => {
-                        setup3DScene();
-                    });
-                });
-            });
-        } else {
-            setup3DScene();
-        }
-    }
-
-    function loadScript(src, callback) {
-        const script = document.createElement('script');
-        script.src = src;
-        script.onload = callback;
-        document.head.appendChild(script);
-    }
-
-    function setup3DScene() {
-        const originalConsoleLog = console.log;
-        console.log = function(...args) {
-            if (args[0] && typeof args[0] === 'string' && 
-                (args[0].includes('TXDLoader') || 
-                 args[0].includes('DFFLoader') ||
-                 args[0].includes('Triangle'))) {
-                return;
-            }
-            originalConsoleLog.apply(console, args);
-        };
-        
-        const container = document.getElementById('uniform3dContainer');
-        if (!container) return;
-        
-        const loadingEl = document.getElementById('uniform3dLoading');
-        if (loadingEl) loadingEl.style.display = 'none';
-
-        const MODEL_ROTATION = {
-            x: -90 * Math.PI / 180,
-            y: 90 * Math.PI / 180,
-            z: 0
-        };
-        
-        let scene, camera, renderer, controls, currentModel = null;
-        let modelCenterY = 0, modelSize = 1;
-        
-        scene = new THREE.Scene();
-        scene.background = new THREE.Color(0x0a0e14);
-        
-        camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-        camera.position.set(5, 3, 8);
-        
-        renderer = new THREE.WebGLRenderer({ antialias: true });
-        renderer.setSize(container.clientWidth, container.clientHeight);
-        renderer.shadowMap.enabled = false;
-        container.innerHTML = '';
-        container.appendChild(renderer.domElement);
-        
-        controls = new THREE.OrbitControls(camera, renderer.domElement);
-        controls.enableDamping = true;
-        controls.dampingFactor = 0.05;
-        controls.rotateSpeed = 1.0;
-        controls.zoomSpeed = 1.2;
-        controls.enableZoom = true;
-        controls.enablePan = true;
-        controls.panSpeed = 0.8;
-        controls.mouseButtons = {
-            LEFT: THREE.MOUSE.ROTATE,
-            MIDDLE: THREE.MOUSE.ZOOM,
-            RIGHT: THREE.MOUSE.PAN
-        };
-        controls.target.set(0, 0, 0);
-
-        const ambientLight = new THREE.AmbientLight(0x606080, 0.7);
-        scene.add(ambientLight);
-        
-        const mainLight = new THREE.DirectionalLight(0xfff5e6, 0.9);
-        mainLight.position.set(2, 5, 3);
-        scene.add(mainLight);
-        
-        const backFillLight = new THREE.DirectionalLight(0x88aaff, 0.6);
-        backFillLight.position.set(-2, 3, -4);
-        scene.add(backFillLight);
-        
-        const leftLight = new THREE.DirectionalLight(0xffcc88, 0.6);
-        leftLight.position.set(-4, 2, 2);
-        scene.add(leftLight);
-        
-        const rightLight = new THREE.DirectionalLight(0x88ccff, 0.6);
-        rightLight.position.set(4, 2, 2);
-        scene.add(rightLight);
-        
-        const bottomLight = new THREE.PointLight(0x6688aa, 0.4);
-        bottomLight.position.set(0, -3, 0);
-        scene.add(bottomLight);
-        
-        const topLight = new THREE.PointLight(0xffccaa, 0.5);
-        topLight.position.set(0, 5, 0);
-        scene.add(topLight);
-
-        function fixSkinnedMeshMaterials(modelGroup) {
-            modelGroup.traverse((child) => {
-                if (child.isSkinnedMesh) {
-                    child.isSkinnedMesh = false;
-                    if (child.material) {
-                        if (Array.isArray(child.material)) {
-                            child.material.forEach(mat => {
-                                mat.skinning = false;
-                            });
-                        } else {
-                            child.material.skinning = false;
-                        }
-                    }
-                }
-            });
-        }
-
-        async function loadUniformModel(uniformFile, uniformName) {
-            if (currentModel) {
-                scene.remove(currentModel);
-                if (currentModel.traverse) {
-                    currentModel.traverse((child) => {
-                        if (child.isMesh && child.material) {
-                            if (Array.isArray(child.material)) child.material.forEach(m => m.dispose());
-                            else child.material.dispose();
-                        }
-                    });
-                }
-            }
-
-            if (loadingEl) {
-                loadingEl.style.display = 'flex';
-                loadingEl.innerHTML = '<i class="fas fa-spinner fa-pulse"></i><p>Загрузка модели...</p>';
-            }
-            
-            try {
-                const path = `../models/uniforms/sledkom/`;
-                const dffUrl = `${path}${uniformFile}.dff`;
-                const txdUrl = `${path}${uniformFile}.txd`;    
-                
-                const dffResponse = await fetch(dffUrl);
-                if (!dffResponse.ok) throw new Error(`DFF файл не найден: ${uniformFile}.dff`);
-                const dffData = await dffResponse.arrayBuffer();
-                
-                const txdResponse = await fetch(txdUrl);
-                if (!txdResponse.ok) throw new Error(`TXD файл не найден: ${uniformFile}.txd`);
-                const txdData = await txdResponse.arrayBuffer();
-                
-                const { TXDLoader, DFFLoader } = window.DFFLoader;
-                
-                const txdLoader = new TXDLoader();
-                const texturesMap = txdLoader.parse(txdData);
-                
-                const dffLoader = new DFFLoader();
-                dffLoader.setTextureDictionary(texturesMap);
-                
-                dffLoader.ignoreVertexColors = true;
-                
-                const modelGroup = dffLoader.parse(dffData);
-
-                modelGroup.traverse((child) => {
-                    if (child.isMesh && child.material) {
-                        if (Array.isArray(child.material)) {
-                            child.material.forEach(mat => {
-                                if (mat.vertexColors !== undefined) mat.vertexColors = false;
-                            });
-                        } else {
-                            if (child.material.vertexColors !== undefined) child.material.vertexColors = false;
-                        }
-                    }
-                    if (child.isSkinnedMesh) {
-                        child.isSkinnedMesh = false;
-                        if (child.material) {
-                            if (Array.isArray(child.material)) {
-                                child.material.forEach(mat => {
-                                    mat.skinning = false;
-                                    if (mat.vertexColors !== undefined) mat.vertexColors = false;
-                                });
-                            } else {
-                                child.material.skinning = false;
-                                if (child.material.vertexColors !== undefined) child.material.vertexColors = false;
-                            }
-                        }
-                    }
-                });
-                
-                modelGroup.rotation.x = MODEL_ROTATION.x;
-                modelGroup.rotation.y = MODEL_ROTATION.y;
-                modelGroup.rotation.z = MODEL_ROTATION.z;
-                
-                const box = new THREE.Box3().setFromObject(modelGroup);
-                const center = box.getCenter(new THREE.Vector3());
-                const minY = box.min.y;
-                const size = box.getSize(new THREE.Vector3());
-                
-                modelSize = Math.max(size.x, size.y, size.z);
-                modelCenterY = size.y / 2;
-                
-                modelGroup.position.x = -center.x;
-                modelGroup.position.z = -center.z;
-                modelGroup.position.y = -minY;
-                
-                const distance = modelSize * 1.5;
-                camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
-                controls.target.set(0, modelCenterY, 0);
-                controls.update();
-                
-                scene.add(modelGroup);
-                currentModel = modelGroup;
-
-                if (loadingEl) loadingEl.style.display = 'none';
-                
-            } catch (error) {
-                console.error('Ошибка загрузки формы:', error);
-                if (loadingEl) {
-                    loadingEl.style.display = 'flex';
-                    loadingEl.innerHTML = '<i class="fas fa-exclamation-triangle"></i><p>Ошибка загрузки 3D модели</p>';
-                }
-            }
-        }
-
-        function resetCamera() {
-            if (currentModel) {
-                const distance = modelSize * 1.5;
-                camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
-                controls.target.set(0, modelCenterY, 0);
-                controls.update();
-            } else {
-                camera.position.set(5, 3, 8);
-                controls.target.set(0, 0, 0);
-                controls.update();
-            }
-        }
+    document.addEventListener('DOMContentLoaded', () => {
+        addImageModal();
+        renderWeapons();
+        initViewer();
         
         const uniformSelect = document.getElementById('uniformSelect');
+        const resetCameraBtn = document.getElementById('resetUniformCamera');
+        const gearBtn = document.getElementById('gearButton');
+        const closeGearModal = document.getElementById('closeGearModal');
+        const closeGearModalBtn = document.getElementById('closeGearModalBtn');
+        const gearModal = document.getElementById('gearModal');
+        
         if (uniformSelect) {
             uniformSelect.addEventListener('change', (e) => {
-                const selectedOption = e.target.options[e.target.selectedIndex];
-                const uniformFile = e.target.value;
-                const uniformName = selectedOption.getAttribute('data-name') || selectedOption.textContent;
-                loadUniformModel(uniformFile, uniformName);
+                currentUniform = e.target.value;
+                loadUniform(currentUniform);
             });
-
-            setTimeout(() => {
-                loadUniformModel(SK_UNIFORMS[0].file, SK_UNIFORMS[0].name);
-            }, 500);
         }
         
-        const resetBtn = document.getElementById('resetUniformCamera');
-        if (resetBtn) {
-            resetBtn.addEventListener('click', resetCamera);
+        if (resetCameraBtn) {
+            resetCameraBtn.addEventListener('click', resetCamera);
         }
         
-        function animate() {
-            requestAnimationFrame(animate);
-            if (controls) controls.update();
-            if (renderer && scene && camera) renderer.render(scene, camera);
-        }
-        animate();
-        
-        window.addEventListener('resize', () => {
-            if (!container) return;
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            if (camera) {
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-            }
-            if (renderer) renderer.setSize(width, height);
-        });
-    }
-
-    document.addEventListener('DOMContentLoaded', function() {
-        renderWeapons();
-        init3DViewer();
-
-        const gearBtn = document.getElementById('gearButton');
-        if (gearBtn) {
+        if (gearBtn && gearModal) {
             gearBtn.addEventListener('click', showGearModal);
         }
-
-        const closeModalBtn = document.getElementById('closeGearModal');
-        const closeModalBtn2 = document.getElementById('closeGearModalBtn');
-        const modal = document.getElementById('gearModal');
         
-        if (closeModalBtn) closeModalBtn.addEventListener('click', hideGearModal);
-        if (closeModalBtn2) closeModalBtn2.addEventListener('click', hideGearModal);
-        
-        if (modal) {
-            modal.addEventListener('click', function(e) {
-                if (e.target === modal) hideGearModal();
+        if (closeGearModal) closeGearModal.addEventListener('click', hideGearModal);
+        if (closeGearModalBtn) closeGearModalBtn.addEventListener('click', hideGearModal);
+        if (gearModal) {
+            gearModal.addEventListener('click', (e) => {
+                if (e.target === gearModal) hideGearModal();
             });
         }
     });

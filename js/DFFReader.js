@@ -6,19 +6,13 @@ export class DFFReader {
     this.position = 0;
     this.isLocked = false;
   }
-
-  /**
-   * Основной метод парсинга DFF-файла
-   * @param {ArrayBuffer} buffer - бинарные данные файла
-   * @returns {Object|null} - распарсенные данные модели
-   */
+  
   parse(buffer) {
     this.data = new DataView(buffer);
     this.position = 0;
     this.length = buffer.byteLength;
     this.isLocked = false;
 
-    // Проверка на "заблокированный" DFF (от некоторых игр)
     if (buffer.byteLength > 20) {
       if ((this.data.getUint32(16, true) >> 16 & 65535) > 255) {
         this.isLocked = true;
@@ -29,13 +23,11 @@ export class DFFReader {
     let clumpData = null;
     const uvAnimations = [];
 
-    // Основной цикл чтения чанков
     while (this.position < buffer.byteLength - 12) {
       const chunkStart = this.position;
       const chunkType = this.data.getUint32(this.position, true);
       const chunkSize = this.fixSize(this.data.getUint32(this.position + 4, true));
 
-      // Проверка выхода за границы
       if (this.position + 12 + chunkSize > buffer.byteLength) {
         break;
       }
@@ -54,7 +46,6 @@ export class DFFReader {
         this.position += header.length;
       }
 
-      // Защита от бесконечного цикла
       if (this.position <= chunkStart) {
         this.position = chunkStart + 12;
       }
@@ -64,7 +55,6 @@ export class DFFReader {
       }
     }
 
-    // Прикрепляем UV-анимации к clump, если они есть
     if (clumpData && uvAnimations.length > 0) {
       clumpData.uvAnimDict = uvAnimations;
     }
@@ -72,9 +62,7 @@ export class DFFReader {
     return clumpData;
   }
 
-  /**
-   * Корректировка размера для "заблокированных" файлов
-   */
+
   fixSize(size) {
     if (!this.isLocked) {
       return size;
@@ -85,16 +73,10 @@ export class DFFReader {
     return size;
   }
 
-  /**
-   * Проверка возможности чтения указанного количества байт
-   */
   canRead(bytes) {
     return this.position + bytes <= this.length;
   }
 
-  /**
-   * Чтение заголовка чанка
-   */
   readHeader(parent) {
     const header = {
       type: this.readUInt32()
@@ -105,7 +87,6 @@ export class DFFReader {
     header.length = this.fixSize(rawLength);
     header.build = this.readUInt32();
 
-    // Определение версии
     if (header.build & -65536) {
       header.version = header.build >> 14 & 261888 | header.build >> 16 & 63 | 196608;
     } else {
@@ -118,8 +99,6 @@ export class DFFReader {
 
     return header;
   }
-
-  // Базовые методы чтения примитивных типов
 
   readInt32() {
     if (this.position + 4 > this.length) {
@@ -175,9 +154,6 @@ export class DFFReader {
     return value;
   }
 
-  /**
-   * Чтение строки заданной длины
-   */
   readString(maxLength) {
     let result = "";
     const endPos = Math.min(this.position + maxLength, this.length);
@@ -195,9 +171,6 @@ export class DFFReader {
     return result.trim();
   }
 
-  /**
-   * Определение количества UV-каналов в геометрии
-   */
   getGeometryNumUVs(geometry) {
     if (!geometry) {
       return 0;
@@ -215,9 +188,6 @@ export class DFFReader {
     return numUVs;
   }
 
-  /**
-   * Чтение значения в нативном формате
-   */
   readNativeValue(dataType, normalized, offset) {
     switch (dataType) {
       case 0: // Float
@@ -270,9 +240,6 @@ export class DFFReader {
     }
   }
 
-  /**
-   * Парсинг нативных данных OpenGL
-   */
   parseOpenGLNativeData(geometry, startOffset, availableSize) {
     const endOffset = Math.min(startOffset + availableSize, this.length);
 
@@ -284,7 +251,6 @@ export class DFFReader {
     let currentOffset = startOffset + 4;
     const attributes = [];
 
-    // Чтение атрибутов
     for (let i = 0; i < numAttributes; i++) {
       if (currentOffset + 24 > endOffset) {
         return null;
@@ -321,7 +287,6 @@ export class DFFReader {
     const vertexBoneWeights = [];
     const vertexBoneIndices = [];
 
-    // Чтение вершинных данных
     for (let vertexIdx = 0; vertexIdx < geometry.numVertices; vertexIdx++) {
       const vertexOffset = currentOffset + vertexIdx * stride;
 
@@ -337,7 +302,6 @@ export class DFFReader {
           dataOffset += nativeValue.byteSize;
         }
 
-        // Распределение по семантике атрибутов
         switch (attrib.index) {
           case 0: // Позиция
             if (values.length >= 3) {
@@ -420,7 +384,6 @@ export class DFFReader {
       }
     }
 
-    // Сохранение результатов в геометрию
     if (vertices.length === geometry.numVertices) {
       const defaultBoundingSphere = {
         x: 0,
@@ -484,9 +447,6 @@ export class DFFReader {
     };
   }
 
-  /**
-   * Чтение чанка определенного типа
-   */
   readChunk(expectedType, parent, endBoundary) {
     if (endBoundary !== undefined && this.position + 12 > endBoundary) {
       return null;
@@ -510,9 +470,6 @@ export class DFFReader {
     return chunkData;
   }
 
-  /**
-   * Чтение чанка в сыром виде
-   */
   readRawChunk(expectedType, parent, endBoundary) {
     if (endBoundary !== undefined && this.position + 12 > endBoundary) {
       return null;
@@ -539,9 +496,6 @@ export class DFFReader {
     };
   }
 
-  /**
-   * Чтение данных в зависимости от типа чанка
-   */
   readData(header) {
     let result = null;
 
@@ -570,7 +524,6 @@ export class DFFReader {
           result.RWCameraList = [];
           result.RWAtomicList = [];
 
-          // Чтение атомиков
           for (let i = 0; i < numAtomics && (!this.isLocked || !(this.position >= clumpEnd)); i++) {
             if (this.isLocked && this.canRead(4)) {
               if (this.data.getUint32(this.position, true) === 65054) { // Маркер окончания
@@ -589,7 +542,6 @@ export class DFFReader {
             }
           }
 
-          // Чтение источников света
           for (let i = 0; i < numLights; i++) {
             const lightHeader = this.readHeader();
             if (lightHeader.type !== ChunkType.CHUNK_STRUCT || lightHeader.length < 4) {
@@ -610,7 +562,6 @@ export class DFFReader {
             }
           }
 
-          // Чтение камер
           for (let i = 0; i < numCameras; i++) {
             const cameraHeader = this.readHeader();
             if (cameraHeader.type !== ChunkType.CHUNK_STRUCT || cameraHeader.length < 4) {
@@ -631,7 +582,6 @@ export class DFFReader {
             }
           }
 
-          // Коррекция для заблокированных DFF
           if (this.isLocked && result.RWGeometryList && result.RWAtomicList.length < result.RWGeometryList.length) {
             const numGeometries = result.RWGeometryList.length;
             const numAtomicsFound = result.RWAtomicList.length;
@@ -659,7 +609,6 @@ export class DFFReader {
           const numFrames = this.readUInt32();
           result = [];
 
-          // Чтение фреймов
           for (let i = 0; i < numFrames; i++) {
             const frameData = {
               rotationMatrix: [
@@ -675,7 +624,6 @@ export class DFFReader {
             result.push({ RWFrame: frameData });
           }
 
-          // Чтение расширений для каждого фрейма
           for (let i = 0; i < numFrames; i++) {
             this.readExtension(result[i]);
           }
@@ -708,14 +656,12 @@ export class DFFReader {
             numUVs = Math.max(1, numUVs);
           }
 
-          // Для старых версий читаем материал
-          if (structHeader.version < 0x34000) { // 212992
+          if (structHeader.version < 0x34000) {
             result.ambient = this.readFloat32();
             result.specular = this.readFloat32();
             result.diffuse = this.readFloat32();
           }
 
-          // Не-нативная геометрия
           if ((result.format & GeometryFlag.rwNATIVE) === 0) {
             if (result.format & GeometryFlag.rwPRELIT) {
               result.prelitcolor = [];
@@ -753,7 +699,6 @@ export class DFFReader {
             }
           }
 
-          // Морф-таргеты
           result.morphTargets = [];
           for (let targetIdx = 0; targetIdx < result.numMorphTargets; targetIdx++) {
             const morphTarget = {
@@ -803,12 +748,10 @@ export class DFFReader {
           const numMaterials = this.readUInt32();
           result = [];
 
-          // Чтение индексов материалов
           for (let i = 0; i < numMaterials; i++) {
             result.push({ id: this.readUInt32() });
           }
 
-          // Чтение данных материалов
           for (let i = 0; i < numMaterials; i++) {
             result[i].RWMaterial = this.readChunk(ChunkType.CHUNK_MATERIAL);
           }
@@ -826,10 +769,10 @@ export class DFFReader {
             b: this.readUInt8(),
             a: this.readUInt8()
           };
-          this.readUInt32(); // Пропускаем unused
+          this.readUInt32(); 
           result.isTextured = this.readUInt32();
 
-          if (structHeader.version > 0x30400) { // 197632
+          if (structHeader.version > 0x30400) { 
             result.ambient = this.readFloat32();
             result.specular = this.readFloat32();
             result.diffuse = this.readFloat32();
@@ -848,7 +791,7 @@ export class DFFReader {
           this.readHeader();
           result = {};
           result.filterFlags = this.readUInt16();
-          this.readUInt16(); // Пропускаем unused
+          this.readUInt16();
 
           const nameHeader = this.readHeader();
           result.nameOffset = this.position;
@@ -874,15 +817,15 @@ export class DFFReader {
           result = {};
           result.frameIndex = this.readUInt32();
 
-          if (structHeader.version < 0x30400) { // 197632
+          if (structHeader.version < 0x30400) {
             result.flags = this.readUInt32();
-            this.readUInt32(); // Пропускаем unused
+            this.readUInt32();
             result.inlineGeometry = this.readChunk(ChunkType.CHUNK_GEOMETRY);
             result.geometryIndex = -1;
           } else {
             result.geometryIndex = this.readUInt32();
             result.flags = this.readUInt32();
-            this.readUInt32(); // Пропускаем unused
+            this.readUInt32();
           }
 
           this.readExtension(result);
@@ -932,7 +875,6 @@ export class DFFReader {
                   }
                 }
 
-                // Алиасы для совместимости
                 extData.hAnimVersion = extData.header.version;
                 extData.nodeId = extData.header.id;
                 extData.numNodes = extData.header.boneCount;
@@ -991,7 +933,6 @@ export class DFFReader {
                   const parentGeometry = header.parent;
                   let dataSize = Math.min(extHeader.length, this.length - extDataStart, extensionEnd - extDataStart);
 
-                  // Попытка определить реальный размер данных
                   if (parentGeometry && parentGeometry.format & GeometryFlag.rwNATIVE && extDataStart + 4 <= this.length) {
                     const numAttribs = this.data.getUint32(extDataStart, true);
                     const headerSize = 4 + numAttribs * 24;
@@ -1032,17 +973,15 @@ export class DFFReader {
                   extData.numBones = this.readUInt8();
                   extData.numUsedBones = this.readUInt8();
                   extData.maxWeightsPerVertex = this.readUInt8();
-                  this.readUInt8(); // Пропускаем padding
+                  this.readUInt8(); 
 
                   const isEmptyBones = extData.numUsedBones === 0;
 
-                  // Используемые кости
                   extData.bonesUsed = [];
                   for (let i = 0; i < extData.numUsedBones; i++) {
                     extData.bonesUsed.push(this.readUInt8());
                   }
 
-                  // Индексы костей для вершин
                   extData.vertexBoneIndices = [];
                   for (let vertIdx = 0; vertIdx < header.parent.numVertices; vertIdx++) {
                     extData.vertexBoneIndices.push({
@@ -1053,7 +992,6 @@ export class DFFReader {
                     });
                   }
 
-                  // Веса костей для вершин
                   extData.vertexBoneWeights = [];
                   for (let vertIdx = 0; vertIdx < header.parent.numVertices; vertIdx++) {
                     extData.vertexBoneWeights.push({
@@ -1064,11 +1002,10 @@ export class DFFReader {
                     });
                   }
 
-                  // Матрицы костей
                   extData.skinToBoneMatrix = [];
                   for (let boneIdx = 0; boneIdx < extData.numBones; boneIdx++) {
                     if (isEmptyBones) {
-                      this.position += 4; // Пропускаем индекс
+                      this.position += 4; 
                     }
 
                     const matrix = [];
@@ -1076,7 +1013,6 @@ export class DFFReader {
                       matrix.push(this.readFloat32());
                     }
 
-                    // Нормализация матрицы 4x4
                     matrix[3] = 0;
                     matrix[7] = 0;
                     matrix[11] = 0;
@@ -1107,7 +1043,7 @@ export class DFFReader {
 
               case ChunkType.CHUNK_MESHEXTENSION:
                 if (this.position + 4 <= this.length && this.position + 4 <= extensionEnd) {
-                  this.readUInt32(); // Пропускаем unknown
+                  this.readUInt32(); 
                 }
                 this.position = Math.min(extDataStart + extHeader.length, extensionEnd, this.length);
                 break;
@@ -1204,7 +1140,6 @@ export class DFFReader {
                         });
                       }
 
-                      // Сохраняем сырые данные
                       const rawBytes = new Uint8Array(dataSize);
                       new DataView(rawBytes.buffer).setUint32(0, flag, true);
                       for (let i = 0; i < extData.colors.length; i++) {
@@ -1269,7 +1204,6 @@ export class DFFReader {
                 }
             }
 
-            // Выравнивание позиции
             const expectedEnd = extDataStart + extHeader.length;
             if (this.position < expectedEnd) {
               this.position = Math.min(expectedEnd, extensionEnd, this.length);
@@ -1291,16 +1225,10 @@ export class DFFReader {
     return result;
   }
 
-  /**
-   * Чтение расширения для объекта
-   */
   readExtension(parent, endBoundary) {
     parent.RWExtension = this.readChunk(ChunkType.CHUNK_EXTENSION, parent, endBoundary);
   }
 
-  /**
-   * Чтение модели коллизий
-   */
   readCollisionModel(dataSize, startOffset) {
     const endOffset = startOffset + dataSize;
     const rawData = new Uint8Array(dataSize);
@@ -1363,9 +1291,6 @@ export class DFFReader {
     return colData;
   }
 
-  /**
-   * Чтение COL1 формата коллизий
-   */
   readCOL1(colData, endOffset) {
     const canRead = (bytes) => this.position + bytes <= endOffset;
 
@@ -1390,7 +1315,7 @@ export class DFFReader {
       return;
     }
 
-    this.readUInt32(); // Пропускаем unknown
+    this.readUInt32(); 
 
     if (!canRead(4)) {
       return;
@@ -1441,9 +1366,6 @@ export class DFFReader {
     }
   }
 
-  /**
-   * Чтение COL2/COL3/COL4 формата коллизий
-   */
   readCOL234(colData, version, structStart, endOffset) {
     const canRead = (bytes) => this.position + bytes <= endOffset;
 
@@ -1455,19 +1377,19 @@ export class DFFReader {
     const numBoxes = this.readUInt16();
     const numTriangles = this.readUInt16();
     const numLines = this.readUInt8();
-    this.position += 1; // Выравнивание
+    this.position += 1;
 
     if (!canRead(24)) {
       return;
     }
 
-    this.readUInt32(); // Пропускаем
+    this.readUInt32();
     const sphereOffset = this.readUInt32();
     const boxOffset = this.readUInt32();
     const lineOffset = this.readUInt32();
     const vertexOffset = this.readUInt32();
     const triangleOffset = this.readUInt32();
-    this.readUInt32(); // Пропускаем
+    this.readUInt32(); 
 
     let numShadowVertices = 0;
     let numShadowFaces = 0;
@@ -1481,7 +1403,6 @@ export class DFFReader {
       shadowFaceOffset = this.readUInt32();
     }
 
-    // Сферы
     if (numSpheres > 0 && sphereOffset > 0) {
       this.position = structStart + sphereOffset;
       for (let i = 0; i < numSpheres && this.position + 20 <= endOffset; i++) {
@@ -1497,7 +1418,6 @@ export class DFFReader {
       }
     }
 
-    // Боксы
     if (numBoxes > 0 && boxOffset > 0) {
       this.position = structStart + boxOffset;
       for (let i = 0; i < numBoxes && this.position + 28 <= endOffset; i++) {
@@ -1515,7 +1435,6 @@ export class DFFReader {
       }
     }
 
-    // Линии
     if (numLines > 0 && lineOffset > 0) {
       this.position = structStart + lineOffset;
       for (let i = 0; i < numLines && this.position + 24 <= endOffset; i++) {
@@ -1530,7 +1449,6 @@ export class DFFReader {
       }
     }
 
-    // Треугольники
     let maxVertexIndex = 0;
     if (numTriangles > 0 && triangleOffset > 0) {
       this.position = structStart + triangleOffset;
@@ -1547,7 +1465,6 @@ export class DFFReader {
       }
     }
 
-    // Вершины
     if (numTriangles > 0 && vertexOffset > 0) {
       const numVertices = maxVertexIndex + 1;
       this.position = structStart + vertexOffset;
@@ -1560,7 +1477,6 @@ export class DFFReader {
       }
     }
 
-    // Тени для COL3/COL4
     if ((version === "COL3" || version === "COL4") && numShadowFaces > 0) {
       colData.shadowVertices = [];
       colData.shadowFaces = [];
@@ -1590,9 +1506,6 @@ export class DFFReader {
     }
   }
 
-  /**
-   * Чтение Int16
-   */
   readInt16() {
     if (this.position + 2 > this.length) {
       throw new Error("Out of bounds at position " + this.position);
@@ -1602,9 +1515,6 @@ export class DFFReader {
     return value;
   }
 
-  /**
-   * Чтение 2DFX эффектов
-   */
   read2DFX(dataSize, startOffset) {
     const endOffset = startOffset + dataSize;
     const rawData = new Uint8Array(dataSize);
@@ -1635,7 +1545,7 @@ export class DFFReader {
 
       try {
         switch (effect.type) {
-          case 0: // Light
+          case 0: 
             effect.color = {
               r: this.readUInt8(),
               g: this.readUInt8(),
@@ -1662,11 +1572,11 @@ export class DFFReader {
             }
             break;
 
-          case 1: // Particle
+          case 1: 
             effect.particleName = this.readString(24);
             break;
 
-          case 3: // Attractor
+          case 3: 
             effect.attractorType = this.readUInt8();
             this.readUInt8();
             this.readUInt8();
@@ -1697,7 +1607,7 @@ export class DFFReader {
             this.readUInt8();
             break;
 
-          case 6: // ENEX
+          case 6:
             effect.enterAngle = this.readFloat32();
             effect.radiusX = this.readFloat32();
             effect.radiusY = this.readFloat32();
@@ -1715,7 +1625,7 @@ export class DFFReader {
             this.readUInt8();
             break;
 
-          case 7: // Road Sign
+          case 7: 
             effect.sizeX = this.readFloat32();
             effect.sizeY = this.readFloat32();
             effect.rotationX = this.readFloat32();
@@ -1733,17 +1643,17 @@ export class DFFReader {
             effect.text = [effect.text1, effect.text2, effect.text3, effect.text4].filter(Boolean).join("\n");
             break;
 
-          case 8: // Trigger Point
+          case 8: 
             effect.pointId = this.readUInt32();
             break;
 
-          case 9: // Cover Point
+          case 9:
             effect.dirX = this.readFloat32();
             effect.dirY = this.readFloat32();
             effect.coverType = this.readUInt32();
             break;
 
-          case 10: // Escalator
+          case 10:
             effect.bottomX = this.readFloat32();
             effect.bottomY = this.readFloat32();
             effect.bottomZ = this.readFloat32();
@@ -1756,7 +1666,7 @@ export class DFFReader {
             effect.direction = this.readUInt8();
             break;
 
-          case 4: // Sun Glare (нет данных)
+          case 4: 
           default:
             break;
         }
@@ -1764,7 +1674,6 @@ export class DFFReader {
         console.warn("[2DFX] Error parsing effect type", effect.type, ":", error.message);
       }
 
-      // Выравнивание позиции
       if (this.position - dataStart < size) {
         this.position = dataStart + size;
       }
@@ -1779,9 +1688,6 @@ export class DFFReader {
     return fxData;
   }
 
-  /**
-   * Чтение словаря UV-анимаций
-   */
   readUVAnimDict() {
     const animations = [];
     const dictHeader = this.readHeader();
@@ -1821,9 +1727,6 @@ export class DFFReader {
     return animations;
   }
 
-  /**
-   * Чтение UV-анимации
-   */
   readUVAnim(endOffset) {
     if (endOffset - this.position < 88) {
       return null;
@@ -1837,7 +1740,7 @@ export class DFFReader {
     const numFrames = this.readUInt32();
     animation.flags = this.readUInt32();
     animation.duration = this.readFloat32();
-    this.position += 4; // Пропускаем reserved
+    this.position += 4; 
     animation.name = this.readString(32);
 
     animation.nodeToUVChannelMap = [];
