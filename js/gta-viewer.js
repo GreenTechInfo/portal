@@ -703,4 +703,93 @@ export class GTACharacterViewer {
         }
         this.controls.update();
     }
+
+    createMeshFromDFF(dffPath, txdPath) {
+    }
+
+    getTextureManager() {
+        return {
+            textures: this.textures,
+            applyTexturesToModel: (model) => this.applyTexturesToModel(model),
+            createTexture: (texData) => this.createTexture(texData),
+            makeMatte: (model) => this.makeMatte(model)
+        };
+    }
+	
+	attachAccessoryToBone(accessoryGroup, boneName) {
+		if (!this.currentModel) {
+			console.warn('No model loaded');
+			return false;
+		}
+
+		let targetBone = null;
+		
+		// Ищем в скелете
+		if (this.skeleton) {
+			for (const bone of this.skeleton.bones) {
+				if (bone.name.toLowerCase() === boneName.toLowerCase()) {
+					targetBone = bone;
+					break;
+				}
+			}
+		}
+		
+		// Если не нашли, ищем в иерархии модели
+		if (!targetBone) {
+			this.currentModel.traverse((child) => {
+				if (child.isBone && child.name.toLowerCase() === boneName.toLowerCase()) {
+					targetBone = child;
+				}
+			});
+		}
+		
+		if (!targetBone) {
+			console.warn(`Bone "${boneName}" not found. Available bones:`, 
+				this.skeleton ? this.skeleton.bones.map(b => b.name) : 'no skeleton');
+			return false;
+		}
+		
+		// Сохраняем текущую локальную позицию (относительно текущего родителя)
+		const localPos = accessoryGroup.position.clone();
+		const localQuat = accessoryGroup.quaternion.clone();
+		const localScl = accessoryGroup.scale.clone();
+		
+		// Открепляем от текущего родителя
+		if (accessoryGroup.parent) {
+			accessoryGroup.parent.remove(accessoryGroup);
+		}
+		
+		// Прикрепляем к кости
+		targetBone.add(accessoryGroup);
+		
+		// Восстанавливаем локальную позицию (теперь она локальна относительно кости)
+		accessoryGroup.position.copy(localPos);
+		accessoryGroup.quaternion.copy(localQuat);
+		accessoryGroup.scale.copy(localScl);
+		
+		return true;
+	}
+	
+	detachAccessoryFromBone(accessoryGroup) {
+		if (!accessoryGroup.parent) return false;
+		
+		// Открепляем от кости и добавляем обратно в сцену
+		const parent = accessoryGroup.parent;
+		const worldPos = new THREE.Vector3();
+		const worldQuat = new THREE.Quaternion();
+		const worldScale = new THREE.Vector3();
+		
+		accessoryGroup.getWorldPosition(worldPos);
+		accessoryGroup.getWorldQuaternion(worldQuat);
+		accessoryGroup.getWorldScale(worldScale);
+		
+		parent.remove(accessoryGroup);
+		this.scene.add(accessoryGroup);
+		
+		accessoryGroup.position.copy(worldPos);
+		accessoryGroup.quaternion.copy(worldQuat);
+		accessoryGroup.scale.copy(worldScale);
+		
+		return true;
+	}
 }

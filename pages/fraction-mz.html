@@ -3,10 +3,80 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Министерство Здравоохранения - GreenTech info</title>
+    <title>Министерство Здравоохранения — GreenTech info</title>
     <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        /* быстрые доработки для новых блоков */
+        .highlight-box {
+            background: rgba(46, 164, 79, 0.07);
+            border-left: 4px solid var(--accent, #2ea44f);
+            padding: 18px 22px;
+            border-radius: 12px;
+            margin: 20px 0 12px;
+        }
+        .highlight-box i {
+            color: var(--accent, #2ea44f);
+            margin-right: 10px;
+        }
+        .link-button {
+            display: inline-block;
+            background: var(--accent, #2ea44f);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: 0.2s;
+            border: none;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+        .link-button i {
+            margin-right: 8px;
+        }
+        .link-button:hover {
+            filter: brightness(1.1);
+            transform: scale(1.02);
+        }
+        .equipment-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+            gap: 16px;
+            margin: 16px 0 8px;
+        }
+        .equipment-item {
+            background: rgba(255,255,255,0.03);
+            padding: 14px 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.06);
+            text-align: center;
+            font-weight: 500;
+        }
+        .equipment-item i {
+            display: block;
+            font-size: 28px;
+            color: var(--accent, #2ea44f);
+            margin-bottom: 8px;
+        }
+        .equipment-item span {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        .transport-badge {
+            background: rgba(46, 164, 79, 0.15);
+            padding: 10px 16px;
+            border-radius: 40px;
+            display: inline-block;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        .transport-badge i {
+            margin-right: 8px;
+            color: var(--accent, #2ea44f);
+        }
+    </style>
 </head>
 <body>
 
@@ -26,12 +96,15 @@
         <h1 class="page-title">Министерство Здравоохранения Нижегородской области</h1>
         <p class="page-subtitle"></p>
 
+        <!-- Блок: О фракции (дополнен) -->
         <div class="info-block">
             <h3>О фракции</h3>
             <p><strong>Министерство здравоохранения Нижегородской области</strong> — центральный орган исполнительной власти, обеспечивающий реализацию государственной политики в сфере охраны здоровья граждан на территории региона.</p>
             <p>Основное звено медицины области, обслуживающее город Арзамас и Арзамасский район. Занимается оказанием экстренной и неотложной медицинской помощи на догоспитальном этапе при чрезвычайных ситуациях, происшествиях, травмах, обострении хронических или внезапно возникших заболеваниях.</p>
+            <p><strong>ГБУЗ НО «Городская клиническая станция скорой медицинской помощи г. Арзамас»</strong> — ведомое звено медицины области, оказывающее экстренную и неотложную помощь на догоспитальном этапе.</p>
         </div>
 
+        <!-- Структура Министерства (без изменений) -->
         <div class="info-block">
             <h3>Структура Министерства</h3>
             <p>В состав Министерства Здравоохранения входят следующие ключевые подразделения:</p>
@@ -47,6 +120,7 @@
             </div>
         </div>
 
+        <!-- О Городской клинической станции скорой медицинской помощи (расширен) -->
         <div class="info-block">
             <h3>О Городской клинической станции скорой медицинской помощи</h3>
             <p><strong>ГБУЗ НО «Городская клиническая станция скорой медицинской помощи»</strong> оказывает скорую и неотложную помощь населению города Арзамаса и Арзамасского района. По объёму выполняемой работы относится к станциям <strong>первой категории</strong>.</p>
@@ -68,6 +142,7 @@
             </ul>
         </div>
 
+        <!-- Структура выездных бригад (без изменений) -->
         <div class="info-block">
             <h3>Структура выездных бригад СМП</h3>
             <p>Штатным расписанием утверждено <strong>25 бригад СМП</strong>:</p>
@@ -88,6 +163,54 @@
             </ul>
         </div>
 
+        <!-- НОВЫЙ БЛОК: Трудоустройство -->
+        <div class="info-block">
+            <h3><i class="fas fa-file-signature" style="color: var(--accent); margin-right: 8px;"></i> Трудоустройство</h3>
+            <p>Для трудоустройства необходимо <strong>очно посетить отдел кадров</strong> по адресу: <strong>г. Арзамас, ул. Грибоедова, д.3</strong>, либо написать электронное заявление через официальный портал Министерства Здравоохранения области.</p>
+            <div style="margin: 20px 0 8px;">
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSeSHWefctnhw20UYttfMImmTv9sId_zH84C6RxeSBGf-qD-Nw/viewform?usp=dialog" target="_blank" class="link-button">
+                    <i class="fas fa-paper-plane"></i> Подать электронное заявление
+                </a>
+            </div>
+        </div>
+
+        <!-- НОВЫЙ БЛОК: 3D-объекты и транспорт -->
+        <div class="info-block">
+            <h3><i class="fas fa-cubes" style="color: var(--accent); margin-right: 8px;"></i> Визуализация процесса</h3>
+            <p>Для комфортной визуализации процесса разработаны 3D-объекты, полностью соответствующие реальному оснащению:</p>
+            
+            <div class="equipment-grid">
+                <div class="equipment-item">
+                    <i class="fas fa-bed"></i>
+                    <span>Лежачая катка</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-user-injured"></i>
+                    <span>Спинальный щит</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-heartbeat"></i>
+                    <span>Дефибриллятор</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-wave-square"></i>
+                    <span>Электрокардиограф</span>
+                </div>
+                <div class="equipment-item">
+                    <i class="fas fa-suitcase-medical"></i>
+                    <span>Укладка с оборудованием</span>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px;">
+                <p>Транспорт создан на основе реальных ГОСТов и стандартов цветографики специализированного транспорта РФ</p>
+                <p style="margin-top: 12px; font-size: 0.95rem; background: rgba(46,164,79,0.05); padding: 12px 16px; border-radius: 10px;">
+                    Всё создано и визуализировано на основе реального опыта руководства организации при помощи команды разработчиков проекта специально для полного и реалистичного погружения в процесс медицинской деятельности скорой помощи.
+                </p>
+            </div>
+        </div>
+
+        <!-- Требования для вступления (заглушка) -->
         <div class="info-block">
             <h3>Требования для вступления</h3>
             <div style="text-align: center; padding: 48px 24px;">
@@ -100,7 +223,7 @@
             </div>
         </div>
 
-
+        <!-- Основные команды (без изменений) -->
         <div class="info-block">
             <h3>Основные команды</h3>
             <div style="overflow-x: auto;">
@@ -109,18 +232,19 @@
                         <tr><th>Команда</th><th>Назначение</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><code>/duty</code></span></td><td>Заступить на службу (надеть форму)</td></tr>
-                        <tr><td><code>/offduty</code></span></td><td>Завершить службу (переодеться в гражданское)</td></tr>
-                        <tr><td><code>/r [текст]</code></span></td><td>RP рация внутри фракции</span></td></tr>
-                        <tr><td><code>/ro [текст]</code></span></td><td>NonRP чат рации внутри фракции</span></td></tr>
-                        <tr><td><code>/d [текст]</code></span></td><td>RP чат рации департамента</span></td></tr>
-                        <tr><td><code>/od [текст]</code></span></td><td>NonRP чат рации департамента</span></td></tr>
-                        <tr><td><code>/members</code></span></td><td>Список сотрудников фракции онлайн</span></td></tr>
+                        <tr><td><code>/duty</code></td><td>Заступить на службу (надеть форму)</td></tr>
+                        <tr><td><code>/offduty</code></td><td>Завершить службу (переодеться в гражданское)</td></tr>
+                        <tr><td><code>/r [текст]</code></td><td>RP рация внутри фракции</td></tr>
+                        <tr><td><code>/ro [текст]</code></td><td>NonRP чат рации внутри фракции</td></tr>
+                        <tr><td><code>/d [текст]</code></td><td>RP чат рации департамента</td></tr>
+                        <tr><td><code>/od [текст]</code></td><td>NonRP чат рации департамента</td></tr>
+                        <tr><td><code>/members</code></td><td>Список сотрудников фракции онлайн</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
+        <!-- Форма сотрудников МЗ (3D) -->
         <div class="info-block uniform-3d-block">
             <h3>Форма сотрудников МЗ</h3>
             <div class="uniform-controls">
@@ -173,6 +297,7 @@
     </div>
 </footer>
 
+<!-- Модальное окно "Снаряжение" -->
 <div id="gearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10002; align-items: center; justify-content: center;">
     <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; max-width: 450px; width: 90%; padding: 28px 24px; text-align: center; position: relative; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);">
         <button id="closeGearModal" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">&times;</button>
@@ -253,7 +378,6 @@
 
             let targetAnim = null;
             
-            // Выбираем анимации в зависимости от пола
             if (config.gender === "female") {
                 const femaleAnims = ["woman_idlestance", "woman_idle", "idle_female", "female_idle", "IDLE"];
                 for (const anim of femaleAnims) {
@@ -337,5 +461,6 @@
         }
     });
 </script>
+
 </body>
 </html>

@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Тестовый редактор аксессуаров - GTA Character Viewer</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1a2e;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .editor-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        /* Панель управления */
+        .control-panel {
+            width: 420px;
+            min-width: 420px;
+            background: rgba(26, 26, 46, 0.95);
+            border-right: 2px solid rgba(46, 164, 79, 0.3);
+            padding: 20px 18px;
+            overflow-y: auto;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .control-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .control-panel::-webkit-scrollbar-thumb {
+            background: var(--accent, #2ea44f);
+            border-radius: 2px;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            border-bottom: 2px solid rgba(46, 164, 79, 0.3);
+            padding-bottom: 12px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .panel-title .badge {
+            font-size: 12px;
+            background: rgba(46, 164, 79, 0.2);
+            color: #2ea44f;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 400;
+        }
+
+        .form-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .form-selector button {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 500;
+            min-width: 80px;
+        }
+
+        .form-selector button:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+
+        .form-selector button.active {
+            border-color: #2ea44f;
+            background: rgba(46, 164, 79, 0.15);
+            color: #fff;
+        }
+
+        .accessories-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .accessories-section h4 {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .accessory-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.02);
+        }
+
+        .accessory-item:hover {
+            background: rgba(255,255,255,0.06);
+        }
+
+        .accessory-item.active {
+            background: rgba(46, 164, 79, 0.12);
+            border-left: 3px solid #2ea44f;
+        }
+
+        .accessory-item label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            flex: 1;
+        }
+
+        .accessory-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2ea44f;
+            cursor: pointer;
+        }
+
+        .accessory-item .name {
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        .accessory-item .status {
+            font-size: 11px;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        .accessory-item .status.equipped {
+            color: #2ea44f;
+            background: rgba(46, 164, 79, 0.15);
+        }
+
+        .transform-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .transform-section h4 {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+
+        .transform-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 12px;
+        }
+
+        .transform-group .full-width {
+            grid-column: 1 / -1;
+        }
+
+        .transform-group label {
+            font-size: 12px;
+            color: #888;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .transform-group input[type="range"] {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+            min-width: 40px;
+        }
+
+        .transform-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #2ea44f;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .transform-group input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            background: #2ea44f;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .transform-group .value-display {
+            font-size: 12px;
+            color: #aaa;
+            min-width: 45px;
+            text-align: right;
+            font-family: 'Consolas', monospace;
+        }
+
+        .transform-group .axis-label {
+            font-size: 10px;
+            color: #666;
+            min-width: 14px;
+            font-weight: 700;
+        }
+
+        .transform-group .input-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .transform-group .slider-with-value {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+
+        .transform-group .slider-with-value input[type="range"] {
+            flex: 1;
+        }
+
+        /* Стили для числового ввода */
+        .transform-group .number-input {
+            width: 52px;
+            padding: 2px 4px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: #fff;
+            font-size: 11px;
+            font-family: 'Consolas', monospace;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+
+        .transform-group .number-input:focus {
+            outline: none;
+            border-color: #2ea44f;
+        }
+
+        .transform-group .number-input:hover {
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .transform-group .number-input::-webkit-inner-spin-button,
+        .transform-group .number-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .transform-group .number-input[type="number"] {
+            -moz-appearance: textfield;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .action-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+
+        .btn-copy {
+            background: #2ea44f;
+            color: #fff;
+        }
+
+        .btn-copy:hover {
+            background: #3cb85c;
+        }
+
+        .btn-copy.copied {
+            background: #1a7a37;
+        }
+
+        .btn-reset {
+            background: rgba(255,255,255,0.08);
+            color: #aaa;
+        }
+
+        .btn-reset:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+
+        .btn-clear-all {
+            background: rgba(255,68,68,0.15);
+            color: #ff4444;
+            border: 1px solid rgba(255,68,68,0.2);
+        }
+
+        .btn-clear-all:hover {
+            background: rgba(255,68,68,0.25);
+        }
+
+        .btn-apply-all {
+            background: rgba(46, 164, 79, 0.15);
+            color: #2ea44f;
+            border: 1px solid rgba(46, 164, 79, 0.2);
+        }
+
+        .btn-apply-all:hover {
+            background: rgba(46, 164, 79, 0.25);
+        }
+
+        .code-output {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            color: #aaa;
+            border: 1px solid rgba(255,255,255,0.06);
+            max-height: 120px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.6;
+        }
+
+        .code-output .highlight {
+            color: #2ea44f;
+        }
+
+        .code-output .key {
+            color: #e6b450;
+        }
+
+        .code-output .string {
+            color: #7ec8a0;
+        }
+
+        .selected-accessory-info {
+            font-size: 13px;
+            color: #888;
+            padding: 4px 0;
+        }
+
+        .selected-accessory-info strong {
+            color: #ddd;
+        }
+
+        /* 3D контейнер */
+        .viewer-container {
+            flex: 1;
+            height: 100vh;
+            background: #0d0d1a;
+            position: relative;
+        }
+
+        #uniform3dContainer {
+            width: 100%;
+            height: 100%;
+        }
+
+        #uniform3dLoading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #666;
+        }
+
+        #uniform3dLoading i {
+            font-size: 48px;
+            color: #2ea44f;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        .viewer-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+            pointer-events: none;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        /* Стили для скролла панели */
+        .control-panel .separator {
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 4px 0;
+        }
+
+        /* Адаптив */
+        @media (max-width: 768px) {
+            .editor-layout {
+                flex-direction: column;
+            }
+
+            .control-panel {
+                width: 100%;
+                min-width: unset;
+                height: 50vh;
+                border-right: none;
+                border-bottom: 2px solid rgba(46, 164, 79, 0.3);
+            }
+
+            .viewer-container {
+                height: 50vh;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="editor-layout">
+    <!-- Панель управления -->
+    <div class="control-panel" id="controlPanel">
+        <div class="panel-title">
+            🎮 Редактор аксессуаров
+            <span class="badge">BETA</span>
+        </div>
+
+        <!-- Выбор формы -->
+        <div class="form-selector">
+            <button class="active" data-uniform="everyday">Повседневная</button>
+            <button data-uniform="combat">Боевая</button>
+        </div>
+
+        <!-- Список аксессуаров -->
+        <div class="accessories-section">
+            <h4>📦 Снаряжение</h4>
+            <div id="accessoriesList"></div>
+        </div>
+
+        <!-- Информация о выбранном аксессуаре -->
+        <div class="selected-accessory-info" id="selectedInfo">
+            <span style="color:#666;">Выберите аксессуар для настройки</span>
+        </div>
+
+        <!-- Трансформации -->
+        <div class="transform-section" id="transformSection">
+            <h4>🔄 Позиция / Вращение / Масштаб</h4>
+            <div class="transform-group">
+                <!-- Позиция X -->
+                <div class="full-width input-row">
+                    <span class="axis-label">X</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="posX" min="-1" max="1" step="0.001" value="0">
+                        <input type="number" class="number-input" id="posXNum" step="0.001">
+                        <span class="value-display" id="posXVal">0.000</span>
+                    </div>
+                </div>
+                <!-- Позиция Y -->
+                <div class="full-width input-row">
+                    <span class="axis-label">Y</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="posY" min="-1" max="1" step="0.001" value="0">
+                        <input type="number" class="number-input" id="posYNum" step="0.001">
+                        <span class="value-display" id="posYVal">0.000</span>
+                    </div>
+                </div>
+                <!-- Позиция Z -->
+                <div class="full-width input-row">
+                    <span class="axis-label">Z</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="posZ" min="-1" max="1" step="0.001" value="0">
+                        <input type="number" class="number-input" id="posZNum" step="0.001">
+                        <span class="value-display" id="posZVal">0.000</span>
+                    </div>
+                </div>
+
+                <div class="separator" style="grid-column:1/-1; margin:4px 0;"></div>
+
+                <!-- Вращение X -->
+                <div class="full-width input-row">
+                    <span class="axis-label">RX</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="rotX" min="-180" max="180" step="1" value="0">
+                        <input type="number" class="number-input" id="rotXNum" step="1">
+                        <span class="value-display" id="rotXVal">0°</span>
+                    </div>
+                </div>
+                <!-- Вращение Y -->
+                <div class="full-width input-row">
+                    <span class="axis-label">RY</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="rotY" min="-180" max="180" step="1" value="0">
+                        <input type="number" class="number-input" id="rotYNum" step="1">
+                        <span class="value-display" id="rotYVal">0°</span>
+                    </div>
+                </div>
+                <!-- Вращение Z -->
+                <div class="full-width input-row">
+                    <span class="axis-label">RZ</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="rotZ" min="-180" max="180" step="1" value="0">
+                        <input type="number" class="number-input" id="rotZNum" step="1">
+                        <span class="value-display" id="rotZVal">0°</span>
+                    </div>
+                </div>
+
+                <div class="separator" style="grid-column:1/-1; margin:4px 0;"></div>
+
+                <!-- Масштаб X -->
+                <div class="full-width input-row">
+                    <span class="axis-label">SX</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="scaleX" min="0.5" max="2" step="0.005" value="1">
+                        <input type="number" class="number-input" id="scaleXNum" step="0.005">
+                        <span class="value-display" id="scaleXVal">1.000</span>
+                    </div>
+                </div>
+                <!-- Масштаб Y -->
+                <div class="full-width input-row">
+                    <span class="axis-label">SY</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="scaleY" min="0.5" max="2" step="0.005" value="1">
+                        <input type="number" class="number-input" id="scaleYNum" step="0.005">
+                        <span class="value-display" id="scaleYVal">1.000</span>
+                    </div>
+                </div>
+                <!-- Масштаб Z -->
+                <div class="full-width input-row">
+                    <span class="axis-label">SZ</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="scaleZ" min="0.5" max="2" step="0.005" value="1">
+                        <input type="number" class="number-input" id="scaleZNum" step="0.005">
+                        <span class="value-display" id="scaleZVal">1.000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки действий -->
+        <div class="action-buttons">
+            <button class="btn-clear-all" id="clearAllBtn">
+                <i class="fas fa-times"></i> Снять всё
+            </button>
+            <button class="btn-reset" id="resetSelectedBtn">
+                <i class="fas fa-undo"></i> Сброс
+            </button>
+        </div>
+
+        <div class="action-buttons">
+            <button class="btn-copy" id="copyCodeBtn">
+                <i class="fas fa-copy"></i> Скопировать код
+            </button>
+            <button class="btn-apply-all" id="applyAllBtn">
+                <i class="fas fa-check"></i> Применить ко всем
+            </button>
+        </div>
+
+        <!-- Вывод кода -->
+        <div class="code-output" id="codeOutput">
+            <span style="color:#666;">// Настройки будут отображаться здесь</span>
+        </div>
+    </div>
+
+    <!-- 3D контейнер -->
+    <div class="viewer-container">
+        <div id="uniform3dContainer">
+            <div id="uniform3dLoading">
+                <i class="fas fa-cube"></i>
+                <p>Загрузка 3D просмотрщика...</p>
+            </div>
+        </div>
+        <div class="viewer-hint">🖱 ЛКМ — вращение | ПКМ — перемещение | Колесо — масштаб | R — сброс камеры</div>
+    </div>
+</div>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+}
+</script>
+
+<script src="../js/common.js"></script>
+<script type="module">
+    import { GTACharacterViewer } from '../js/gta-viewer.js';
+    import { DFFReader } from '../js/DFFReader.js';
+    import { TXDReader } from '../js/TXDReader.js';
+
+    // ===== КОНФИГУРАЦИЯ =====
+    // Укажите пути к вашим моделям
+    const MODELS_BASE_PATH = '../models/uniforms/fsin/';
+    const ACCESSORIES_BASE_PATH = '../models/uniforms/fsin/accessories/';
+    const ACCESSORIES_TXD_PATH = `${ACCESSORIES_BASE_PATH}accessories.txd`;
+    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
+
+    const UNIFORM_MODELS = {
+        everyday: {
+            name: "Повседневная форма",
+            dff: `${MODELS_BASE_PATH}everyday.dff`,
+            txd: `${MODELS_BASE_PATH}everyday.txd`,
+            gender: "male"
+        },
+        combat: {
+            name: "Боевая форма",
+            dff: `${MODELS_BASE_PATH}combat.dff`,
+            txd: `${MODELS_BASE_PATH}combat.txd`,
+            gender: "male"
+        }
+    };
+
+    // Список аксессуаров
+    const ACCESSORIES_INFO = [
+        { id: 'body_armor', name: 'Бронежилет', slot: 'body', defaultBone: 'neck' },
+        { id: 'combat_helmet', name: 'Боевой шлем', slot: 'head', defaultBone: 'head' },
+        { id: 'cap', name: 'Кепка', slot: 'head', defaultBone: 'head' },
+        { id: 'peak_cap', name: 'Фуражка', slot: 'head', defaultBone: 'head' }
+    ];
+
+    // ===== СОСТОЯНИЕ =====
+    let viewer = null;
+    let currentUniform = 'everyday';
+    let accessoryGroups = {};
+    let loadedAccessories = {};
+    let equippedAccessories = {};
+    let accessorySlots = { head: null, body: null };
+    let accessoryAttachments = {};
+    let selectedAccessoryId = null;
+    let isUpdatingSliders = false;
+    let isUpdatingNumberInputs = false;
+    let accessoriesTxdData = null;
+
+    // Храним оригинальные позиции для сброса
+    const defaultTransforms = {};
+
+    // ===== ИНИЦИАЛИЗАЦИЯ =====
+    async function initViewer() {
+        const container = document.getElementById('uniform3dContainer');
+        const loadingEl = document.getElementById('uniform3dLoading');
+        
+        viewer = new GTACharacterViewer(container);
+        
+        setTimeout(() => {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }, 500);
+        
+        await loadAccessoriesTxd();
+        await loadUniform(currentUniform);
+        await loadAllAccessories();
+        updateAccessoriesUI();
+        updateSelectedInfo();
+    }
+
+    async function loadAccessoriesTxd() {
+        try {
+            const response = await fetch(ACCESSORIES_TXD_PATH);
+            if (!response.ok) throw new Error(`TXD not found: ${ACCESSORIES_TXD_PATH}`);
+            const buffer = await response.arrayBuffer();
+            accessoriesTxdData = buffer;
+        } catch (error) {
+            console.error('Failed to load accessories TXD:', error);
+        }
+    }
+
+    function applySharedTexturesToMesh(group) {
+        if (!accessoriesTxdData || !viewer) return;
+        try {
+            const txd = new TXDReader().parse(accessoriesTxdData);
+            for (const tex of txd.textures) {
+                if (tex.imageData) {
+                    const texture = viewer.createTexture(tex);
+                    viewer.textures.set(tex.name.toLowerCase(), texture);
+                }
+            }
+            viewer.applyTexturesToModel(group);
+            viewer.makeMatte(group);
+        } catch (error) {
+            console.error('Failed to apply shared textures:', error);
+        }
+    }
+
+    async function loadUniform(uniformId) {
+        const config = UNIFORM_MODELS[uniformId];
+        if (!config) return;
+
+        // Снимаем все аксессуары при смене формы
+        clearAllAccessories();
+        
+        const loadingEl = document.getElementById('uniform3dLoading');
+        if (loadingEl) loadingEl.style.display = 'flex';
+        
+        try {
+            await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
+
+            const availableAnims = viewer.getAnimationNames();
+            const maleAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed", "IDLE"];
+            let targetAnim = maleAnims.find(a => availableAnims.includes(a));
+            if (!targetAnim && availableAnims.length > 0) targetAnim = availableAnims[0];
+            if (targetAnim) viewer.playAnimation(targetAnim);
+            
+        } catch (error) {
+            console.error('Failed to load uniform:', error);
+        } finally {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }
+    }
+
+    async function loadAllAccessories() {
+        for (const info of ACCESSORIES_INFO) {
+            try {
+                const dffPath = `${ACCESSORIES_BASE_PATH}${info.id}.dff`;
+                const dffResponse = await fetch(dffPath);
+                if (!dffResponse.ok) throw new Error(`DFF not found: ${dffPath}`);
+                const dffBuffer = await dffResponse.arrayBuffer();
+                const dff = new DFFReader().parse(dffBuffer);
+                if (!dff) throw new Error("Failed to parse DFF");
+                
+                const meshGroup = viewer.createMesh(dff);
+                applySharedTexturesToMesh(meshGroup);
+                
+                meshGroup.visible = false;
+                viewer.scene.add(meshGroup);
+                
+                accessoryGroups[info.id] = meshGroup;
+                loadedAccessories[info.id] = true;
+                accessoryAttachments[info.id] = {
+                    group: meshGroup,
+                    bone: info.defaultBone || 'head',
+                    isAttached: false
+                };
+
+                // Сохраняем дефолтные трансформации
+                defaultTransforms[info.id] = {
+                    position: { x: 0, y: 0, z: 0 },
+                    rotation: { x: 0, y: 0, z: 0 },
+                    scale: { x: 1, y: 1, z: 1 }
+                };
+                
+            } catch (error) {
+                console.error(`Failed to load accessory "${info.id}":`, error);
+                loadedAccessories[info.id] = false;
+            }
+        }
+        updateAccessoriesUI();
+    }
+
+    // ===== УПРАВЛЕНИЕ АКСЕССУАРАМИ =====
+    function toggleAccessory(accessoryId) {
+        const info = ACCESSORIES_INFO.find(a => a.id === accessoryId);
+        if (!info) return;
+        
+        const group = accessoryGroups[accessoryId];
+        if (!group || !loadedAccessories[accessoryId]) return;
+        
+        const slot = info.slot || 'body';
+        
+        if (equippedAccessories[accessoryId]) {
+            // Снимаем
+            const attachment = accessoryAttachments[accessoryId];
+            if (attachment && attachment.isAttached) {
+                viewer.detachAccessoryFromBone(group);
+                attachment.isAttached = false;
+            }
+            group.visible = false;
+            delete equippedAccessories[accessoryId];
+            if (accessorySlots[slot] === accessoryId) {
+                accessorySlots[slot] = null;
+            }
+            if (selectedAccessoryId === accessoryId) {
+                selectedAccessoryId = null;
+            }
+        } else {
+            // Надеваем
+            if (accessorySlots[slot]) {
+                const oldId = accessorySlots[slot];
+                if (accessoryGroups[oldId]) {
+                    const oldAttachment = accessoryAttachments[oldId];
+                    if (oldAttachment && oldAttachment.isAttached) {
+                        viewer.detachAccessoryFromBone(accessoryGroups[oldId]);
+                        oldAttachment.isAttached = false;
+                    }
+                    accessoryGroups[oldId].visible = false;
+                }
+                delete equippedAccessories[oldId];
+            }
+            
+            const attachment = accessoryAttachments[accessoryId];
+            if (attachment && attachment.bone) {
+                group.visible = true;
+                // Применяем сохранённые трансформации
+                applySavedTransform(accessoryId);
+                const success = viewer.attachAccessoryToBone(group, attachment.bone);
+                attachment.isAttached = success;
+            }
+            
+            equippedAccessories[accessoryId] = true;
+            accessorySlots[slot] = accessoryId;
+            selectedAccessoryId = accessoryId;
+        }
+        
+        updateAccessoriesUI();
+        updateSelectedInfo();
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    function clearAllAccessories() {
+        for (const info of ACCESSORIES_INFO) {
+            const group = accessoryGroups[info.id];
+            if (group) {
+                const attachment = accessoryAttachments[info.id];
+                if (attachment && attachment.isAttached) {
+                    viewer.detachAccessoryFromBone(group);
+                    attachment.isAttached = false;
+                }
+                group.visible = false;
+            }
+        }
+        equippedAccessories = {};
+        accessorySlots = { head: null, body: null };
+        selectedAccessoryId = null;
+        updateAccessoriesUI();
+        updateSelectedInfo();
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    function selectAccessory(accessoryId) {
+        if (!equippedAccessories[accessoryId]) {
+            toggleAccessory(accessoryId);
+            return;
+        }
+        selectedAccessoryId = accessoryId;
+        updateAccessoriesUI();
+        updateSelectedInfo();
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    // ===== ТРАНСФОРМАЦИИ =====
+    function getCurrentTransform(accessoryId) {
+        const group = accessoryGroups[accessoryId];
+        if (!group) return null;
+        return {
+            position: {
+                x: group.position.x,
+                y: group.position.y,
+                z: group.position.z
+            },
+            rotation: {
+                x: group.rotation.x * 180 / Math.PI,
+                y: group.rotation.y * 180 / Math.PI,
+                z: group.rotation.z * 180 / Math.PI
+            },
+            scale: {
+                x: group.scale.x,
+                y: group.scale.y,
+                z: group.scale.z
+            }
+        };
+    }
+
+    function applySavedTransform(accessoryId) {
+        const group = accessoryGroups[accessoryId];
+        if (!group) return;
+        const def = defaultTransforms[accessoryId];
+        if (!def) return;
+        group.position.set(def.position.x, def.position.y, def.position.z);
+        group.rotation.set(
+            def.rotation.x * Math.PI / 180,
+            def.rotation.y * Math.PI / 180,
+            def.rotation.z * Math.PI / 180
+        );
+        group.scale.set(def.scale.x, def.scale.y, def.scale.z);
+    }
+
+    function updateTransformFromValue(accessoryId, type, axis, value) {
+        if (isUpdatingSliders || isUpdatingNumberInputs) return;
+        if (!accessoryId || !equippedAccessories[accessoryId]) return;
+        
+        const group = accessoryGroups[accessoryId];
+        if (!group) return;
+        
+        const val = parseFloat(value);
+        if (isNaN(val)) return;
+        
+        const sliderId = type + axis;
+        const numId = type + axis + 'Num';
+        const valId = type + axis + 'Val';
+        
+        // Обновляем слайдер
+        const slider = document.getElementById(sliderId);
+        if (slider) {
+            const min = parseFloat(slider.min);
+            const max = parseFloat(slider.max);
+            const clamped = Math.max(min, Math.min(max, val));
+            slider.value = clamped;
+        }
+        
+        // Обновляем числовой инпут
+        const numInput = document.getElementById(numId);
+        if (numInput) {
+            numInput.value = val;
+        }
+        
+        // Обновляем отображение
+        const display = document.getElementById(valId);
+        if (display) {
+            if (type === 'rot') {
+                display.textContent = `${Math.round(val)}°`;
+            } else {
+                display.textContent = val.toFixed(3);
+            }
+        }
+        
+        // Применяем к модели
+        if (type === 'pos') {
+            const pos = group.position;
+            pos[axis.toLowerCase()] = val;
+        } else if (type === 'rot') {
+            const rot = group.rotation;
+            rot[axis.toLowerCase()] = val * Math.PI / 180;
+        } else if (type === 'scale') {
+            const scale = group.scale;
+            scale[axis.toLowerCase()] = val;
+        }
+        
+        // Сохраняем в дефолты
+        const transform = getCurrentTransform(accessoryId);
+        if (transform) {
+            defaultTransforms[accessoryId] = transform;
+        }
+        
+        updateCodeOutput();
+    }
+
+    function updateTransformFromSliders(accessoryId) {
+        if (isUpdatingSliders) return;
+        if (!accessoryId || !equippedAccessories[accessoryId]) return;
+        
+        const group = accessoryGroups[accessoryId];
+        if (!group) return;
+        
+        const posX = parseFloat(document.getElementById('posX').value);
+        const posY = parseFloat(document.getElementById('posY').value);
+        const posZ = parseFloat(document.getElementById('posZ').value);
+        const rotX = parseFloat(document.getElementById('rotX').value);
+        const rotY = parseFloat(document.getElementById('rotY').value);
+        const rotZ = parseFloat(document.getElementById('rotZ').value);
+        const scaleX = parseFloat(document.getElementById('scaleX').value);
+        const scaleY = parseFloat(document.getElementById('scaleY').value);
+        const scaleZ = parseFloat(document.getElementById('scaleZ').value);
+        
+        group.position.set(posX, posY, posZ);
+        group.rotation.set(
+            rotX * Math.PI / 180,
+            rotY * Math.PI / 180,
+            rotZ * Math.PI / 180
+        );
+        group.scale.set(scaleX, scaleY, scaleZ);
+        
+        // Обновляем отображение значений и числовые инпуты
+        isUpdatingNumberInputs = true;
+        
+        updateNumberInputAndDisplay('posX', posX);
+        updateNumberInputAndDisplay('posY', posY);
+        updateNumberInputAndDisplay('posZ', posZ);
+        updateNumberInputAndDisplay('rotX', rotX);
+        updateNumberInputAndDisplay('rotY', rotY);
+        updateNumberInputAndDisplay('rotZ', rotZ);
+        updateNumberInputAndDisplay('scaleX', scaleX);
+        updateNumberInputAndDisplay('scaleY', scaleY);
+        updateNumberInputAndDisplay('scaleZ', scaleZ);
+        
+        isUpdatingNumberInputs = false;
+        
+        // Сохраняем в дефолты для текущего аксессуара
+        defaultTransforms[accessoryId] = {
+            position: { x: posX, y: posY, z: posZ },
+            rotation: { x: rotX, y: rotY, z: rotZ },
+            scale: { x: scaleX, y: scaleY, z: scaleZ }
+        };
+        
+        updateCodeOutput();
+    }
+
+    function updateNumberInputAndDisplay(id, value) {
+        const numInput = document.getElementById(id + 'Num');
+        if (numInput) {
+            numInput.value = value;
+        }
+        const display = document.getElementById(id + 'Val');
+        if (display) {
+            if (id.startsWith('rot')) {
+                display.textContent = `${Math.round(value)}°`;
+            } else {
+                display.textContent = value.toFixed(3);
+            }
+        }
+    }
+
+    function updateTransformSliders() {
+        isUpdatingSliders = true;
+        
+        if (!selectedAccessoryId || !equippedAccessories[selectedAccessoryId]) {
+            // Отключаем слайдеры и инпуты
+            document.querySelectorAll('.transform-group input[type="range"]').forEach(el => {
+                el.disabled = true;
+            });
+            document.querySelectorAll('.transform-group .number-input').forEach(el => {
+                el.disabled = true;
+            });
+            isUpdatingSliders = false;
+            return;
+        }
+        
+        document.querySelectorAll('.transform-group input[type="range"]').forEach(el => {
+            el.disabled = false;
+        });
+        document.querySelectorAll('.transform-group .number-input').forEach(el => {
+            el.disabled = false;
+        });
+        
+        const transform = getCurrentTransform(selectedAccessoryId);
+        if (transform) {
+            const ids = ['posX', 'posY', 'posZ', 'rotX', 'rotY', 'rotZ', 'scaleX', 'scaleY', 'scaleZ'];
+            const values = [
+                transform.position.x, transform.position.y, transform.position.z,
+                transform.rotation.x, transform.rotation.y, transform.rotation.z,
+                transform.scale.x, transform.scale.y, transform.scale.z
+            ];
+            
+            isUpdatingNumberInputs = true;
+            
+            ids.forEach((id, index) => {
+                const slider = document.getElementById(id);
+                if (slider) slider.value = values[index];
+                
+                const numInput = document.getElementById(id + 'Num');
+                if (numInput) numInput.value = values[index];
+                
+                const display = document.getElementById(id + 'Val');
+                if (display) {
+                    if (id.startsWith('rot')) {
+                        display.textContent = `${Math.round(values[index])}°`;
+                    } else {
+                        display.textContent = values[index].toFixed(3);
+                    }
+                }
+            });
+            
+            isUpdatingNumberInputs = false;
+        }
+        
+        isUpdatingSliders = false;
+    }
+
+    function resetSelectedTransform() {
+        if (!selectedAccessoryId) return;
+        const def = defaultTransforms[selectedAccessoryId];
+        if (!def) return;
+        
+        const group = accessoryGroups[selectedAccessoryId];
+        if (!group) return;
+        
+        group.position.set(def.position.x, def.position.y, def.position.z);
+        group.rotation.set(
+            def.rotation.x * Math.PI / 180,
+            def.rotation.y * Math.PI / 180,
+            def.rotation.z * Math.PI / 180
+        );
+        group.scale.set(def.scale.x, def.scale.y, def.scale.z);
+        
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    function applyToAllForms(accessoryId) {
+        const transform = getCurrentTransform(accessoryId);
+        if (!transform) return;
+        
+        for (const uniformId of Object.keys(UNIFORM_MODELS)) {
+            const config = UNIFORM_MODELS[uniformId];
+            if (config.accessories && config.accessories[accessoryId]) {
+                config.accessories[accessoryId].position = { ...transform.position };
+                config.accessories[accessoryId].rotation = { ...transform.rotation };
+                config.accessories[accessoryId].scale = { ...transform.scale };
+            }
+        }
+        
+        updateCodeOutput();
+        
+        const btn = document.querySelector('.btn-apply-all');
+        btn.textContent = '✅ Применено!';
+        setTimeout(() => {
+            btn.innerHTML = '<i class="fas fa-check"></i> Применить ко всем';
+        }, 1500);
+    }
+
+    // ===== UI ОБНОВЛЕНИЯ =====
+    function updateAccessoriesUI() {
+        const container = document.getElementById('accessoriesList');
+        if (!container) return;
+        
+        let html = '';
+        for (const info of ACCESSORIES_INFO) {
+            const isLoaded = loadedAccessories[info.id];
+            const isEquipped = !!equippedAccessories[info.id];
+            const isSelected = selectedAccessoryId === info.id;
+            
+            html += `
+                <div class="accessory-item ${isEquipped ? 'active' : ''} ${isSelected ? 'active' : ''}" 
+                     data-id="${info.id}"
+                     style="${isSelected ? 'border-left-color: #2ea44f;' : ''}">
+                    <label>
+                        <input type="checkbox" 
+                               data-accessory-id="${info.id}"
+                               ${isEquipped ? 'checked' : ''}
+                               ${!isLoaded ? 'disabled' : ''}>
+                        <span class="name">${info.name}</span>
+                    </label>
+                    <span class="status ${isEquipped ? 'equipped' : ''}">
+                        ${isEquipped ? '✓ Надето' : (isLoaded ? 'Снято' : '❌')}
+                    </span>
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
+        
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                e.stopPropagation();
+                const id = e.target.dataset.accessoryId;
+                toggleAccessory(id);
+            });
+        });
+        
+        container.querySelectorAll('.accessory-item').forEach(item => {
+            item.addEventListener('click', (e) => {
+                if (e.target.tagName === 'INPUT') return;
+                const id = item.dataset.id;
+                if (equippedAccessories[id]) {
+                    selectAccessory(id);
+                } else {
+                    toggleAccessory(id);
+                }
+            });
+        });
+    }
+
+    function updateSelectedInfo() {
+        const el = document.getElementById('selectedInfo');
+        if (!selectedAccessoryId || !equippedAccessories[selectedAccessoryId]) {
+            el.innerHTML = '<span style="color:#666;">Выберите аксессуар для настройки</span>';
+            return;
+        }
+        const info = ACCESSORIES_INFO.find(a => a.id === selectedAccessoryId);
+        el.innerHTML = `<strong>${info ? info.name : selectedAccessoryId}</strong> <span style="color:#666;">— настройка позиции</span>`;
+    }
+
+    function updateCodeOutput() {
+        const output = document.getElementById('codeOutput');
+        if (!output) return;
+        
+        const config = UNIFORM_MODELS[currentUniform];
+        if (!config) {
+            output.innerHTML = '<span style="color:#666;">// Нет данных</span>';
+            return;
+        }
+        
+        const accessoriesData = {};
+        for (const info of ACCESSORIES_INFO) {
+            const def = defaultTransforms[info.id];
+            if (def) {
+                accessoriesData[info.id] = {
+                    position: { 
+                        x: Math.round(def.position.x * 1000) / 1000,
+                        y: Math.round(def.position.y * 1000) / 1000,
+                        z: Math.round(def.position.z * 1000) / 1000
+                    },
+                    rotation: {
+                        x: Math.round(def.rotation.x),
+                        y: Math.round(def.rotation.y),
+                        z: Math.round(def.rotation.z)
+                    },
+                    scale: {
+                        x: Math.round(def.scale.x * 1000) / 1000,
+                        y: Math.round(def.scale.y * 1000) / 1000,
+                        z: Math.round(def.scale.z * 1000) / 1000
+                    },
+                    bone: info.defaultBone
+                };
+            }
+        }
+        
+        const json = JSON.stringify(accessoriesData, null, 2);
+        
+        output.innerHTML = `
+            <span style="color:#666;">// Настройки для формы "${config.name}"</span>\n
+            <span class="key">accessories</span>: <span class="highlight">${json}</span>
+        `;
+    }
+
+    // ===== КОПИРОВАНИЕ =====
+    function copyCode() {
+        const output = document.getElementById('codeOutput');
+        const text = output.textContent;
+        
+        const match = text.match(/accessories:\s*(\{[\s\S]*\})/);
+        let codeToCopy = '';
+        if (match) {
+            codeToCopy = match[1];
+        } else {
+            codeToCopy = text;
+        }
+        
+        navigator.clipboard.writeText(codeToCopy).then(() => {
+            const btn = document.getElementById('copyCodeBtn');
+            btn.textContent = '✅ Скопировано!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-copy"></i> Скопировать код';
+                btn.classList.remove('copied');
+            }, 2000);
+        }).catch(() => {
+            const textarea = document.createElement('textarea');
+            textarea.value = codeToCopy;
+            document.body.appendChild(textarea);
+            textarea.select();
+            document.execCommand('copy');
+            document.body.removeChild(textarea);
+        });
+    }
+
+    // ===== СБРОС КАМЕРЫ =====
+    function resetCamera() {
+        if (viewer) viewer.resetCamera();
+    }
+
+    // ===== ОБРАБОТЧИКИ СОБЫТИЙ =====
+    document.addEventListener('DOMContentLoaded', () => {
+        initViewer();
+        
+        // Выбор формы
+        document.querySelectorAll('.form-selector button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.form-selector button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentUniform = btn.dataset.uniform;
+                loadUniform(currentUniform);
+                setTimeout(() => {
+                    updateAccessoriesUI();
+                    updateSelectedInfo();
+                    updateTransformSliders();
+                    updateCodeOutput();
+                }, 200);
+            });
+        });
+        
+        // Настройка связи между слайдерами и числовыми инпутами
+        const sliderIds = ['posX', 'posY', 'posZ', 'rotX', 'rotY', 'rotZ', 'scaleX', 'scaleY', 'scaleZ'];
+        
+        // Слайдеры -> числовые инпуты
+        sliderIds.forEach(id => {
+            const slider = document.getElementById(id);
+            if (slider) {
+                slider.addEventListener('input', () => {
+                    if (selectedAccessoryId) {
+                        const numInput = document.getElementById(id + 'Num');
+                        if (numInput) {
+                            numInput.value = slider.value;
+                        }
+                        updateTransformFromSliders(selectedAccessoryId);
+                    }
+                });
+            }
+        });
+        
+        // Числовые инпуты -> слайдеры
+        sliderIds.forEach(id => {
+            const numInput = document.getElementById(id + 'Num');
+            if (numInput) {
+                numInput.addEventListener('input', (e) => {
+                    if (selectedAccessoryId) {
+                        const value = parseFloat(e.target.value);
+                        if (!isNaN(value)) {
+                            const slider = document.getElementById(id);
+                            if (slider) {
+                                const min = parseFloat(slider.min);
+                                const max = parseFloat(slider.max);
+                                const clamped = Math.max(min, Math.min(max, value));
+                                slider.value = clamped;
+                            }
+                            // Определяем тип
+                            let type = 'pos';
+                            if (id.startsWith('rot')) type = 'rot';
+                            else if (id.startsWith('scale')) type = 'scale';
+                            const axis = id.slice(-1);
+                            updateTransformFromValue(selectedAccessoryId, type, axis, value);
+                        }
+                    }
+                });
+                
+                // При потере фокуса округляем значение
+                numInput.addEventListener('blur', (e) => {
+                    const value = parseFloat(e.target.value);
+                    if (!isNaN(value)) {
+                        const id = e.target.id.replace('Num', '');
+                        let step = 0.001;
+                        if (id.startsWith('rot')) step = 1;
+                        else if (id.startsWith('scale')) step = 0.005;
+                        const rounded = Math.round(value / step) * step;
+                        e.target.value = rounded;
+                        
+                        // Обновляем слайдер и модель
+                        const slider = document.getElementById(id);
+                        if (slider) {
+                            slider.value = rounded;
+                        }
+                        let type = 'pos';
+                        if (id.startsWith('rot')) type = 'rot';
+                        else if (id.startsWith('scale')) type = 'scale';
+                        const axis = id.slice(-1);
+                        updateTransformFromValue(selectedAccessoryId, type, axis, rounded);
+                    }
+                });
+            }
+        });
+        
+        // Кнопки
+        document.getElementById('resetSelectedBtn').addEventListener('click', resetSelectedTransform);
+        document.getElementById('clearAllBtn').addEventListener('click', clearAllAccessories);
+        document.getElementById('copyCodeBtn').addEventListener('click', copyCode);
+        document.getElementById('applyAllBtn').addEventListener('click', () => {
+            if (selectedAccessoryId) {
+                applyToAllForms(selectedAccessoryId);
+            }
+        });
+        
+        // Глобальный сброс камеры (клавиша R)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'r' || e.key === 'R') {
+                if (!e.ctrlKey && !e.metaKey && !e.target.closest('input')) {
+                    resetCamera();
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

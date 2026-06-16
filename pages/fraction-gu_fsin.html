@@ -87,13 +87,13 @@
                         <tr><th>Команда</th><th>Назначение</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><code>/duty</code></span></td><td>Заступить на службу (надеть форму)</td></tr>
-                        <tr><td><code>/offduty</code></span></td><td>Завершить службу (переодеться в гражданское)</td></tr>
-                        <tr><td><code>/r [текст]</code></span></td><td>RP рация внутри фракции</span></td></tr>
-                        <tr><td><code>/ro [текст]</code></span></td><td>NonRP чат рации внутри фракции</span></td></tr>
-                        <tr><td><code>/d [текст]</code></span></td><td>RP чат рации департамента</span></td></tr>
-                        <tr><td><code>/od [текст]</code></span></td><td>NonRP чат рации департамента</span></td></tr>
-                        <tr><td><code>/members</code></span></td><td>Список сотрудников фракции онлайн</span></td></tr>
+                        <tr><td><code>/duty</code></td><td>Заступить на службу (надеть форму)</td></tr>
+                        <tr><td><code>/offduty</code></td><td>Завершить службу (переодеться в гражданское)</td></tr>
+                        <tr><td><code>/r [текст]</code></td><td>RP рация внутри фракции</td></tr>
+                        <tr><td><code>/ro [текст]</code></td><td>NonRP чат рации внутри фракции</td></tr>
+                        <tr><td><code>/d [текст]</code></td><td>RP чат рации департамента</td></tr>
+                        <tr><td><code>/od [текст]</code></td><td>NonRP чат рации департамента</td></tr>
+                        <tr><td><code>/members</code></td><td>Список сотрудников фракции онлайн</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -149,18 +149,31 @@
     </div>
 </footer>
 
-<div id="gearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10002; align-items: center; justify-content: center;">
-    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; max-width: 450px; width: 90%; padding: 28px 24px; text-align: center; position: relative; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);">
-        <button id="closeGearModal" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">&times;</button>
-        <i class="fas fa-tshirt" style="font-size: 48px; color: var(--accent); margin-bottom: 16px; display: block;"></i>
-        <h3 style="margin-bottom: 12px; color: #fff;">Раздел «Снаряжение»</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 16px;">Данные о дополнительных элементах формы пока отсутствуют.</p>
-        <div style="background: rgba(46, 164, 79, 0.1); border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 8px; text-align: left; margin-top: 8px;">
-            <i class="fas fa-info-circle" style="color: var(--accent); margin-right: 8px;"></i>
-            <strong style="color: var(--accent);">Помощь сайту:</strong>
-            <p style="margin-top: 8px; font-size: 0.85rem;">Если вы обладаете информацией о снаряжении ГУ ФСИН, пожалуйста, свяжитесь с <a href="about-site.html" style="color: var(--accent); text-decoration: none;">нами</a>.</p>
+<div id="gearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10002; align-items: center; justify-content: center;">
+    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; max-width: 500px; width: 92%; max-height: 85vh; position: relative; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5); display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px 24px 12px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-tshirt" style="font-size: 24px; color: var(--accent);"></i>
+                <h3 style="margin: 0; color: #fff;">Снаряжение</h3>
+            </div>
+            <button id="closeGearModal" style="background: none; border: none; color: var(--text-secondary); font-size: 28px; cursor: pointer; line-height: 1;">&times;</button>
         </div>
-        <button id="closeGearModalBtn" style="margin-top: 20px; background: var(--accent); border: none; color: #fff; padding: 10px 24px; border-radius: 30px; cursor: pointer; font-weight: 600;">Закрыть</button>
+        <div class="gear-modal-content" style="padding: 16px 24px 24px 24px; flex: 1;">
+            <div id="accessoriesList">
+                <div class="no-accessories">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Загрузка...</p>
+                </div>
+            </div>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                <button id="clearAllAccessories" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;">
+                    <i class="fas fa-times"></i> Снять всё
+                </button>
+                <button id="closeGearModalBtn" style="background: var(--accent); border: none; color: #fff; padding: 8px 24px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    Закрыть
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -178,16 +191,47 @@
 
 <script type="module">
     import { GTACharacterViewer } from '../js/gta-viewer.js';
+    import { DFFReader } from '../js/DFFReader.js';
+    import { TXDReader } from '../js/TXDReader.js';
 
     const MODELS_BASE_PATH = '../models/uniforms/fsin/';
+    const ACCESSORIES_BASE_PATH = '../models/uniforms/fsin/accessories/';
     const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
+
+    const ACCESSORIES_TXD_PATH = `${ACCESSORIES_BASE_PATH}accessories.txd`;
 
     const UNIFORM_MODELS = {
         everyday: {
             name: "Повседневная форма",
             dff: `${MODELS_BASE_PATH}everyday.dff`,
             txd: `${MODELS_BASE_PATH}everyday.txd`,
-            gender: "male"
+            gender: "male",
+            accessories: {
+                body_armor: { 
+                    position: { x: -0.138, y: 0.076, z: 0.004 }, 
+                    rotation: { x: 0, y: 0, z: -15 }, 
+                    scale: { x: 1, y: 1.18, z: 1.125 },
+                    bone: 'neck'
+                },
+                combat_helmet: { 
+                    position: { x: 0.139, y: 0.024, z: -0.005 }, 
+                    rotation: { x: 90, y: 90, z: 90 }, 
+                    scale: { x: 1, y: 1, z: 1 },
+                    bone: 'head'
+                },
+                cap: { 
+                    position: { x: 0.21, y: 0.053, z: -0.002 }, 
+                    rotation: { x: 0, y: 0, z: 0 }, 
+                    scale: { x: 1, y: 1.055, z: 1.055 },
+                    bone: 'head'
+                },
+                peak_cap: { 
+                    position: { x: 0.239, y: 0.024, z: 0 }, 
+                    rotation: { x: 0, y: 0, z: 0 }, 
+                    scale: { x: 1, y: 1, z: 1 },
+                    bone: 'head'
+                }
+            }
         },
         combat: {
             name: "Боевая форма",
@@ -197,8 +241,36 @@
         }
     };
 
+    const ACCESSORIES_INFO = [
+        { id: 'body_armor', name: 'Бронежилет', slot: 'neck' },
+        { id: 'combat_helmet', name: 'Боевой шлем со встроенной рацией', slot: 'head' },
+        { id: 'cap', name: 'Кепка', slot: 'head' },
+        { id: 'peak_cap', name: 'Фуражка', slot: 'head' }
+    ];
+
+    const ACCESSORY_BONE_MAP = {
+        body_armor: 'neck',
+        combat_helmet: 'head',
+        cap: 'head',
+        peak_cap: 'head'
+    };
+
+    const ACCESSORY_SLOT_GROUP = {
+        body_armor: 'neck',
+        combat_helmet: 'head',
+        cap: 'head',
+        peak_cap: 'head'
+    };
+
     let viewer = null;
     let currentUniform = "everyday";
+    let accessoryGroups = {};
+    let loadedAccessories = {};
+    let equippedAccessories = {};
+    let accessorySlots = { head: null, body: null };
+    let accessoryAttachments = {};
+    let sharedAccessoriesTexture = null;
+    let accessoriesTxdData = null;
 
     async function initViewer() {
         const container = document.getElementById('uniform3dContainer');
@@ -211,6 +283,20 @@
         }, 500);
         
         await loadUniform(currentUniform);
+        await loadAccessoriesTxd();
+        await loadAllAccessories();
+        updateAccessoriesUI();
+    }
+
+    async function loadAccessoriesTxd() {
+        try {
+            const response = await fetch(ACCESSORIES_TXD_PATH);
+            if (!response.ok) throw new Error(`TXD not found: ${ACCESSORIES_TXD_PATH}`);
+            const buffer = await response.arrayBuffer();
+            accessoriesTxdData = buffer;
+        } catch (error) {
+            console.error('Failed to load accessories TXD:', error);
+        }
     }
 
     async function loadUniform(uniformId) {
@@ -219,16 +305,16 @@
             console.error('Unknown uniform:', uniformId);
             return;
         }
+
+        clearAllAccessories();
         
         const loadingEl = document.getElementById('uniform3dLoading');
-        
         if (loadingEl) loadingEl.style.display = 'flex';
         
         try {
             await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
 
             const availableAnims = viewer.getAnimationNames();
-
             let targetAnim = null;
             
             const maleAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed", "IDLE"];
@@ -254,10 +340,225 @@
         }
     }
 
+    function applyAccessoryPosition(accessoryId, group, uniformId) {
+        const config = UNIFORM_MODELS[uniformId];
+        if (!config || !config.accessories) return false;
+        
+        const posConfig = config.accessories[accessoryId];
+        if (!posConfig) return false;
+        
+        group.position.set(posConfig.position.x, posConfig.position.y, posConfig.position.z);
+        group.rotation.set(
+            posConfig.rotation.x * Math.PI / 180,
+            posConfig.rotation.y * Math.PI / 180,
+            posConfig.rotation.z * Math.PI / 180
+        );
+        group.scale.set(posConfig.scale.x, posConfig.scale.y, posConfig.scale.z);
+        
+        return true;
+    }
+
+    function applySharedTexturesToMesh(group) {
+        if (!accessoriesTxdData || !viewer) return;
+        
+        try {
+            const txd = new TXDReader().parse(accessoriesTxdData);
+            for (const tex of txd.textures) {
+                if (tex.imageData) {
+                    const texture = viewer.createTexture(tex);
+                    viewer.textures.set(tex.name.toLowerCase(), texture);
+                }
+            }
+            viewer.applyTexturesToModel(group);
+            viewer.makeMatte(group);
+        } catch (error) {
+            console.error('Failed to apply shared textures:', error);
+        }
+    }
+
+    async function loadAllAccessories() {
+        const accessoriesList = document.getElementById('accessoriesList');
+        
+        for (const info of ACCESSORIES_INFO) {
+            try {
+                const dffPath = `${ACCESSORIES_BASE_PATH}${info.id}.dff`;
+                
+                const dffResponse = await fetch(dffPath);
+                if (!dffResponse.ok) throw new Error(`DFF not found: ${dffPath}`);
+                const dffBuffer = await dffResponse.arrayBuffer();
+                
+                const dff = new DFFReader().parse(dffBuffer);
+                if (!dff) throw new Error("Failed to parse DFF");
+                
+                const meshGroup = viewer.createMesh(dff);
+                
+                // Применяем общую текстуру для всех аксессуаров
+                applySharedTexturesToMesh(meshGroup);
+                
+                meshGroup.visible = false;
+                viewer.scene.add(meshGroup);
+                
+                accessoryGroups[info.id] = meshGroup;
+                loadedAccessories[info.id] = true;
+                accessoryAttachments[info.id] = {
+                    group: meshGroup,
+                    bone: ACCESSORY_BONE_MAP[info.id] || null,
+                    isAttached: false
+                };
+                
+            } catch (error) {
+                console.error(`Failed to load accessory "${info.id}":`, error);
+                loadedAccessories[info.id] = false;
+            }
+        }
+        
+        updateAccessoriesUI();
+    }
+
+    function toggleAccessory(accessoryId) {
+        const info = ACCESSORIES_INFO.find(a => a.id === accessoryId);
+        if (!info) return;
+        
+        const group = accessoryGroups[accessoryId];
+        if (!group || !loadedAccessories[accessoryId]) return;
+        
+        const slot = ACCESSORY_SLOT_GROUP[accessoryId] || 'body';
+        
+        if (equippedAccessories[accessoryId]) {
+            const attachment = accessoryAttachments[accessoryId];
+            if (attachment && attachment.isAttached) {
+                viewer.detachAccessoryFromBone(group);
+                attachment.isAttached = false;
+            }
+            group.visible = false;
+            delete equippedAccessories[accessoryId];
+            if (accessorySlots[slot] === accessoryId) {
+                accessorySlots[slot] = null;
+            }
+        } else {
+            // Если в слоте уже есть аксессуар, снимаем его
+            if (accessorySlots[slot]) {
+                const oldId = accessorySlots[slot];
+                if (accessoryGroups[oldId]) {
+                    const oldAttachment = accessoryAttachments[oldId];
+                    if (oldAttachment && oldAttachment.isAttached) {
+                        viewer.detachAccessoryFromBone(accessoryGroups[oldId]);
+                        oldAttachment.isAttached = false;
+                    }
+                    accessoryGroups[oldId].visible = false;
+                }
+                delete equippedAccessories[oldId];
+            }
+            
+            const attachment = accessoryAttachments[accessoryId];
+            if (attachment && attachment.bone) {
+                group.visible = true;
+                applyAccessoryPosition(accessoryId, group, currentUniform);
+                const success = viewer.attachAccessoryToBone(group, attachment.bone);
+                attachment.isAttached = success;
+            }
+            
+            equippedAccessories[accessoryId] = true;
+            accessorySlots[slot] = accessoryId;
+        }
+        
+        updateAccessoriesUI();
+    }
+
+    function clearAllAccessories() {
+        for (const info of ACCESSORIES_INFO) {
+            const group = accessoryGroups[info.id];
+            if (group) {
+                const attachment = accessoryAttachments[info.id];
+                if (attachment && attachment.isAttached) {
+                    viewer.detachAccessoryFromBone(group);
+                    attachment.isAttached = false;
+                }
+                group.visible = false;
+            }
+        }
+        equippedAccessories = {};
+        accessorySlots = { head: null, body: null };
+        updateAccessoriesUI();
+    }
+
+    function updateAccessoriesUI() {
+        const container = document.getElementById('accessoriesList');
+        if (!container) return;
+        
+        const config = UNIFORM_MODELS[currentUniform];
+
+        if (!config || !config.accessories || Object.keys(config.accessories).length === 0) {
+            container.innerHTML = `
+                <div class="no-accessories-msg">
+                    <i class="fas fa-tshirt"></i>
+                    <p>Для этой формы снаряжение не предусмотрено</p>
+                </div>
+            `;
+            return;
+        }
+
+        const availableIds = Object.keys(config.accessories);
+        const availableInfos = ACCESSORIES_INFO.filter(info => availableIds.includes(info.id));
+        
+        if (availableInfos.length === 0) {
+            container.innerHTML = `
+                <div class="no-accessories-msg">
+                    <i class="fas fa-tshirt"></i>
+                    <p>Для этой формы снаряжение не предусмотрено</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        for (const info of availableInfos) {
+            const isLoaded = loadedAccessories[info.id];
+            const isEquipped = !!equippedAccessories[info.id];
+            
+            html += `
+                <div class="accessory-item">
+                    <label>
+                        <input type="checkbox" 
+                               data-accessory-id="${info.id}"
+                               ${isEquipped ? 'checked' : ''}
+                               ${!isLoaded ? 'disabled' : ''}>
+                        <span class="accessory-name">${info.name}</span>
+                    </label>
+                    <span class="accessory-status ${isEquipped ? 'equipped' : ''}">
+                        ${isEquipped ? '✓ Надето' : (isLoaded ? 'Снято' : '❌ Ошибка')}
+                    </span>
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
+        
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const id = e.target.dataset.accessoryId;
+                toggleAccessory(id);
+            });
+        });
+    }
+
     function resetCamera() {
         if (viewer) {
             viewer.resetCamera();
         }
+    }
+
+    function showGearModal() {
+        const modal = document.getElementById('gearModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            updateAccessoriesUI();
+        }
+    }
+
+    function hideGearModal() {
+        const modal = document.getElementById('gearModal');
+        if (modal) modal.style.display = 'none';
     }
 
     function addImageModal() {
@@ -368,7 +669,7 @@
                              class="clickable-weapon-img"
                              data-full-img="${imagePath}"
                              data-caption="${escapeHtml(weapon.name)}"
-                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'weapon-img-placeholder\'><i class=\'fas fa-shield-alt\'></i><br>${escapeHtml(weapon.name)}</div>'">
+                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'weapon-img-placeholder\\'><i class=\\'fas fa-shield-alt\\'></i><br>${escapeHtml(weapon.name)}</div>'">
                     </div>
                     <div class="weapon-card-name">${escapeHtml(weapon.name)}</div>
                 </div>
@@ -388,16 +689,6 @@
         });
     }
 
-    function showGearModal() {
-        const modal = document.getElementById('gearModal');
-        if (modal) modal.style.display = 'flex';
-    }
-
-    function hideGearModal() {
-        const modal = document.getElementById('gearModal');
-        if (modal) modal.style.display = 'none';
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
         addImageModal();
         renderWeapons();
@@ -408,12 +699,15 @@
         const gearBtn = document.getElementById('gearButton');
         const closeGearModal = document.getElementById('closeGearModal');
         const closeGearModalBtn = document.getElementById('closeGearModalBtn');
+        const clearAllBtn = document.getElementById('clearAllAccessories');
         const gearModal = document.getElementById('gearModal');
         
         if (uniformSelect) {
             uniformSelect.addEventListener('change', (e) => {
                 currentUniform = e.target.value;
                 loadUniform(currentUniform);
+                // После загрузки формы обновляем UI снаряжения
+                setTimeout(() => updateAccessoriesUI(), 100);
             });
         }
         
@@ -421,12 +715,13 @@
             resetCameraBtn.addEventListener('click', resetCamera);
         }
         
-        if (gearBtn && gearModal) {
+        if (gearBtn) {
             gearBtn.addEventListener('click', showGearModal);
         }
         
         if (closeGearModal) closeGearModal.addEventListener('click', hideGearModal);
         if (closeGearModalBtn) closeGearModalBtn.addEventListener('click', hideGearModal);
+        if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllAccessories);
         if (gearModal) {
             gearModal.addEventListener('click', (e) => {
                 if (e.target === gearModal) hideGearModal();
