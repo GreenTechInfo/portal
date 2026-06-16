@@ -28,9 +28,53 @@
 
         <div class="info-block">
             <h3>О фракции</h3>
-            <p><strong>Федеральная служба исполнения наказаний (ФСИН)</strong> - в рамках своей компетенции осуществляет правоприменительные функции по исполнению уголовных наказаний, связанных с изоляцией осужденных от общества, обеспечению содержания под стражей лиц, подозреваемых и обвиняемых в совершении преступлений, а также контролю за поведением условно осужденных и лиц, освобожденных от наказания условно-досрочно.</p>
+            <p><strong>Федеральная служба исполнения наказаний (ФСИН России)</strong> — федеральный орган исполнительной власти, который осуществляет правоприменительные функции, контроль и надзор в сфере исполнения уголовных наказаний, а также содержание под стражей лиц, подозреваемых или обвиняемых в совершении преступлений, их охрану и конвоирование. Подведомственна Министерству юстиции Российской Федерации.</p>
+            <p style="margin-top: 12px;"><strong>ГУ ФСИН России по Нижегородской области</strong> — территориальный орган, обеспечивающий исполнение наказаний, связанных с изоляцией осуждённых от общества, а также контроль за поведением условно осуждённых и лиц, освобождённых условно-досрочно.</p>
+            <p style="margin-top: 12px;"><strong>ФКУ ИК-16 ГУФСИН России по Нижегородской области</strong> — федеральное казённое учреждение «Исправительная колония № 16», где отбывают наказание осуждённые, содержащиеся под строгим надзором.</p>
         </div>
+		
+		<div class="info-block">
+            <h3>Структура организации</h3>
+            <p>В состав ГУ ФСИН входят следующие ключевые подразделения:</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <strong>ГУ ФСИН</strong> — Главное управление
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <strong>ПРсОО</strong> — Первая рота службы обеспечения охраны
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <strong>ФКУ УИИ</strong> — Уголовно-исполнительная инспекция
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <strong>ОСН «Сатурн»</strong> — отдел специального назначения
+                </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <strong>УЦ-ГУФСИН</strong> — Нижегородский учебный центр
+                </div>
+            </div>
+        </div>
+		
+		<div class="info-block">
+            <h3>Требования для вступления</h3>
 
+            <h4 style="color: #e67e22; margin: 20px 0 10px;">OOC:</h4>
+            <ul class="info-list">
+                <li>Минимальный игровой уровень — <strong>6</strong></li>
+                <li>Водительское удостоверение с открытыми категориями <strong>B, C, D</strong></li>
+                <li>Знание правил сервера и основ RP</li>
+                <li>Отсутствие серьёзных OOC-наказаний</li>
+            </ul>
+
+            <h4 style="color: #27ae60; margin: 20px 0 10px;">IC:</h4>
+            <ul class="info-list">
+                <li><strong>Младший начальствующий состав</strong> — наличие среднего образования</li>
+                <li><strong>Средний начальствующий состав</strong> — среднее специальное образование в учебных центрах ФСИН</li>
+                <li><strong>Офицерский состав</strong> — высшее образование по специальности (юрист, правоохранительная деятельность, судебная и прокурорская деятельность)</li>
+                <li>Прохождение учебной подготовки по повышению квалификации в Нижегородском учебном центре ГУ ФСИН</li>
+            </ul>
+        </div>
+		
         <div class="info-block">
             <h3>Порядок приёма на службу</h3>
             <p><em>Извлечение из Федерального закона от 19 июля 2018 г. № 197-ФЗ "О службе в уголовно-исполнительной системе Российской Федерации"</em></p>
@@ -78,7 +122,12 @@
                 </div>
             </details>
         </div>
-
+		
+		<div class="info-block">
+            <h3>Автопарк ГУ ФСИН</h3>
+            <div class="vinyl-gallery" id="fleetGallery"></div>
+        </div>
+		
         <div class="info-block">
             <h3>Основные команды</h3>
             <div style="overflow-x: auto;">
@@ -94,13 +143,18 @@
                         <tr><td><code>/d [текст]</code></td><td>RP чат рации департамента</td></tr>
                         <tr><td><code>/od [текст]</code></td><td>NonRP чат рации департамента</td></tr>
                         <tr><td><code>/members</code></td><td>Список сотрудников фракции онлайн</td></tr>
+						<tr><td><code>Y</code></td><td>Открыть ворота</td></tr>
+                        <tr><td><code>/k</code></td><td>Ударить и повалить на землю</td></tr>
+                        <tr><td><code>/cuff</code></td><td>Надеть / снять наручники</td></tr>
+                        <tr><td><code>/kpzsud</code></td><td>Поместить в «аквариум» в здании суда</td></tr>
+                        <tr><td><code>/unkpz</code></td><td>Вытащить из камеры или «аквариума»</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
         <div class="info-block uniform-3d-block">
-            <h3>Форма сотрудников УФСИН</h3>
+            <h3>Форма сотрудников ФСИН</h3>
             <div class="uniform-controls">
                 <select id="uniformSelect" class="uniform-select">
                     <option value="everyday" data-name="Повседневная форма">Повседневная форма</option>
@@ -645,6 +699,42 @@
         { name: "АКС-74У", image: "aks74u.png", category: "fsin" }
     ];
 
+    // ========== АВТОПАРК ==========
+    const FLEET_IMAGES = [
+        { src: "../images/fractions/fsin/fleet/1.png", caption: "Lada Granta" },
+        { src: "../images/fractions/fsin/fleet/2.png", caption: "УАЗ «Буханка»" },
+        { src: "../images/fractions/fsin/fleet/3.png", caption: "ГАЗ-3221 (Газель)" },
+        { src: "../images/fractions/fsin/fleet/4.png", caption: "ГАЗон NEXT (автозак)" }
+    ];
+
+    function renderFleetGallery() {
+        const galleryContainer = document.getElementById('fleetGallery');
+        if (!galleryContainer) return;
+
+        const imagesHtml = FLEET_IMAGES.map(img => `
+            <div class="vinyl-image-item">
+                <img src="${img.src}" 
+                     alt="${img.caption}" 
+                     class="clickable-image vinyl-img"
+                     data-full-img="${img.src}"
+                     data-caption="${img.caption}"
+                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'vehicle-img-placeholder\\'>Изображение не найдено</div>'">
+            </div>
+        `).join('');
+
+        galleryContainer.innerHTML = imagesHtml;
+        
+        const images = document.querySelectorAll('.clickable-image');
+        images.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const fullImgSrc = img.getAttribute('data-full-img') || img.src;
+                const caption = img.getAttribute('data-caption') || img.alt;
+                window.openImageModal(fullImgSrc, caption);
+            });
+        });
+    }
+
     function escapeHtml(str) {
         if (!str) return '';
         return String(str).replace(/[&<>]/g, function(m) {
@@ -692,6 +782,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         addImageModal();
         renderWeapons();
+        renderFleetGallery();
         initViewer();
         
         const uniformSelect = document.getElementById('uniformSelect');
