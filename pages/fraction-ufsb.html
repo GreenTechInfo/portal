@@ -36,10 +36,6 @@
             <h3>Основные направления деятельности</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
                 <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
-                    <i class="fas fa-shield-alt" style="color: var(--accent); margin-right: 10px;"></i>
-                    <strong>Контрразведка</strong>
-                </div>
-                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
                     <i class="fas fa-bomb" style="color: var(--accent); margin-right: 10px;"></i>
                     <strong>Борьба с терроризмом и экстремизмом</strong>
                 </div>
@@ -49,15 +45,7 @@
                 </div>
                 <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
                     <i class="fas fa-chart-line" style="color: var(--accent); margin-right: 10px;"></i>
-                    <strong>Обеспечение экономической безопасности</strong>
-                </div>
-                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
-                    <i class="fas fa-laptop-code" style="color: var(--accent); margin-right: 10px;"></i>
-                    <strong>Обеспечение информационной безопасности</strong>
-                </div>
-                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
-                    <i class="fas fa-map-marked-alt" style="color: var(--accent); margin-right: 10px;"></i>
-                    <strong>Охрана и защита государственной границы РФ</strong>
+                    <strong>Обеспечение экономической и информационной безопасности</strong>
                 </div>
                 <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
                     <i class="fas fa-balance-scale" style="color: var(--accent); margin-right: 10px;"></i>
@@ -76,9 +64,7 @@
             <div style="margin-bottom: 20px;">
                 <h4 style="color: #e67e22; margin-bottom: 10px;">IC:</h4>
                 <ul class="info-list">
-                    <li>Гражданство Российской Федерации</li>
-                    <li>Наличие паспорта гражданина РФ</li>
-                    <li>Являться действующим сотрудником правоохранительных ведомств (ФСВНГ, МВД) или военнослужащим контрактной службы Вооружённых сил Российской Федерации</li>
+                    <li>Устанавливаются индивидуально руководителем органа</li>
                 </ul>
             </div>
             
@@ -116,35 +102,23 @@
         </div>
 
         <div class="info-block uniform-3d-block">
-            <h3>Форма сотрудников УФСБ</h3>
-            <div class="uniform-controls">
-                <select id="uniformSelect" class="uniform-select">
-                    <option value="operativnik1" data-name="Форма оперативника 1">Форма оперативника 1</option>
-                    <option value="operativnik2" data-name="Форма оперативника 2">Форма оперативника 2</option>
-                    <option value="combat" data-name="Боевая форма">Боевая форма</option>
-                    <option value="sledovatel" data-name="Следователь">Следователь</option>
-                </select>
-                <button id="gearButton" class="uniform-reset-btn">
-                    <i class="fas fa-tshirt"></i> Снаряжение
-                </button>
-                <button id="resetUniformCamera" class="uniform-reset-btn">
-                    <i class="fas fa-sync-alt"></i> Сброс камеры
-                </button>
+            <h3>Форма и вооружение сотрудников УФСБ </h3>
+            <div style="
+                background: rgba(0,0,0,0.3);
+                border-radius: 12px;
+                padding: 40px 20px;
+                text-align: center;
+                border: 1px dashed var(--accent);
+                margin: 16px 0;
+            ">
+                <i class="fas fa-user-secret" style="font-size: 48px; color: var(--accent); opacity: 0.7; margin-bottom: 16px; display: block;"></i>
+                <h4 style="color: var(--accent); font-weight: 300; letter-spacing: 1px;">ДАННЫЕ ЗАСЕКРЕЧЕНЫ</h4>
+                <p style="color: var(--text-secondary); margin-top: 8px; font-size: 0.9rem;">
+                    Информация о форме и вооружению сотрудников УФСБ не подлежит разглашению.
+                </p>
             </div>
-            <div id="uniform3dContainer" class="uniform-3d-container">
-                <div id="uniform3dLoading" class="uniform-3d-loading">
-                    <i class="fas fa-cube"></i>
-                    <p>Загрузка 3D просмотрщика...</p>
-                </div>
-            </div>
-            <div class="uniform-3d-note">
-                Управление: ЛКМ - вращение, ПКМ - перемещение, колесо - масштаб
-            </div>
-        </div>
-
-        <div class="info-block">
-            <h3>Вооружение УФСБ</h3>
-            <div class="weapons-grid" id="fsbWeaponsGrid">
+            <div class="uniform-3d-note" style="text-align: center; color: var(--text-secondary); font-size: 0.8rem; opacity: 0.6;">
+                &nbsp;
             </div>
         </div>
         
@@ -168,129 +142,10 @@
     </div>
 </footer>
 
-<div id="gearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10002; align-items: center; justify-content: center;">
-    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; max-width: 450px; width: 90%; padding: 28px 24px; text-align: center; position: relative; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);">
-        <button id="closeGearModal" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">&times;</button>
-        <i class="fas fa-tshirt" style="font-size: 48px; color: var(--accent); margin-bottom: 16px; display: block;"></i>
-        <h3 style="margin-bottom: 12px; color: #fff;">Раздел «Снаряжение»</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 16px;">Данные о дополнительных элементах формы пока отсутствуют.</p>
-        <div style="background: rgba(46, 164, 79, 0.1); border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 8px; text-align: left; margin-top: 8px;">
-            <i class="fas fa-info-circle" style="color: var(--accent); margin-right: 8px;"></i>
-            <strong style="color: var(--accent);">Помощь сайту:</strong>
-            <p style="margin-top: 8px; font-size: 0.85rem;">Если вы обладаете информацией о снаряжении УФСБ, пожалуйста, свяжитесь с <a href="about-site.html" style="color: var(--accent); text-decoration: none;">нами</a>.</p>
-        </div>
-        <button id="closeGearModalBtn" style="margin-top: 20px; background: var(--accent); border: none; color: #fff; padding: 10px 24px; border-radius: 30px; cursor: pointer; font-weight: 600;">Закрыть</button>
-    </div>
-</div>
-
-<script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
-            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
-        }
-    }
-</script>
-
 <script src="../js/common.js"></script>
 <script src="../js/navigation.js"></script>
 
-<script type="module">
-    import { GTACharacterViewer } from '../js/gta-viewer.js';
-
-    const MODELS_BASE_PATH = '../models/uniforms/fsb/';
-    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
-
-    const UNIFORM_MODELS = {
-        operativnik1: {
-            name: "Форма оперативника 1",
-            dff: `${MODELS_BASE_PATH}operativnik1.dff`,
-            txd: `${MODELS_BASE_PATH}operativnik1.txd`,
-            gender: "male"
-        },
-        operativnik2: {
-            name: "Форма оперативника 2",
-            dff: `${MODELS_BASE_PATH}operativnik2.dff`,
-            txd: `${MODELS_BASE_PATH}operativnik2.txd`,
-            gender: "male"
-        },
-        combat: {
-            name: "Боевая форма",
-            dff: `${MODELS_BASE_PATH}combat.dff`,
-            txd: `${MODELS_BASE_PATH}combat.txd`,
-            gender: "male"
-        },
-        sledovatel: {
-            name: "Следователь",
-            dff: `${MODELS_BASE_PATH}sledovatel.dff`,
-            txd: `${MODELS_BASE_PATH}sledovatel.txd`,
-            gender: "male"
-        }
-    };
-
-    let viewer = null;
-    let currentUniform = "operativnik1";
-
-    async function initViewer() {
-        const container = document.getElementById('uniform3dContainer');
-        const loadingEl = document.getElementById('uniform3dLoading');
-        
-        viewer = new GTACharacterViewer(container);
-        
-        setTimeout(() => {
-            if (loadingEl) loadingEl.style.display = 'none';
-        }, 500);
-        
-        await loadUniform(currentUniform);
-    }
-
-    async function loadUniform(uniformId) {
-        const config = UNIFORM_MODELS[uniformId];
-        if (!config) {
-            console.error('Unknown uniform:', uniformId);
-            return;
-        }
-        
-        const loadingEl = document.getElementById('uniform3dLoading');
-        
-        if (loadingEl) loadingEl.style.display = 'flex';
-        
-        try {
-            await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
-
-            const availableAnims = viewer.getAnimationNames();
-
-            let targetAnim = null;
-            
-            const maleAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed", "IDLE"];
-            for (const anim of maleAnims) {
-                if (availableAnims.includes(anim)) {
-                    targetAnim = anim;
-                    break;
-                }
-            }
-
-            if (!targetAnim && availableAnims.length > 0) {
-                targetAnim = availableAnims[0];
-            }
-            
-            if (targetAnim) {
-                viewer.playAnimation(targetAnim);
-            }
-            
-        } catch (error) {
-            console.error('Failed to load uniform:', error);
-        } finally {
-            if (loadingEl) loadingEl.style.display = 'none';
-        }
-    }
-
-    function resetCamera() {
-        if (viewer) {
-            viewer.resetCamera();
-        }
-    }
-
+<script>
     function addImageModal() {
         if (document.getElementById('globalImageModal')) return;
 
@@ -420,50 +275,9 @@
         });
     }
 
-    function showGearModal() {
-        const modal = document.getElementById('gearModal');
-        if (modal) modal.style.display = 'flex';
-    }
-
-    function hideGearModal() {
-        const modal = document.getElementById('gearModal');
-        if (modal) modal.style.display = 'none';
-    }
-
     document.addEventListener('DOMContentLoaded', () => {
         addImageModal();
         renderWeapons();
-        initViewer();
-        
-        const uniformSelect = document.getElementById('uniformSelect');
-        const resetCameraBtn = document.getElementById('resetUniformCamera');
-        const gearBtn = document.getElementById('gearButton');
-        const closeGearModal = document.getElementById('closeGearModal');
-        const closeGearModalBtn = document.getElementById('closeGearModalBtn');
-        const gearModal = document.getElementById('gearModal');
-        
-        if (uniformSelect) {
-            uniformSelect.addEventListener('change', (e) => {
-                currentUniform = e.target.value;
-                loadUniform(currentUniform);
-            });
-        }
-        
-        if (resetCameraBtn) {
-            resetCameraBtn.addEventListener('click', resetCamera);
-        }
-        
-        if (gearBtn && gearModal) {
-            gearBtn.addEventListener('click', showGearModal);
-        }
-        
-        if (closeGearModal) closeGearModal.addEventListener('click', hideGearModal);
-        if (closeGearModalBtn) closeGearModalBtn.addEventListener('click', hideGearModal);
-        if (gearModal) {
-            gearModal.addEventListener('click', (e) => {
-                if (e.target === gearModal) hideGearModal();
-            });
-        }
     });
 </script>
 </body>

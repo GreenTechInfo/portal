@@ -2,9 +2,10 @@ const NAVIGATION_DATA = {
     mainLinks: [
         { href: "index.html", icon: "home.png", text: "Главная" },
         { href: "pages/about.html", icon: "about.png", text: "О сервере" },
-		{ href: "pages/rules.html", icon: "rules.png", text: "Правила сервера" },
+        { href: "pages/rules.html", icon: "rules.png", text: "Правила сервера" },
         { href: "pages/systems.html", icon: "systems.png", text: "Системы сервера" },
-        { href: "pages/animations.html", icon: "animations.png", text: "Анимации" }
+        { href: "pages/animations.html", icon: "animations.png", text: "Анимации" },
+        { href: "pages/jobs.html", icon: "jobs.png", text: "Работы" }
     ],
     
     vehiclesSubmenu: {
@@ -31,7 +32,7 @@ const NAVIGATION_DATA = {
             { href: "pages/fraction-gu_mvd.html", text: "ГУ МВД" },
             { href: "pages/fraction-ugibdd.html", text: "УГИБДД" },
             { href: "pages/fraction-ufsvng.html", text: "УФСВНГ" },
-            { href: "pages/fraction-mz.html", text: "МЗ" },
+            { href: "pages/fraction-mz.html", text: "ГК ССМП" },
             { href: "pages/fraction-mchs.html", text: "МЧС" },
             { href: "pages/fraction-army.html", text: "Армия" },
             { href: "pages/fraction-tsordd.html", text: "ЦОРДД" }
