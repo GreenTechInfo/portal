@@ -173,6 +173,21 @@
             </div>
         </div>
 
+        <div class="info-block">
+            <h3>Автопарк Росгвардии</h3>
+            <p>Специализированная техника, состоящая на вооружении Управления ФСВНГ России по Нижегородской области.</p>
+            <div class="vinyl-gallery" id="fleetGallery">
+                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; min-height: 200px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed var(--border); grid-column: 1 / -1;">
+                    <i class="fas fa-hard-hat" style="font-size: 48px; color: var(--text-secondary); opacity: 0.4; margin-bottom: 16px;"></i>
+                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">Раздел находится в стадии наполнения</p>
+                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">
+                        Хотите помочь с информацией? 
+                        <a href="about-site.html" style="color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);">Пишите нам</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+
         <div class="info-block uniform-3d-block">
             <h3>Форма сотрудников ФСВНГ</h3>
             <div class="uniform-controls">
@@ -260,8 +275,6 @@
 <script type="module">
     import { GTACharacterViewer } from '../js/gta-viewer.js';
 
-    // Конфигурация моделей для каждой формы
-    // Пути относительно корня сайта (начинаются с ../ так как мы в pages/)
     const MODELS_BASE_PATH = '../models/uniforms/fsvng/';
     
     const UNIFORM_MODELS = {
@@ -307,13 +320,11 @@
         }
     };
 
-    // Общий путь к анимациям
     const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
 
     let viewer = null;
     let currentUniform = "siniy_moh";
-    
-    // Инициализация просмотрщика
+
     async function initViewer() {
         const container = document.getElementById('uniform3dContainer');
         const loadingEl = document.getElementById('uniform3dLoading');
@@ -326,12 +337,10 @@
         
         await loadUniform(currentUniform);
     }
-    
-    // Загрузка выбранной формы
+
     async function loadUniform(uniformId) {
         const config = UNIFORM_MODELS[uniformId];
         if (!config) {
-            console.error('Unknown uniform:', uniformId);
             return;
         }
         
@@ -340,18 +349,11 @@
         if (loadingEl) loadingEl.style.display = 'flex';
         
         try {
-            console.log('Loading DFF:', config.dff);
-            console.log('Loading TXD:', config.txd);
-            console.log('Loading IFP:', ANIM_IFP_PATH);
             
-            // Загружаем модель и анимации
             await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
             
-            // После загрузки модели, запускаем подходящую анимацию
             const availableAnims = viewer.getAnimationNames();
-            console.log('Available animations:', availableAnims);
             
-            // Пробуем найти стандартные анимации
             const preferredAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed"];
             let targetAnim = null;
             
@@ -362,32 +364,166 @@
                 }
             }
             
-            // Если не нашли, берем первую доступную
             if (!targetAnim && availableAnims.length > 0) {
                 targetAnim = availableAnims[0];
             }
             
             if (targetAnim) {
                 viewer.playAnimation(targetAnim);
-                console.log('Playing animation:', targetAnim);
             }
             
         } catch (error) {
-            console.error('Failed to load uniform:', error);
         } finally {
             if (loadingEl) loadingEl.style.display = 'none';
         }
     }
     
-    // Сброс камеры
     function resetCamera() {
         if (viewer) {
             viewer.resetCamera();
         }
     }
     
-    // Обработчики событий
+    function addImageModal() {
+        if (document.getElementById('globalImageModal')) return;
+
+        const modal = document.createElement('div');
+        modal.id = 'globalImageModal';
+        modal.style.cssText = `
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 10000;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        `;
+
+        modal.innerHTML = `
+            <div style="position: relative; max-width: 90%; max-height: 85vh;">
+                <img id="globalModalImage" src="" alt="Увеличенное изображение" style="max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px;">
+                <button id="globalCloseModalBtn" style="
+                    position: absolute;
+                    top: -50px;
+                    right: -50px;
+                    background: none;
+                    border: none;
+                    color: white;
+                    font-size: 32px;
+                    cursor: pointer;
+                    padding: 8px;
+                    transition: transform 0.2s;
+                ">✕</button>
+            </div>
+            <div id="globalModalCaption" style="
+                margin-top: 16px;
+                color: var(--text-secondary);
+                font-size: 0.9rem;
+                text-align: center;
+                max-width: 80%;
+                background: rgba(0,0,0,0.6);
+                padding: 8px 16px;
+                border-radius: 8px;
+            "></div>
+        `;
+
+        document.body.appendChild(modal);
+
+        const modalImg = document.getElementById('globalModalImage');
+        const modalCaption = document.getElementById('globalModalCaption');
+        const closeBtn = document.getElementById('globalCloseModalBtn');
+
+        function closeModal() {
+            modal.style.display = 'none';
+            document.body.style.overflow = '';
+        }
+
+        modal.addEventListener('click', closeModal);
+        if (closeBtn) closeBtn.addEventListener('click', (e) => { e.stopPropagation(); closeModal(); });
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.style.display === 'flex') closeModal(); });
+    }
+
+    window.openImageModal = (src, caption) => {
+        const modal = document.getElementById('globalImageModal');
+        const modalImg = document.getElementById('globalModalImage');
+        const modalCaption = document.getElementById('globalModalCaption');
+        if (modal && modalImg) {
+            modalImg.src = src;
+            modalCaption.textContent = caption || '';
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    };
+
+    const FSVNG_WEAPONS = [
+        { name: "Наручники и тазер", image: "handcuffs_and_taser.png" },
+        { name: "Газовый балончик", image: "pepper_spray.png" },
+        { name: "Дубинка", image: "batton.png" },
+        { name: "Пистолет Макарова", image: "pm.png" },
+        { name: "ПЯ Грач", image: "grach.png" },
+        { name: "АК-74М в обвесах", image: "ak74m_tactical.png" },
+        { name: "АК-74М", image: "ak74m.png" },
+        { name: "СВД", image: "svd.png" },
+        { name: "Дымовая шашка", image: "smoke_grenade.png" },
+        { name: "АКС-У", image: "aks74u.png" },
+        { name: "Пулемёт", image: "machinegun.png" },
+        { name: "ПП Кедр", image: "kedr.png" },
+        { name: "Кувалда", image: "sledgehammer.png" },
+        { name: "Бензорез", image: "grinder.png" }
+    ];
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function renderWeapons() {
+        const container = document.getElementById('fsvngWeaponsGrid');
+        if (!container) return;
+
+        const weaponsHtml = FSVNG_WEAPONS.map(weapon => {
+            const imagePath = `../images/weapons/${weapon.image}`;
+            return `
+                <div class="weapon-card">
+                    <div class="weapon-card-image">
+                        <img src="${imagePath}" 
+                             alt="${escapeHtml(weapon.name)}"
+                             class="clickable-weapon-img"
+                             data-full-img="${imagePath}"
+                             data-caption="${escapeHtml(weapon.name)}"
+                             onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\'weapon-img-placeholder\'><i class=\'fas fa-gun\'></i><br>${escapeHtml(weapon.name)}</div>'">
+                    </div>
+                    <div class="weapon-card-name">${escapeHtml(weapon.name)}</div>
+                </div>
+            `;
+        }).join('');
+
+        container.innerHTML = weaponsHtml;
+        
+        const weaponImages = document.querySelectorAll('.clickable-weapon-img');
+        weaponImages.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const fullImgSrc = img.getAttribute('data-full-img') || img.src;
+                const caption = img.getAttribute('data-caption') || img.alt;
+                window.openImageModal(fullImgSrc, caption);
+            });
+        });
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
+        addImageModal();
+        renderWeapons();
         initViewer();
         
         const uniformSelect = document.getElementById('uniformSelect');
@@ -408,7 +544,6 @@
             resetCameraBtn.addEventListener('click', resetCamera);
         }
         
-        // Модальное окно снаряжения
         if (gearBtn && gearModal) {
             gearBtn.addEventListener('click', () => {
                 gearModal.style.display = 'flex';

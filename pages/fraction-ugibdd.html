@@ -79,13 +79,26 @@
             
             <h4 style="color: var(--accent); margin: 20px 0 12px;">Критерии для граждан:</h4>
             <ul class="info-list">
-                <li>Иметь высшее/среднее профессиональное образование;</li>
-                <li>Не иметь судимостей у себя и близких родственников;</li>
-                <li>Постоянно проживать в области постоянно не менее 5-ти лет;</li>
-                <li>Иметь водительское удостоверение категории <strong>B</strong>;</li>
-                <li>Не иметь задолженностей по штрафам и тяжких административных правонарушений по линии ГИБДД;</li>
-                <li>Пройти воинскую службу в рядах Вооруженных Сил Российской Федерации, категория годности по военному билету <strong>(А1)</strong>.</li>
+                <li><strong>10-й игровой уровень</strong></li>
+                <li>Наличие военного билета</li>
+                <li>Наличие недвижимости или быть прописанным</li>
+                <li>Ни разу не быть лишенным права управления</li>
+                <li>Не иметь штрафов по грубым нарушениям ПДД</li>
+                <li>Отсутствие судимостей</li>
             </ul>
+
+            <div style="margin-top: 20px; background: rgba(46, 164, 79, 0.08); border-left: 3px solid var(--accent); padding: 16px 20px; border-radius: 8px;">
+                <i class="fas fa-calendar-alt" style="color: var(--accent); margin-right: 10px;"></i>
+                <strong>Набор в организацию проводится от 4 до 6 раз в год. В среднем, раз в 2-2.5 месяца.</strong>
+            </div>
+        </div>
+
+        <!-- Блок автопарка -->
+        <div class="info-block">
+            <h3>Автопарк ГИБДД</h3>
+            <p>Современные автомобили и мотоциклы, состоящие на вооружении Госавтоинспекции Нижегородской области.</p>
+            <div class="vinyl-gallery" id="fleetGallery">
+            </div>
         </div>
 
         <div class="info-block">
@@ -96,13 +109,13 @@
                         <tr><th>Команда</th><th>Назначение</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><code>/duty</code></span></td><td>Заступить на службу (надеть форму)</td></tr>
-                        <tr><td><code>/offduty</code></span></td><td>Завершить службу (переодеться в гражданское)</td></tr>
-                        <tr><td><code>/r [текст]</code></span></td><td>RP рация внутри фракции</span></td></tr>
-                        <tr><td><code>/ro [текст]</code></span></td><td>NonRP чат рации внутри фракции</span></td></tr>
-                        <tr><td><code>/d [текст]</code></span></td><td>RP чат рации департамента</span></td></tr>
-                        <tr><td><code>/od [текст]</code></span></td><td>NonRP чат рации департамента</span></td></tr>
-                        <tr><td><code>/members</code></span></td><td>Список сотрудников фракции онлайн</span></td></tr>
+                        <tr><td><code>/duty</code></td><td>Заступить на службу (надеть форму)</td></tr>
+                        <tr><td><code>/offduty</code></td><td>Завершить службу (переодеться в гражданское)</td></tr>
+                        <tr><td><code>/r [текст]</code></td><td>RP рация внутри фракции</td></tr>
+                        <tr><td><code>/ro [текст]</code></td><td>NonRP чат рации внутри фракции</td></tr>
+                        <tr><td><code>/d [текст]</code></td><td>RP чат рации департамента</td></tr>
+                        <tr><td><code>/od [текст]</code></td><td>NonRP чат рации департамента</td></tr>
+                        <tr><td><code>/members</code></td><td>Список сотрудников фракции онлайн</td></tr>
                     </tbody>
                 </table>
             </div>
@@ -210,8 +223,45 @@
         "9": { name: "Форма 9", dff: `${MODELS_BASE_PATH}9.dff`, txd: `${MODELS_BASE_PATH}9.txd`, gender: "male" }
     };
 
+    const FLEET_IMAGES = [
+        { src: "../images/fractions/gibdd/fleet/skoda_octavia.png", caption: "Skoda Octavia" },
+        { src: "../images/fractions/gibdd/fleet/haval_f7.png", caption: "Haval F7" },
+        { src: "../images/fractions/gibdd/fleet/hyundai_solaris.png", caption: "Hyundai Solaris" },
+        { src: "../images/fractions/gibdd/fleet/bmw_r1200rt.png", caption: "BMW R 1200 RT" },
+        { src: "../images/fractions/gibdd/fleet/toyota_camry.png", caption: "Toyota Camry" },
+        { src: "../images/fractions/gibdd/fleet/ford_transit.png", caption: "Ford Transit" }
+    ];
+
     let viewer = null;
     let currentUniform = "1";
+
+    function renderFleetGallery() {
+        const galleryContainer = document.getElementById('fleetGallery');
+        if (!galleryContainer) return;
+
+        const imagesHtml = FLEET_IMAGES.map(img => `
+            <div class="vinyl-image-item">
+                <img src="${img.src}" 
+                     alt="${img.caption}" 
+                     class="clickable-image vinyl-img"
+                     data-full-img="${img.src}"
+                     data-caption="${img.caption}"
+                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'vehicle-img-placeholder\\'>Изображение не найдено</div>'">
+            </div>
+        `).join('');
+
+        galleryContainer.innerHTML = imagesHtml;
+        
+        const images = document.querySelectorAll('.clickable-image');
+        images.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const fullImgSrc = img.getAttribute('data-full-img') || img.src;
+                const caption = img.getAttribute('data-caption') || img.alt;
+                window.openImageModal(fullImgSrc, caption);
+            });
+        });
+    }
 
     async function initViewer() {
         const container = document.getElementById('uniform3dContainer');
@@ -425,6 +475,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         addImageModal();
         renderWeapons();
+        renderFleetGallery();
         initViewer();
         
         const uniformSelect = document.getElementById('uniformSelect');

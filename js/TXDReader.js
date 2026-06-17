@@ -19,8 +19,6 @@ export class TXDReader {
     return this.readTextureDictionary(header);
   }
 
-  // ─── Чтение заголовка чанка ──────────────────────────────
-
   readHeader() {
     const type = this.readU32();
     const length = this.readU32();
@@ -35,8 +33,6 @@ export class TXDReader {
 
     return { type, name: getChunkName(type), length, build, version };
   }
-
-  // ─── Примитивы чтения ────────────────────────────────────
 
   readI32() { return this._read("getInt32", 4); }
   readU32() { return this._read("getUint32", 4); }
@@ -75,8 +71,6 @@ export class TXDReader {
 
   skip(n) { this.pos += Math.min(n, this.len - this.pos); }
 
-  // ─── Парсинг словаря текстур ─────────────────────────────
-
   readTextureDictionary(header) {
     const result = { textures: [], version: header.version, build: header.build };
 
@@ -96,7 +90,6 @@ export class TXDReader {
       }
     }
 
-    // Остаток — extension
     const remaining = header.length - (this.pos - 12);
     if (remaining > 0) {
       const extHeader = this.readHeader();
@@ -108,7 +101,6 @@ export class TXDReader {
     return result;
   }
 
-  // ─── Чтение Texture Native ────────────────────────────────
 
   readTextureNative() {
     const header = this.readHeader();
@@ -120,7 +112,7 @@ export class TXDReader {
     const chunkEnd = this.pos + header.length;
     const tex = {};
 
-    this.readHeader(); // struct header
+    this.readHeader();
     const platform = this.readU32();
     tex.platform = platform;
     tex.filterFlags = this.readU32();
@@ -131,7 +123,6 @@ export class TXDReader {
     tex.maskName = this.readString(32);
     tex.rasterFormat = this.readU32();
 
-    // Только D3D8/D3D9 имеют пиксельные данные
     if (platform !== PlatformID.PLATFORM_D3D8 && platform !== PlatformID.PLATFORM_D3D9) {
       this.pos = chunkEnd;
       tex.imageData = null;
@@ -166,7 +157,6 @@ export class TXDReader {
     tex.imageData = this.readTextureData(tex);
     tex.originalFormat = this.getFormatName(tex.d3dFormat);
 
-    // Пропуск extension в конце
     if (this.pos < chunkEnd) {
       try {
         const ext = this.readHeader();
@@ -178,12 +168,9 @@ export class TXDReader {
     return tex;
   }
 
-  // ─── Чтение пиксельных данных ────────────────────────────
-
   readTextureData(tex) {
     let palette = null;
 
-    // Чтение палитры
     const hasPal8  = (tex.rasterFormat & RasterFormat.FORMAT_EXT_PAL8) !== 0;
     const hasPal4  = (tex.rasterFormat & RasterFormat.FORMAT_EXT_PAL4) !== 0;
     if (hasPal8 || hasPal4) {
@@ -209,7 +196,6 @@ export class TXDReader {
     tex.rawDataSize = dataSize;
     tex.mipmaps = [];
 
-    // Чтение мип-уровней
     if (tex.mipmapCount > 1) {
       for (let i = 1; i < tex.mipmapCount && this.pos + 4 <= this.len; i++) {
         const mipSize = this.readU32();
@@ -230,11 +216,9 @@ export class TXDReader {
   }
 
   detectAlpha(pixels) {
-    // Быстрая проверка каждого 16-го пикселя
     for (let i = 3; i < pixels.length; i += 64) {
       if (pixels[i] < 255) return true;
     }
-    // Проверка первых 1000 пикселей
     const limit = Math.min(pixels.length / 4, 1000);
     for (let i = 0; i < limit; i++) {
       if (pixels[i * 4 + 3] < 255) return true;
@@ -242,19 +226,15 @@ export class TXDReader {
     return false;
   }
 
-  // ─── Декодирование текстур ───────────────────────────────
-
   decodeTexture(tex, raw, palette) {
     const w = tex.width, h = tex.height;
     const fmt = tex.d3dFormat;
     const out = new Uint8Array(w * h * 4);
 
-    // DXT сжатие
     if (fmt === D3DFormat.D3DFMT_DXT1) return this.decodeDXT1(raw, w, h);
     if (fmt === D3DFormat.D3DFMT_DXT3) return this.decodeDXT3(raw, w, h);
     if (fmt === D3DFormat.D3DFMT_DXT5) return this.decodeDXT5(raw, w, h);
 
-    // Палитровые
     if (palette) {
       for (let i = 0; i < w * h; i++) {
         const idx = raw[i] * 4;
@@ -272,9 +252,9 @@ export class TXDReader {
       case D3DFormat.D3DFMT_A8R8G8B8:
       case D3DFormat.D3DFMT_X8R8G8B8:
         for (let i = 0; i < count; i++) {
-          out[i * 4 + 0] = raw[i * 4 + 2]; // B → R
-          out[i * 4 + 1] = raw[i * 4 + 1]; // G
-          out[i * 4 + 2] = raw[i * 4 + 0]; // R → B
+          out[i * 4 + 0] = raw[i * 4 + 2]; 
+          out[i * 4 + 1] = raw[i * 4 + 1]; 
+          out[i * 4 + 2] = raw[i * 4 + 0]; 
           out[i * 4 + 3] = fmt === D3DFormat.D3DFMT_A8R8G8B8 ? raw[i * 4 + 3] : 255;
         }
         return out;
@@ -314,7 +294,6 @@ export class TXDReader {
         return out;
     }
 
-    // Fallback: raster format
     const rasterFmt = tex.rasterFormat & RasterFormat.FORMAT_MASK;
 
     if (rasterFmt === RasterFormat.FORMAT_4444 && raw.length === count) {
@@ -404,8 +383,6 @@ export class TXDReader {
     return out;
   }
 
-  // ─── DXT декодеры ────────────────────────────────────────
-
   decodeDXT1(data, width, height) {
     const output = new Uint8Array(width * height * 4);
     const blocksW = Math.max(1, (width + 3) >> 2);
@@ -482,7 +459,6 @@ export class TXDReader {
 
     for (let by = 0; by < blocksH; by++) {
       for (let bx = 0; bx < blocksW; bx++) {
-        // 8 байт альфа (4 бита на пиксель)
         const alphaData = [];
         for (let i = 0; i < 8; i++) alphaData.push(data[offset++]);
 
@@ -527,7 +503,6 @@ export class TXDReader {
         const alpha0 = data[offset++];
         const alpha1 = data[offset++];
 
-        // 6 байт индексов альфы (3 бита на пиксель)
         const alphaIndices = [];
         for (let i = 0; i < 6; i++) alphaIndices.push(data[offset++]);
 
@@ -584,8 +559,6 @@ export class TXDReader {
     }
     return alphas;
   }
-
-  // ─── Хелперы ──────────────────────────────────────────────
 
   getFormatName(format) {
     switch (format) {
