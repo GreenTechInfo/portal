@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>GreenTech info — Информационный портал</title>
-    
+
+    <script type='text/javascript' src='//samp-rating.ru/web/api/18738/'></script>
+
     <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    
 </head>
 <body>
 
@@ -27,8 +30,88 @@
 
     <main class="content" id="contentArea">
         <div class="page active" id="page-home">
-            <h1 class="page-title">GreenTech RolePlay</h1>
-            <p class="page-subtitle">Информационный портал сервера</p>
+            <h1 class="page-title">GreenTech Info</h1>
+            <p class="page-subtitle">Информационный портал сервера GreenTech RolePlay</p>
+
+            <div class="quick-links-grid">
+                <a href="pages/vehicles.html" class="quick-link">
+                    <div class="quick-link-icon"><img src="images/icons/vehicles.png" alt="Автомобили"></div>
+                    <span>Автомобили</span>
+                </a>
+                <a href="pages/fraction-army.html" class="quick-link">
+                    <div class="quick-link-icon"><img src="images/icons/fractions.png" alt="Фракции"></div>
+                    <span>Фракции</span>
+                </a>
+                <a href="pages/systems.html" class="quick-link">
+                    <div class="quick-link-icon"><img src="images/icons/systems.png" alt="Системы"></div>
+                    <span>Системы</span>
+                </a>
+                <a href="pages/animations.html" class="quick-link">
+                    <div class="quick-link-icon"><img src="images/icons/animations.png" alt="Анимации"></div>
+                    <span>Анимации</span>
+                </a>
+                <a href="pages/rules.html" class="quick-link">
+                    <div class="quick-link-icon"><img src="images/icons/rules.png" alt="Правила"></div>
+                    <span>Правила</span>
+                </a>
+                <a href="pages/jobs.html" class="quick-link">
+                    <div class="quick-link-icon"><img src="images/icons/jobs.png" alt="Работы"></div>
+                    <span>Работы</span>
+                </a>
+                <a href="pages/tuning.html" class="quick-link">
+                    <div class="quick-link-icon"><i class="fas fa-wrench"></i></div>
+                    <span>Тюнинг</span>
+                </a>
+                <a href="pages/faq.html" class="quick-link">
+                    <div class="quick-link-icon"><img src="images/icons/faq.png" alt="FAQ"></div>
+                    <span>FAQ</span>
+                </a>
+            </div>
+
+            <div class="info-block servers-block">
+                <h3><i class="fas fa-server"></i> Статус сервера</h3>
+                <div class="servers-grid">
+                    <div class="server-card">
+                        <div class="server-status online" id="statusDot"></div>
+                        <div class="server-info">
+                            <div class="server-name" id="serverName">
+                                <script type='text/javascript'>document.write(api.hostname);</script>
+                            </div>
+                            <div class="server-online">
+                                <span class="online-count" id="onlineNumber">
+                                    <script type='text/javascript'>document.write(api.players);</script>
+                                </span> / <span id="maxPlayers">
+                                    <script type='text/javascript'>document.write(api.maxplayers);</script>
+                                </span> игроков онлайн
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-block news-block">
+                <h3>
+                    <i class="fas fa-newspaper"></i> Последние новости
+                </h3>
+                <div id="newsContainer">
+                    <div class="news-loader">
+                        <div class="news-spinner"></div>
+                        <span>Загрузка новостей...</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="info-block resources-block">
+                <h3><i class="fas fa-link"></i> Официальные ресурсы</h3>
+                <div class="resources-grid">
+                    <a href="https://vk.com/greentech_rp" target="_blank" class="resource-link"><i class="fab fa-vk"></i> Официальная группа ВК</a>
+                    <a href="https://vk.com/greentech_roleplay_free" target="_blank" class="resource-link"><i class="fab fa-vk"></i> Свободная группа ВК</a>
+                    <a href="https://t.me/greentech_rp" target="_blank" class="resource-link"><i class="fab fa-telegram-plane"></i> Telegram</a>
+                    <a href="https://www.youtube.com/@GreenTechOfficialChannel" target="_blank" class="resource-link"><i class="fab fa-youtube"></i> YouTube</a>
+                    <a href="https://discord.gg/YxmyH4QxfR" target="_blank" class="resource-link"><i class="fab fa-discord"></i> Discord</a>
+                    <a href="https://forum.greentech-rp.com/" target="_blank" class="resource-link"><i class="fas fa-users"></i> Форум</a>
+                </div>
+            </div>
         </div>
     </main>
 </div>
@@ -40,7 +123,7 @@
 </button>
 
 <footer class="footer">
-    <div class="footer-left">
+    <div class="footer-copyright">
         © 2026 GreenTech Info. Информационный портал.
     </div>
     <div class="footer-right">
@@ -52,5 +135,138 @@
 
 <script src="js/common.js"></script>
 <script src="js/navigation.js"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const statusDot = document.getElementById('statusDot');
+
+        function updateServerStatus() {
+            try {
+                if (typeof api !== 'undefined' && api.status == 1) {
+                    statusDot.className = 'server-status online';
+                } else {
+                    statusDot.className = 'server-status offline';
+                }
+            } catch (e) {
+                statusDot.className = 'server-status offline';
+            }
+        }
+
+        setTimeout(updateServerStatus, 500);
+    });
+
+    (function() {
+        const container = document.getElementById('newsContainer');
+        
+        const NEWS_URL = 'https://greentech-samp-cdn-ru.itcloud.io/prod/launcher/news.json';
+        
+        const PROXIES = [
+            'https://api.allorigins.win/raw?url=',
+            'https://corsproxy.io/?',
+            'https://api.codetabs.com/v1/proxy?quest='
+        ];
+
+        function createNewsCard(item) {
+            const card = document.createElement('div');
+            card.className = 'news-card';
+
+            const img = document.createElement('img');
+            img.className = 'news-image';
+            img.src = item.ImgUrl || '';
+            img.alt = item.Title || 'Новость';
+            img.loading = 'lazy';
+            img.onerror = function() {
+                this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="225" viewBox="0 0 400 225"%3E%3Crect width="400" height="225" fill="%23161c27"/%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" font-family="sans-serif" font-size="18" fill="%235a6e8e"%3EНет изображения%3C/text%3E%3C/svg%3E';
+            };
+
+            const content = document.createElement('div');
+            content.className = 'news-content';
+
+            const title = document.createElement('h4');
+            title.className = 'news-title';
+            title.textContent = item.Title || 'Без заголовка';
+
+            const desc = document.createElement('p');
+            desc.className = 'news-desc';
+            desc.textContent = item.Desc || '';
+
+            const link = document.createElement('a');
+            link.className = 'news-link';
+            link.href = item.Link || '#';
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = 'Читать';
+
+            content.appendChild(title);
+            content.appendChild(desc);
+            content.appendChild(link);
+
+            card.appendChild(img);
+            card.appendChild(content);
+
+            return card;
+        }
+
+        async function fetchWithProxy(url, proxyIndex = 0) {
+            if (proxyIndex >= PROXIES.length) {
+                throw new Error('Все прокси-серверы недоступны');
+            }
+
+            const proxyUrl = PROXIES[proxyIndex] + encodeURIComponent(url);
+
+            try {
+                const response = await fetch(proxyUrl, {
+                    signal: AbortSignal.timeout(10000)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+
+                const text = await response.text();
+                return JSON.parse(text);
+            } catch (error) {
+                return fetchWithProxy(url, proxyIndex + 1);
+            }
+        }
+
+        async function fetchNews() {
+            try {
+                const data = await fetchWithProxy(NEWS_URL);
+
+                if (!Array.isArray(data) || data.length === 0) {
+                    throw new Error('Получены некорректные данные');
+                }
+
+                container.innerHTML = '';
+
+                const grid = document.createElement('div');
+                grid.className = 'news-grid';
+
+                const lastTen = data.slice(0, 10);
+                lastTen.forEach(item => {
+                    const card = createNewsCard(item);
+                    grid.appendChild(card);
+                });
+
+                container.appendChild(grid);
+
+            } catch (error) {
+                container.innerHTML = `
+                    <div class="news-error">
+                        <div style="font-size: 2rem; margin-bottom: 10px;">⚠️</div>
+                        <div style="font-weight: 600; margin-bottom: 6px;">Не удалось загрузить новости</div>
+                        <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 16px;">
+                            ${error.message || 'Проверьте подключение к интернету'}
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        fetchNews();
+    })();
+</script>
+
 </body>
 </html>
