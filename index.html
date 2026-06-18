@@ -231,38 +231,59 @@
         }
 
         async function fetchNews() {
-            try {
-                const data = await fetchWithProxy(NEWS_URL);
+			const CACHE_KEY = 'greentech_news_cache';
+			const CACHE_TIME_KEY = 'greentech_news_time';
+			const CACHE_DURATION = 720 * 60 * 1000; // 12 часов
 
-                if (!Array.isArray(data) || data.length === 0) {
-                    throw new Error('Получены некорректные данные');
-                }
+			try {
+				const cached = localStorage.getItem(CACHE_KEY);
+				const cachedTime = localStorage.getItem(CACHE_TIME_KEY);
+				const now = Date.now();
 
-                container.innerHTML = '';
+				if (cached && cachedTime && (now - parseInt(cachedTime)) < CACHE_DURATION) {
+					const data = JSON.parse(cached);
+					renderNews(data);
+					return;
+				}
 
-                const grid = document.createElement('div');
-                grid.className = 'news-grid';
+				const data = await fetchWithProxy(NEWS_URL);
 
-                const lastTen = data.slice(0, 10);
-                lastTen.forEach(item => {
-                    const card = createNewsCard(item);
-                    grid.appendChild(card);
-                });
+				if (!Array.isArray(data) || data.length === 0) {
+					throw new Error('Получены некорректные данные');
+				}
 
-                container.appendChild(grid);
+				localStorage.setItem(CACHE_KEY, JSON.stringify(data));
+				localStorage.setItem(CACHE_TIME_KEY, String(now));
 
-            } catch (error) {
-                container.innerHTML = `
-                    <div class="news-error">
-                        <div style="font-size: 2rem; margin-bottom: 10px;">⚠️</div>
-                        <div style="font-weight: 600; margin-bottom: 6px;">Не удалось загрузить новости</div>
-                        <div style="font-size: 0.9rem; opacity: 0.8; margin-bottom: 16px;">
-                            ${error.message || 'Проверьте подключение к интернету'}
-                        </div>
-                    </div>
-                `;
-            }
-        }
+				renderNews(data);
+
+			} catch (error) {
+				const cached = localStorage.getItem(CACHE_KEY);
+				if (cached) {
+					try {
+						const data = JSON.parse(cached);
+						renderNews(data);
+						return;
+					} catch (e) {}
+				}
+
+				showError(error.message);
+			}
+		}
+		
+		function renderNews(data) {
+			container.innerHTML = '';
+			const grid = document.createElement('div');
+			grid.className = 'news-grid';
+
+			const lastTen = data.slice(0, 10);
+			lastTen.forEach(item => {
+				const card = createNewsCard(item);
+				grid.appendChild(card);
+			});
+
+			container.appendChild(grid);
+		}
 
         fetchNews();
     })();

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Редактор аксессуаров МЧС</title>
+    <title>Редактор аксессуаров ФСВНГ</title>
     <style>
         * {
             margin: 0;
@@ -28,7 +28,7 @@
             width: 420px;
             min-width: 420px;
             background: rgba(26, 26, 46, 0.95);
-            border-right: 2px solid rgba(46, 164, 79, 0.3);
+            border-right: 2px solid rgba(0, 150, 255, 0.3);
             padding: 20px 18px;
             overflow-y: auto;
             z-index: 10;
@@ -44,7 +44,7 @@
             background: transparent;
         }
         .control-panel::-webkit-scrollbar-thumb {
-            background: #2ea44f;
+            background: #0096ff;
             border-radius: 2px;
         }
 
@@ -52,7 +52,7 @@
             font-size: 20px;
             font-weight: 700;
             color: #fff;
-            border-bottom: 2px solid rgba(46, 164, 79, 0.3);
+            border-bottom: 2px solid rgba(0, 150, 255, 0.3);
             padding-bottom: 12px;
             margin-bottom: 4px;
             display: flex;
@@ -61,8 +61,8 @@
         }
         .panel-title .badge {
             font-size: 12px;
-            background: rgba(46, 164, 79, 0.2);
-            color: #2ea44f;
+            background: rgba(0, 150, 255, 0.2);
+            color: #0096ff;
             padding: 2px 10px;
             border-radius: 12px;
             font-weight: 400;
@@ -70,29 +70,29 @@
 
         .uniform-selector {
             display: flex;
-            gap: 8px;
+            gap: 6px;
             flex-wrap: wrap;
         }
         .uniform-selector button {
-            flex: 1;
-            padding: 8px 12px;
+            flex: 1 0 calc(33% - 6px);
+            padding: 6px 8px;
             border: 2px solid rgba(255,255,255,0.1);
             background: rgba(255,255,255,0.05);
             color: #aaa;
-            border-radius: 8px;
+            border-radius: 6px;
             cursor: pointer;
             transition: all 0.3s;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 500;
-            min-width: 80px;
+            min-width: 60px;
         }
         .uniform-selector button:hover {
             background: rgba(255,255,255,0.08);
             color: #fff;
         }
         .uniform-selector button.active {
-            border-color: #2ea44f;
-            background: rgba(46, 164, 79, 0.15);
+            border-color: #0096ff;
+            background: rgba(0, 150, 255, 0.15);
             color: #fff;
         }
 
@@ -113,8 +113,8 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 8px 10px;
-            margin-bottom: 4px;
+            padding: 6px 10px;
+            margin-bottom: 3px;
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
@@ -124,8 +124,8 @@
             background: rgba(255,255,255,0.06);
         }
         .accessory-item.active {
-            background: rgba(46, 164, 79, 0.12);
-            border-left: 3px solid #2ea44f;
+            background: rgba(0, 150, 255, 0.12);
+            border-left: 3px solid #0096ff;
         }
         .accessory-item label {
             display: flex;
@@ -137,11 +137,11 @@
         .accessory-item input[type="checkbox"] {
             width: 16px;
             height: 16px;
-            accent-color: #2ea44f;
+            accent-color: #0096ff;
             cursor: pointer;
         }
         .accessory-item .name {
-            font-size: 14px;
+            font-size: 13px;
             color: #ddd;
         }
         .accessory-item .status {
@@ -152,8 +152,8 @@
             background: rgba(255,255,255,0.05);
         }
         .accessory-item .status.equipped {
-            color: #2ea44f;
-            background: rgba(46, 164, 79, 0.15);
+            color: #0096ff;
+            background: rgba(0, 150, 255, 0.15);
         }
 
         .selected-info {
@@ -210,14 +210,14 @@
             -webkit-appearance: none;
             width: 14px;
             height: 14px;
-            background: #2ea44f;
+            background: #0096ff;
             border-radius: 50%;
             cursor: pointer;
         }
         .transform-group input[type="range"]::-moz-range-thumb {
             width: 14px;
             height: 14px;
-            background: #2ea44f;
+            background: #0096ff;
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -249,7 +249,7 @@
         }
         .transform-group .number-input:focus {
             outline: none;
-            border-color: #2ea44f;
+            border-color: #0096ff;
         }
         .transform-group .number-input:hover {
             border-color: rgba(255,255,255,0.2);
@@ -286,14 +286,14 @@
             min-width: 80px;
         }
         .btn-copy {
-            background: #2ea44f;
+            background: #0096ff;
             color: #fff;
         }
         .btn-copy:hover {
-            background: #3cb85c;
+            background: #33abff;
         }
         .btn-copy.copied {
-            background: #1a7a37;
+            background: #006bb3;
         }
         .btn-reset {
             background: rgba(255,255,255,0.08);
@@ -312,13 +312,13 @@
             background: rgba(255,68,68,0.25);
         }
         .btn-gear {
-            background: rgba(46, 164, 79, 0.15);
-            color: #2ea44f;
-            border: 1px solid rgba(46, 164, 79, 0.2);
+            background: rgba(0, 150, 255, 0.15);
+            color: #0096ff;
+            border: 1px solid rgba(0, 150, 255, 0.2);
             flex: 1;
         }
         .btn-gear:hover {
-            background: rgba(46, 164, 79, 0.25);
+            background: rgba(0, 150, 255, 0.25);
         }
         .btn-gear i {
             margin-right: 6px;
@@ -339,7 +339,7 @@
             line-height: 1.6;
         }
         .code-output .highlight {
-            color: #2ea44f;
+            color: #0096ff;
         }
         .code-output .key {
             color: #e6b450;
@@ -365,7 +365,7 @@
         }
         #uniform3dLoading i {
             font-size: 48px;
-            color: #2ea44f;
+            color: #0096ff;
             animation: spin 1.5s linear infinite;
         }
         @keyframes spin {
@@ -394,7 +394,7 @@
                 min-width: unset;
                 height: 50vh;
                 border-right: none;
-                border-bottom: 2px solid rgba(46, 164, 79, 0.3);
+                border-bottom: 2px solid rgba(0, 150, 255, 0.3);
             }
             .viewer-container {
                 height: 50vh;
@@ -445,7 +445,7 @@
             gap: 12px;
         }
         .gear-modal-header h3 i {
-            color: #2ea44f;
+            color: #0096ff;
             font-size: 24px;
         }
         .gear-modal-close {
@@ -500,13 +500,13 @@
             background: rgba(255,68,68,0.1);
         }
         .btn-close-gear {
-            background: #2ea44f;
+            background: #0096ff;
             color: #fff;
             font-weight: 600;
             padding: 8px 24px;
         }
         .btn-close-gear:hover {
-            background: #3cb85c;
+            background: #33abff;
         }
     </style>
 </head>
@@ -516,25 +516,23 @@
     <!-- Панель управления -->
     <div class="control-panel">
         <div class="panel-title">
-            🎮 Редактор аксессуаров МЧС
+            🛡️ Редактор аксессуаров ФСВНГ
             <span class="badge">BETA</span>
         </div>
 
         <!-- Выбор формы -->
         <div class="uniform-selector" id="uniformSelector">
-            <button class="active" data-uniform="kombinezon">Комбинезон</button>
-            <button data-uniform="bop1">БОП 1</button>
-            <button data-uniform="bop2">БОП 2</button>
-            <button data-uniform="bop_spt">БОП (СПТ)</button>
-            <button data-uniform="everyday">Повседневная</button>
-            <button data-uniform="medic">Медицинская</button>
-            <button data-uniform="office">ТОК-200</button>
-            <button data-uniform="gks_form">ГКС</button>
-            <button data-uniform="leader_form">Лидер</button>
-            <button data-uniform="female_form">Женская</button>
+            <button class="active" data-uniform="siniy_moh">Синий мох</button>
+            <button data-uniform="chernaya_noch">Чёрная ночь</button>
+            <button data-uniform="zeleniy_moh">Зелёный мох</button>
+            <button data-uniform="boevaya_1">Боевая 1</button>
+            <button data-uniform="boevaya_2">Боевая 2</button>
+            <button data-uniform="svobodnaya">Свободная</button>
+            <button data-uniform="leader">Лидер</button>
+            <button data-uniform="razminirovanie">Разминирование</button>
         </div>
 
-        <!-- КНОПКА СНАРЯЖЕНИЯ - ТЕПЕРЬ ОНА ЗДЕСЬ И БОЛЬШАЯ -->
+        <!-- КНОПКА СНАРЯЖЕНИЯ -->
         <button class="btn-gear" id="gearButton" style="padding: 12px; font-size: 16px; width: 100%;">
             <i class="fas fa-tshirt"></i> 🎒 ОТКРЫТЬ СНАРЯЖЕНИЕ
         </button>
@@ -664,7 +662,7 @@
 <div class="gear-modal-overlay" id="gearModal">
     <div class="gear-modal">
         <div class="gear-modal-header">
-            <h3><i class="fas fa-tshirt"></i> Снаряжение МЧС</h3>
+            <h3><i class="fas fa-tshirt"></i> Снаряжение ФСВНГ</h3>
             <button class="gear-modal-close" id="closeGearModal">&times;</button>
         </div>
         <div class="gear-modal-body" id="gearModalBody">
@@ -697,77 +695,94 @@
     import { DFFReader } from '../js/DFFReader.js';
     import { TXDReader } from '../js/TXDReader.js';
 
-    // ==================== КОНФИГ ====================
-    const MODELS_BASE_PATH = '../models/uniforms/mchs/';
-    const ACCESSORIES_BASE_PATH = '../models/uniforms/mchs/accessories/';
-    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
+    // ==================== КОНФИГ ФСВНГ ====================
+    const MODELS_BASE_PATH = '../models/uniforms/fsvng/';
+    const ACCESSORIES_BASE_PATH = '../models/uniforms/fsvng/accessories/';
+    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim2.ifp`;
 
+    // Список форм ФСВНГ (из вашего файла fraction-ufsvng.html)
     const UNIFORM_MODELS = {
-        kombinezon: { name: "Комбинезон", dff: `${MODELS_BASE_PATH}kombinezon.dff`, txd: `${MODELS_BASE_PATH}kombinezon.txd`, gender: "male" },
-        bop1: { name: "БОП 1", dff: `${MODELS_BASE_PATH}bop1.dff`, txd: `${MODELS_BASE_PATH}bop1.txd`, gender: "male" },
-        bop2: { name: "БОП 2", dff: `${MODELS_BASE_PATH}bop2.dff`, txd: `${MODELS_BASE_PATH}bop2.txd`, gender: "male" },
-        bop_spt: { name: "БОП (СПТ)", dff: `${MODELS_BASE_PATH}bop_spt.dff`, txd: `${MODELS_BASE_PATH}bop_spt.txd`, gender: "male" },
-        everyday: { name: "Повседневная", dff: `${MODELS_BASE_PATH}everyday.dff`, txd: `${MODELS_BASE_PATH}everyday.txd`, gender: "male" },
-        medic: { name: "Медицинская", dff: `${MODELS_BASE_PATH}medic.dff`, txd: `${MODELS_BASE_PATH}medic.txd`, gender: "male" },
-        office: { name: "ТОК-200", dff: `${MODELS_BASE_PATH}office.dff`, txd: `${MODELS_BASE_PATH}office.txd`, gender: "male" },
-        female_form: { name: "Женская", dff: `${MODELS_BASE_PATH}female_form.dff`, txd: `${MODELS_BASE_PATH}female_form.txd`, gender: "female" },
-        gks_form: { name: "ГКС", dff: `${MODELS_BASE_PATH}gks_form.dff`, txd: `${MODELS_BASE_PATH}gks_form.txd`, gender: "male" },
-        leader_form: { name: "Лидер", dff: `${MODELS_BASE_PATH}leader_form.dff`, txd: `${MODELS_BASE_PATH}leader_form.txd`, gender: "male" }
+        siniy_moh: { name: "Синий мох", dff: `${MODELS_BASE_PATH}siniy_moh.dff`, txd: `${MODELS_BASE_PATH}siniy_moh.txd` },
+        chernaya_noch: { name: "Чёрная ночь", dff: `${MODELS_BASE_PATH}chernaya_noch.dff`, txd: `${MODELS_BASE_PATH}chernaya_noch.txd` },
+        zeleniy_moh: { name: "Зелёный мох", dff: `${MODELS_BASE_PATH}zeleniy_moh.dff`, txd: `${MODELS_BASE_PATH}zeleniy_moh.txd` },
+        boevaya_1: { name: "Боевая 1", dff: `${MODELS_BASE_PATH}boevaya_1.dff`, txd: `${MODELS_BASE_PATH}boevaya_1.txd` },
+        boevaya_2: { name: "Боевая 2", dff: `${MODELS_BASE_PATH}boevaya_2.dff`, txd: `${MODELS_BASE_PATH}boevaya_2.txd` },
+        svobodnaya: { name: "Свободная", dff: `${MODELS_BASE_PATH}svobodnaya.dff`, txd: `${MODELS_BASE_PATH}svobodnaya.txd` },
+        leader: { name: "Лидер", dff: `${MODELS_BASE_PATH}leader.dff`, txd: `${MODELS_BASE_PATH}leader.txd` },
+        razminirovanie: { name: "Разминирование", dff: `${MODELS_BASE_PATH}razminirovanie.dff`, txd: `${MODELS_BASE_PATH}razminirovanie.txd` }
     };
 
+    // Аксессуары ФСВНГ (из вашего файла, плюс щиты)
     const ACCESSORIES_INFO = [
-        { id: 'first_aid', name: 'Чемоданчик первой помощи', slot: 'body', bone: 'R Finger' },
-        { id: 'spreader', name: 'Гидравлические разжимы', slot: 'body', bone: 'R Finger' },
-        { id: 'cutter', name: 'Гидравлические ножницы', slot: 'body', bone: 'R Finger' },
-        { id: 'manhattan', name: 'Манхэттенская скатка', slot: 'body', bone: 'L UpperArm' },
-        { id: 'hooligan', name: 'Хулиган', slot: 'body', bone: 'R Finger' },
-        { id: 'bugor', name: 'Бугор пожарный', slot: 'body', bone: 'R Finger' },
-        { id: 'purga5', name: 'ПУРГА-5', slot: 'body', bone: 'R Finger' },
-        { id: 'fire_axe', name: 'Топор пожарный', slot: 'body', bone: 'R Finger' },
-        { id: 'life_vest', name: 'Спасательный жилет', slot: 'body', bone: 'Neck' },
-        { id: 'load_vest', name: 'Разгрузочный жилет', slot: 'body', bone: 'Neck' },
-        { id: 'sizod', name: 'СИЗОД', slot: 'body', bone: 'Neck' },
-        { id: 'helmet_spt', name: 'Каска СПТ', slot: 'head', bone: 'head' },
-        { id: 'helmet_upsch', name: 'Каска УПСЧ', slot: 'head', bone: 'head' },
-        { id: 'helmet_11', name: 'Каска 11 ПСЧ', slot: 'head', bone: 'head' },
-        { id: 'helmet_spsc', name: 'Каска СПСЧ', slot: 'head', bone: 'head' },
-        { id: 'mask_sizod', name: 'Маска СИЗОД', slot: 'head', bone: 'head' },
-        { id: 'moto_helmet', name: 'Мото-шлем', slot: 'head', bone: 'head' },
-        { id: 'peak_cap', name: 'Фуражка', slot: 'head', bone: 'head' },
-        { id: 'cap1', name: 'Кепка 1', slot: 'head', bone: 'head' },
-        { id: 'cap2', name: 'Кепка 2', slot: 'head', bone: 'head' }
+        { id: 'buff', name: 'Бафф', slot: 'neck', bone: 'Jaw' },
+        { id: 'beret_black', name: 'Чёрный берет', slot: 'head', bone: 'head' },
+        { id: 'beret_black_sign', name: 'Чёрный берет со знаком', slot: 'head', bone: 'head' },
+        { id: 'beret_krapoviy', name: 'Краповый берет', slot: 'head', bone: 'head' },
+        { id: 'cap_blue_moh', name: 'Кепка синий мох', slot: 'head', bone: 'head' },
+        { id: 'cap_green_moh', name: 'Кепка зелёный мох', slot: 'head', bone: 'head' },
+        { id: 'cap_black', name: 'Кепка чёрная', slot: 'head', bone: 'head' },
+        { id: 'cap_furazhka_1', name: 'Фуражка 1', slot: 'head', bone: 'head' },
+        { id: 'glasses', name: 'Очки', slot: 'face', bone: 'head' },
+        { id: 'helmet_tor_s', name: 'Шлем ТОР (S)', slot: 'head', bone: 'head' },
+        { id: 'helmet_tor_m', name: 'Шлем ТОР (М)', slot: 'head', bone: 'head' },
+        { id: 'helmet_pilot', name: 'Шлем пилота', slot: 'head', bone: 'head' },
+        { id: 'helmet_zsh_1_2m', name: 'Шлем ЗШ-1-2М', slot: 'head', bone: 'head' },
+        { id: 'helmet_zsh_1_2m_visor', name: 'Шлем ЗШ-1-2М с забралом', slot: 'head', bone: 'head' },
+        { id: 'helmet_zsh_1_2m_glasses', name: 'Шлем ЗШ-1-2М с очками', slot: 'head', bone: 'head' },
+        { id: 'armor_light', name: 'Бронелифчик', slot: 'body', bone: 'Neck' },
+        { id: 'armor_tactics', name: 'Бронежилет Тактика', slot: 'body', bone: 'Neck' },
+        { id: 'armor_tactics_3m', name: 'Бронежилет Тактика (3M)', slot: 'body', bone: 'Neck' },
+        { id: 'armor_bagariy_v1', name: 'Бронежилет Багарий v1', slot: 'body', bone: 'Neck' },
+        { id: 'armor_bagariy_v2', name: 'Бронежилет Багарий v2', slot: 'body', bone: 'Neck' },
+        { id: 'armor_specnaz', name: 'Бронежилет Спецназ', slot: 'body', bone: 'Neck' },
+        { id: 'armor_green_moh', name: 'Бронежилет зелёный мох', slot: 'body', bone: 'Neck' },
+        { id: 'bandage_friendly', name: 'Повязка свой/чужой', slot: 'arm_left', bone: 'L UpperArm' },
+        { id: 'bandage_rz', name: 'Повязка РЗ', slot: 'arm_left', bone: 'L UpperArm' },
+        { id: 'backpack', name: 'Рюкзак', slot: 'back', bone: 'neck' },
+        { id: 'backpack_travel', name: 'Рюкзак походный', slot: 'back', bone: 'neck' },
+        { id: 'shield_1', name: 'Щит 1', slot: 'hand_left', bone: 'L Finger' },
+        { id: 'shield_2', name: 'Щит 2', slot: 'hand_left', bone: 'L Finger' }
     ];
 
+    // Соответствие TXD для аксессуаров
     const ACCESSORY_TXD_MAP = {
-        mask_sizod: 'mask_sizod.txd',
-        moto_helmet: 'moto_helmet.txd',
-        sizod: 'sizod.txd',
-        life_vest: 'vests.txd',
-        load_vest: 'vests.txd',
-        helmet_spt: 'hats.txd',
-        helmet_upsch: 'hats.txd',
-        helmet_11: 'hats.txd',
-        peak_cap: 'hats.txd',
-        helmet_spsc: 'hats.txd',
-        cap1: 'hats.txd',
-        cap2: 'hats.txd',
-        first_aid: 'textures2.txd',
-        spreader: 'textures2.txd',
-        cutter: 'textures2.txd',
-        manhattan: 'textures2.txd',
-        bugor: 'textures3.txd',
-        purga5: 'textures3.txd',
-        hooligan: 'textures3.txd',
-        fire_axe: 'textures3.txd'
+        buff: 'ros_attach_w.txd',
+        armor_bagariy_v1: 'ros_attach.txd',
+        armor_bagariy_v2: 'ros_attach_w.txd',
+        armor_specnaz: 'ros_attach_w.txd',
+        armor_tactics: 'ros_attach_w.txd',
+        armor_tactics_3m: 'ros_attach_w.txd',
+        armor_green_moh: 'ros_attach_w.txd',
+        armor_light: 'ros_attach.txd',
+        cap_green_moh: 'ros_attach.txd',
+        cap_blue_moh: 'ros_attach.txd',
+        cap_black: 'ros_attach.txd',
+        beret_krapoviy: 'ros_attach_w.txd',
+        glasses: 'ros_attach.txd',
+        bandage_rz: 'ros_attach_w.txd',
+        bandage_friendly: 'ros_attach_w.txd',
+        backpack: 'ros_attach_w.txd',
+        backpack_travel: 'ros_attach_w.txd',
+        cap_furazhka_1: 'ros_attach_w.txd',
+        beret_black: 'ros_attach.txd',
+        beret_black_sign: 'ros_attach.txd',
+        helmet_zsh_1_2m: 'ros_attach.txd',
+        helmet_zsh_1_2m_visor: 'ros_attach.txd',
+        helmet_zsh_1_2m_glasses: 'ros_attach.txd',
+        helmet_tor_m: 'ros_attach.txd',
+        helmet_tor_s: 'ros_attach_w.txd',
+        helmet_pilot: 'ros_attach.txd',
+        shield_1: 'shield_1.txd',
+        shield_2: 'objectsst.txd'
     };
 
     // ==================== СОСТОЯНИЕ ====================
     let viewer = null;
-    let currentUniform = 'kombinezon';
+    let currentUniform = 'siniy_moh';
     let accessoryGroups = {};
     let loadedAccessories = {};
     let equippedAccessories = {};
-    let accessorySlots = { head: null, body: null };
+    let accessorySlots = { head: null, body: null, back: null, arm_left: null, neck: null, face: null, hand_left: null };
     let accessoryAttachments = {};
     let selectedAccessoryId = null;
     let isUpdating = false;
@@ -846,14 +861,9 @@
         try {
             await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
             const availableAnims = viewer.getAnimationNames();
+            const preferredAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed", "IDLE"];
             let targetAnim = null;
-            if (config.gender === "female") {
-                const femaleAnims = ["woman_idlestance", "woman_idle", "idle_female", "female_idle", "IDLE"];
-                for (const a of femaleAnims) { if (availableAnims.includes(a)) { targetAnim = a; break; } }
-            } else {
-                const maleAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed", "IDLE"];
-                for (const a of maleAnims) { if (availableAnims.includes(a)) { targetAnim = a; break; } }
-            }
+            for (const a of preferredAnims) { if (availableAnims.includes(a)) { targetAnim = a; break; } }
             if (!targetAnim && availableAnims.length > 0) targetAnim = availableAnims[0];
             if (targetAnim) viewer.playAnimation(targetAnim);
         } catch (error) {
@@ -919,7 +929,7 @@
             }
         }
         equippedAccessories = {};
-        accessorySlots = { head: null, body: null };
+        accessorySlots = { head: null, body: null, back: null, arm_left: null, neck: null, face: null, hand_left: null };
         selectedAccessoryId = null;
         updateAccessoriesUI();
         updateSelectedInfo();
@@ -1098,7 +1108,6 @@
         const containerFull = document.getElementById('accessoriesListFull');
         if (containerFull) {
             let html = '';
-            // Для модалки показываем все аксессуары, которые есть в папке
             const filtered = ACCESSORIES_INFO;
             if (filtered.length === 0) {
                 html = `<div class="no-accessories-msg"><i class="fas fa-tshirt"></i><p>Для этой формы снаряжение не предусмотрено</p></div>`;
@@ -1163,10 +1172,7 @@
             return;
         }
         const data = {
-            position: { x: Math.round(t.position.x*1000)/1000, y: Math.round(t.position.y*1000)/1000, z: Math.round(t.position.z*1000)/1000 },
-            rotation: { x: Math.round(t.rotation.x), y: Math.round(t.rotation.y), z: Math.round(t.rotation.z) },
-            scale: { x: Math.round(t.scale.x*1000)/1000, y: Math.round(t.scale.y*1000)/1000, z: Math.round(t.scale.z*1000)/1000 },
-            bone: accessoryAttachments[selectedAccessoryId]?.bone || 'spine'
+            position: { x: Math.round(t.position.x*1000)/1000, y: Math.round(t.position.y*1000)/1000, z: Math.round(t.position.z*1000)/1000 }, rotation: { x: Math.round(t.rotation.x), y: Math.round(t.rotation.y), z: Math.round(t.rotation.z) }, scale: { x: Math.round(t.scale.x*1000)/1000, y: Math.round(t.scale.y*1000)/1000, z: Math.round(t.scale.z*1000)/1000 }, bone: accessoryAttachments[selectedAccessoryId]?.bone || 'spine'
         };
         const json = JSON.stringify(data, null, 2);
         output.innerHTML = `<span class="key">${selectedAccessoryId}</span>: <span class="highlight">${json}</span>`;

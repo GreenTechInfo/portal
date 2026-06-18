@@ -31,7 +31,7 @@
             <h3>О фракции</h3>
             <p><strong>Федеральная служба войск национальной гвардии Российской Федерации (Росгвардия)</strong> представляет собой федеральный орган исполнительной власти, основная задача которого заключается в обеспечении государственной и общественной безопасности.</p>
             <p>Росгвардия активно защищает права и свободы человека и гражданина, охраняет общественный порядок, а также борется с терроризмом и экстремизмом.</p>
-            <p style="margin-top: 12px;"><strong>Управление ФСВНГ России по Нижегородской области</strong> включает в себя Отдел лицензионно-разрешительной работы и отряд мобильный особого назначения "Таир".</p>
+            <p style="margin-top: 12px;"><strong>Управление ФСВНГ России по Нижегородской области</strong> включает в себя отдел лицензионно-разрешительной работы и отряд мобильный особого назначения "Таир".</p>
             <p>Бойцы данного управления ежедневно выполняют свою службу по охране общественного порядка на территории области, обеспечивая спокойствие и безопасность граждан. Их работа играет ключевую роль в поддержании правопорядка и защите местного населения.</p>
         </div>
 
@@ -168,6 +168,90 @@
                             <td><code>/members</code></td>
                             <td>Список сотрудников фракции онлайн</td>
                         </tr>
+						<tr>
+							<td><code>/obj</code></td>
+							<td>Меню объектов</td>
+						</tr>
+						<tr>
+							<td><code>/stop</code></td>
+							<td>Требование об остановке</td>
+						</tr>
+						<tr>
+							<td><code>/m</code></td>
+							<td>Мегафон</td>
+						</tr>
+						<tr>
+							<td><code>/dp</code></td>
+							<td>Ответ диспетчеру</td>
+						</tr>
+						<tr>
+							<td><code>/tazer</code></td>
+							<td>Ударить тазером</td>
+						</tr>
+						<tr>
+							<td><code>/tazeroff</code></td>
+							<td>Отключить тазер</td>
+						</tr>
+						<tr>
+							<td><code>/wanted</code></td>
+							<td>Список разыскиваемых</td>
+						</tr>
+						<tr>
+							<td><code>/k</code></td>
+							<td>Сбить с ног</td>
+						</tr>
+						<tr>
+							<td><code>/cuff</code></td>
+							<td>Надеть наручники</td>
+						</tr>
+						<tr>
+							<td><code>/delsu</code></td>
+							<td>Снять розыск</td>
+						</tr>
+						<tr>
+							<td><code>/weaponlic</code></td>
+							<td>Выдать оружейную лицензию (лидер)</td>
+						</tr>
+						<tr>
+							<td><code>/shit</code></td>
+							<td>Щит</td>
+						</tr>
+						<tr>
+							<td><code>/shitm</code></td>
+							<td>Противоударный щит</td>
+						</tr>
+						<tr>
+							<td><code>/ud</code></td>
+							<td>Удостоверение</td>
+						</tr>
+						<tr>
+							<td><code>/attach</code></td>
+							<td>Вести за собой</td>
+						</tr>
+						<tr>
+							<td><code>/incar</code></td>
+							<td>Посадить в авто</td>
+						</tr>
+						<tr>
+							<td><code>/crackd</code></td>
+							<td>Взломать дверь дома</td>
+						</tr>
+						<tr>
+							<td><code>/maskomon</code></td>
+							<td>Надеть маску</td>
+						</tr>
+						<tr>
+							<td><code>/takelicweapon</code></td>
+							<td>Изъять лицензию на оружие</td>
+						</tr>
+						<tr>
+							<td><code>/calling</code></td>
+							<td>Список вызовов</td>
+						</tr>
+						<tr>
+							<td><code>/animomon</code></td>
+							<td>Анимации ОМОН</td>
+						</tr>
                     </tbody>
                 </table>
             </div>
@@ -177,14 +261,6 @@
             <h3>Автопарк Росгвардии</h3>
             <p>Специализированная техника, состоящая на вооружении Управления ФСВНГ России по Нижегородской области.</p>
             <div class="vinyl-gallery" id="fleetGallery">
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; min-height: 200px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed var(--border); grid-column: 1 / -1;">
-                    <i class="fas fa-hard-hat" style="font-size: 48px; color: var(--text-secondary); opacity: 0.4; margin-bottom: 16px;"></i>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">Раздел находится в стадии наполнения</p>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">
-                        Хотите помочь с информацией? 
-                        <a href="about-site.html" style="color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);">Пишите нам</a>
-                    </p>
-                </div>
             </div>
         </div>
 
@@ -245,18 +321,32 @@
     </div>
 </footer>
 
-<div id="gearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 10002; align-items: center; justify-content: center;">
-    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; max-width: 450px; width: 90%; padding: 28px 24px; text-align: center; position: relative; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);">
-        <button id="closeGearModal" style="position: absolute; top: 16px; right: 16px; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">&times;</button>
-        <i class="fas fa-tshirt" style="font-size: 48px; color: var(--accent); margin-bottom: 16px; display: block;"></i>
-        <h3 style="margin-bottom: 12px; color: #fff;">Раздел «Снаряжение»</h3>
-        <p style="color: var(--text-secondary); margin-bottom: 16px;">Данные о дополнительных элементах формы пока отсутствуют.</p>
-        <div style="background: rgba(46, 164, 79, 0.1); border-left: 3px solid var(--accent); padding: 12px 16px; border-radius: 8px; text-align: left; margin-top: 8px;">
-            <i class="fas fa-info-circle" style="color: var(--accent); margin-right: 8px;"></i>
-            <strong style="color: var(--accent);">Помощь сайту:</strong>
-            <p style="margin-top: 8px; font-size: 0.85rem;">Если вы обладаете информацией о снаряжении Росгвардии, пожалуйста, свяжитесь с <a href="about-site.html" style="color: var(--accent); text-decoration: none;">нами</a>.</p>
+<!-- Полноценное модальное окно снаряжения -->
+<div id="gearModal" style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 10002; align-items: center; justify-content: center;">
+    <div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 16px; max-width: 500px; width: 92%; max-height: 85vh; position: relative; box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5); display: flex; flex-direction: column;">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding: 20px 24px 12px 24px; border-bottom: 1px solid var(--border); flex-shrink: 0;">
+            <div style="display: flex; align-items: center; gap: 12px;">
+                <i class="fas fa-tshirt" style="font-size: 24px; color: var(--accent);"></i>
+                <h3 style="margin: 0; color: #fff;">Снаряжение</h3>
+            </div>
+            <button id="closeGearModal" style="background: none; border: none; color: var(--text-secondary); font-size: 28px; cursor: pointer; line-height: 1;">&times;</button>
         </div>
-        <button id="closeGearModalBtn" style="margin-top: 20px; background: var(--accent); border: none; color: #fff; padding: 10px 24px; border-radius: 30px; cursor: pointer; font-weight: 600;">Закрыть</button>
+        <div class="gear-modal-content" style="padding: 16px 24px 24px 24px; flex: 1; overflow-y: auto;">
+            <div id="accessoriesList">
+                <div class="no-accessories">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Загрузка...</p>
+                </div>
+            </div>
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 12px; flex-wrap: wrap;">
+                <button id="clearAllAccessories" style="background: transparent; border: 1px solid #ff4444; color: #ff4444; padding: 8px 16px; border-radius: 8px; cursor: pointer; font-size: 0.85rem; transition: all 0.3s;">
+                    <i class="fas fa-times"></i> Снять всё
+                </button>
+                <button id="closeGearModalBtn" style="background: var(--accent); border: none; color: #fff; padding: 8px 24px; border-radius: 8px; cursor: pointer; font-weight: 600;">
+                    Закрыть
+                </button>
+            </div>
+        </div>
     </div>
 </div>
 
@@ -274,56 +364,370 @@
 
 <script type="module">
     import { GTACharacterViewer } from '../js/gta-viewer.js';
+    import { DFFReader } from '../js/DFFReader.js';
+    import { TXDReader } from '../js/TXDReader.js';
+    import { IFPReader } from '../js/IFPReader.js';
 
     const MODELS_BASE_PATH = '../models/uniforms/fsvng/';
-    
+    const ACCESSORIES_BASE_PATH = '../models/uniforms/fsvng/accessories/';
+    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
+    const ANIM2_IFP_PATH = `${MODELS_BASE_PATH}anim2.ifp`;
+    let shieldAnimationLoaded = false;
+    let isShieldAnimating = false;
+    let shieldAnimations = [];
+
+    const COMMON_ACCESSORIES = {
+        shield_1: { position: { x: -0.13, y: 0.35, z: 0.01 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Bip01 L Forearm' },
+        shield_2: { position: { x: -0.13, y: 0.35, z: 0.01 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Bip01 L Forearm' }
+    };
+
     const UNIFORM_MODELS = {
-        siniy_moh: {
-            name: "Синий мох",
-            dff: `${MODELS_BASE_PATH}siniy_moh.dff`,
-            txd: `${MODELS_BASE_PATH}siniy_moh.txd`
+        siniy_moh: { 
+            name: "Синий мох", 
+            dff: `${MODELS_BASE_PATH}siniy_moh.dff`, 
+            txd: `${MODELS_BASE_PATH}siniy_moh.txd`,
+            accessories: {
+				cap_black: { position: { x: 0.215, y: 0.033, z: -0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				cap_blue_moh: { position: { x: 0.215, y: 0.033, z: -0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				beret_black: { position: { x: 0.254, y: 0.005, z: -0.011 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 0.94, y: 1, z: 1 }, bone: 'head' },
+				beret_black_sign: { position: { x: 0.254, y: 0.005, z: -0.011 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 0.94, y: 1, z: 1 }, bone: 'head' },
+				glasses: { position: { x: 0.158, y: 0.043, z: -0.001 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                buff: { position: { x: -0.018, y: -0.044, z: -0.007 }, rotation: { x: 90, y: -20, z: -87 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Jaw' },
+                helmet_tor_m: { position: { x: 0.168, y: -0.016, z: -0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m: { position: { x: 0.168, y: -0.012, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				helmet_zsh_1_2m_glasses: { position: { x: 0.168, y: -0.012, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m_visor: { position: { x: 0.163, y: 0.018, z: -0.007 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				armor_light: { position: { x: -0.057, y: 0.082, z: -0.023 }, rotation: { x: 90, y: 80, z: 90 }, scale: { x: 1, y: 1.075, z: 1 }, bone: 'Neck' },
+				armor_tactics: { position: { x: -0.167, y: 0.074, z: 0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.045, z: 1 }, bone: 'Neck' },
+				armor_bagariy_v1: { position: { x: -0.110, y: 0.072, z: 0.0 }, rotation: { x: 90, y: 71, z: 90 }, scale: { x: 1, y: 0.93, z: 0.945 }, bone: 'Neck' },
+				armor_bagariy_v2: { position: { x: -0.120, y: 0.038, z: 0.0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.16, z: 1 }, bone: 'Neck' },
+				armor_specnaz: { position: { x: -0.170, y: 0.095, z: -0.033 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 0.995, y: 1.170, z: 1 }, bone: 'Neck' },
+				bandage_friendly: { position: { x: 0.081, y: 0.014, z: -0.001 }, rotation: { x: 151, y: -90, z: 71 }, scale: { x: 1.2, y: 1.2, z: 1 }, bone: 'L UpperArm' },
+                bandage_rz: { position: { x: 0.081, y: 0.015, z: 0 }, rotation: { x: -166, y: -90, z: 0 }, scale: { x: 1.125, y: 1.060, z: 1 }, bone: 'L UpperArm' }
+            }
         },
-        chernaya_noch: {
-            name: "Чёрная ночь",
-            dff: `${MODELS_BASE_PATH}chernaya_noch.dff`,
-            txd: `${MODELS_BASE_PATH}chernaya_noch.txd`
+        chernaya_noch: { 
+            name: "Чёрная ночь", 
+            dff: `${MODELS_BASE_PATH}chernaya_noch.dff`, 
+            txd: `${MODELS_BASE_PATH}chernaya_noch.txd`,
+            accessories: {
+                shield_1: { position: { x: -0.282, y: -0.206, z: 0.263 }, rotation: { x: -154, y: 20, z: 12 }, scale: { x: 1, y: 1, z: 1 }, bone: 'L Finger' },
+				shield_2: { position: { x: -0.225, y: -0.1, z: 0.139 }, rotation: { x: -154, y: 20, z: 102 }, scale: { x: 1, y: 0.785, z: 1 }, bone: 'L Finger' }
+			}
         },
-        zeleniy_moh: {
-            name: "Зелёный мох",
-            dff: `${MODELS_BASE_PATH}zeleniy_moh.dff`,
-            txd: `${MODELS_BASE_PATH}zeleniy_moh.txd`
+        zeleniy_moh: { 
+            name: "Зелёный мох", 
+            dff: `${MODELS_BASE_PATH}zeleniy_moh.dff`, 
+            txd: `${MODELS_BASE_PATH}zeleniy_moh.txd`,
+            accessories: {
+				cap_black: { position: { x: 0.215, y: 0.033, z: -0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				cap_green_moh: { position: { x: 0.215, y: 0.033, z: -0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				beret_black: { position: { x: 0.254, y: 0.005, z: -0.011 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 0.94, y: 1, z: 1 }, bone: 'head' },
+				beret_black_sign: { position: { x: 0.254, y: 0.005, z: -0.011 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 0.94, y: 1, z: 1 }, bone: 'head' },
+				glasses: { position: { x: 0.158, y: 0.043, z: -0.001 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                buff: { position: { x: -0.018, y: -0.044, z: -0.007 }, rotation: { x: 90, y: -20, z: -87 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Jaw' },
+				helmet_tor_m: { position: { x: 0.168, y: -0.016, z: -0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				helmet_tor_s: { position: { x: 0.161, y: 0.002, z: -0.003 }, rotation: { x: 90, y: 0, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m: { position: { x: 0.168, y: -0.012, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				helmet_zsh_1_2m_glasses: { position: { x: 0.168, y: -0.012, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m_visor: { position: { x: 0.163, y: 0.018, z: -0.007 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				armor_light: { position: { x: -0.057, y: 0.082, z: -0.023 }, rotation: { x: 90, y: 80, z: 90 }, scale: { x: 1, y: 1.075, z: 1 }, bone: 'Neck' },
+				armor_tactics: { position: { x: -0.167, y: 0.074, z: 0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.045, z: 1 }, bone: 'Neck' },
+				armor_tactics_3m: { position: { x: -0.167, y: 0.074, z: 0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.045, z: 1 }, bone: 'Neck' },
+                armor_bagariy_v1: { position: { x: -0.110, y: 0.072, z: 0.0 }, rotation: { x: 90, y: 71, z: 90 }, scale: { x: 1, y: 0.93, z: 0.945 }, bone: 'Neck' },
+				armor_bagariy_v2: { position: { x: -0.120, y: 0.038, z: 0.0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.16, z: 1 }, bone: 'Neck' },
+				armor_green_moh: { position: { x: -0.070, y: 0.055, z: 0.01 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1.080, y: 1.045, z: 1 }, bone: 'Neck' },
+				armor_specnaz: { position: { x: -0.170, y: 0.095, z: -0.033 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 0.995, y: 1.170, z: 1 }, bone: 'Neck' },
+				bandage_friendly: { position: { x: 0.081, y: 0.014, z: -0.001 }, rotation: { x: 151, y: -90, z: 71 }, scale: { x: 1.2, y: 1.2, z: 1 }, bone: 'L UpperArm' },
+                bandage_rz: { position: { x: 0.081, y: 0.015, z: 0 }, rotation: { x: -166, y: -90, z: 0 }, scale: { x: 1.125, y: 1.060, z: 1 }, bone: 'L UpperArm' },
+				backpack: { position: { x: -0.120, y: -0.043, z: -0.006 }, rotation: { x: 90, y: 75, z: -90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'neck' },
+                backpack_travel: { position: { x: -0.206, y: -0.139, z: -0.003 }, rotation: { x: 90, y: 70, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'neck' }
+            }
         },
-        boevaya_1: {
-            name: "Форма боевая 1",
-            dff: `${MODELS_BASE_PATH}boevaya_1.dff`,
-            txd: `${MODELS_BASE_PATH}boevaya_1.txd`
+        boevaya_1: { 
+            name: "Форма боевая 1", 
+            dff: `${MODELS_BASE_PATH}boevaya_1.dff`, 
+            txd: `${MODELS_BASE_PATH}boevaya_1.txd`,
+            accessories: {
+                cap_black: { position: { x: 0.168, y: 0.058, z: -0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1.105, y: 1.020, z: 1 }, bone: 'head' },
+				helmet_tor_s: { position: { x: 0.124, y: 0.023, z: 0 }, rotation: { x: 90, y: 0, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_tor_m: { position: { x: 0.123, y: 0.014, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m: { position: { x: 0.113, y: 0.015, z: 0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				helmet_zsh_1_2m_glasses: { position: { x: 0.113, y: 0.015, z: 0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m_visor: { position: { x: 0.113, y: 0.045, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                armor_light: { position: { x: -0.111, y: 0.101, z: -0.017 }, rotation: { x: 90, y: 80, z: 90 }, scale: { x: 1, y: 1.15, z: 1 }, bone: 'Neck' },
+				armor_tactics: { position: { x: -0.213, y: 0.092, z: 0.010 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.15, z: 1 }, bone: 'Neck' },
+                armor_tactics_3m: { position: { x: -0.213, y: 0.092, z: 0.010 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.15, z: 1 }, bone: 'Neck' },
+				armor_bagariy_v2: { position: { x: -0.172, y: 0.056, z: 0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.18, z: 1 }, bone: 'Neck' },
+                armor_green_moh: { position: { x: -0.118, y:0.078, z: 0.006 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1.03, y: 1.19, z: 1 }, bone: 'Neck' },
+				armor_specnaz: { position: { x: -0.223, y: 0.109, z: -0.034 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.25, z: 1 }, bone: 'Neck' },
+                bandage_friendly: { position: { x: 0.139, y: 0.043, z: 0 }, rotation: { x: 65, y: -90, z: 0 }, scale: { x: 1.2, y: 1.2, z: 1 }, bone: 'L UpperArm' },
+                bandage_rz: { position: { x: 0.137, y: 0.043, z: 0.002 }, rotation: { x: 180, y: -90, z: 0 }, scale: { x: 1.025, y: 1.2, z: 1 }, bone: 'L UpperArm' },
+                backpack: { position: { x: -0.183, y: -0.024, z: 0 }, rotation: { x: 90, y: 75, z: -90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Neck' },
+                backpack_travel: { position: { x: -0.276, y: -0.091, z: 0.01 }, rotation: { x: 90, y: 70, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Neck' },
+                shield_1: { position: { x: -0.282, y: -0.206, z: 0.167 }, rotation: { x: -154, y: 20, z: 12 }, scale: { x: 1, y: 1, z: 1 }, bone: 'L Finger' },
+				shield_2: { position: { x: -0.225, y: -0.053, z: 0.033 }, rotation: { x: -154, y: 20, z: 102 }, scale: { x: 1, y: 0.785, z: 1 }, bone: 'L Finger' }
+            }
         },
-        boevaya_2: {
-            name: "Форма боевая 2",
-            dff: `${MODELS_BASE_PATH}boevaya_2.dff`,
-            txd: `${MODELS_BASE_PATH}boevaya_2.txd`
+        boevaya_2: { 
+            name: "Форма боевая 2", 
+            dff: `${MODELS_BASE_PATH}boevaya_2.dff`, 
+            txd: `${MODELS_BASE_PATH}boevaya_2.txd`,
+            accessories: {
+                cap_green_moh: { position: { x: 0.168, y: 0.058, z: -0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1.105, y: 1.020, z: 1 }, bone: 'head' },
+                //helmet_pilot: { position: { x: 0.105, y: 0.035, z: 0.005 }, rotation: { x: 90, y: 90, z: 0 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_tor_s: { position: { x: 0.124, y: 0.023, z: 0 }, rotation: { x: 90, y: 0, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_tor_m: { position: { x: 0.123, y: 0.014, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m: { position: { x: 0.113, y: 0.015, z: 0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				helmet_zsh_1_2m_glasses: { position: { x: 0.113, y: 0.015, z: 0.003 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m_visor: { position: { x: 0.113, y: 0.045, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                armor_light: { position: { x: -0.111, y: 0.101, z: -0.017 }, rotation: { x: 90, y: 80, z: 90 }, scale: { x: 1, y: 1.15, z: 1 }, bone: 'Neck' },
+				armor_tactics: { position: { x: -0.213, y: 0.092, z: 0.010 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.15, z: 1 }, bone: 'Neck' },
+                armor_bagariy_v2: { position: { x: -0.172, y: 0.056, z: 0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.18, z: 1 }, bone: 'Neck' },
+                armor_specnaz: { position: { x: -0.223, y: 0.109, z: -0.034 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.25, z: 1 }, bone: 'Neck' },
+                armor_tactics_3m: { position: { x: -0.213, y: 0.092, z: 0.010 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.15, z: 1 }, bone: 'Neck' },
+				armor_green_moh: { position: { x: -0.118, y:0.078, z: 0.006 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1.03, y: 1.19, z: 1 }, bone: 'Neck' },
+                bandage_friendly: { position: { x: 0.139, y: 0.043, z: 0 }, rotation: { x: 65, y: -90, z: 0 }, scale: { x: 1.2, y: 1.2, z: 1 }, bone: 'L UpperArm' },
+                bandage_rz: { position: { x: 0.137, y: 0.043, z: 0.002 }, rotation: { x: 180, y: -90, z: 0 }, scale: { x: 1.025, y: 1.2, z: 1 }, bone: 'L UpperArm' },
+                backpack: { position: { x: -0.183, y: -0.024, z: 0 }, rotation: { x: 90, y: 75, z: -90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Neck' },
+                backpack_travel: { position: { x: -0.276, y: -0.091, z: 0.01 }, rotation: { x: 90, y: 70, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Neck' },
+                shield_1: { position: { x: -0.282, y: -0.206, z: 0.167 }, rotation: { x: -154, y: 20, z: 12 }, scale: { x: 1, y: 1, z: 1 }, bone: 'L Finger' },
+				shield_2: { position: { x: -0.225, y: -0.053, z: 0.033 }, rotation: { x: -154, y: 20, z: 102 }, scale: { x: 1, y: 0.785, z: 1 }, bone: 'L Finger' }
+            }
         },
-        svobodnaya: {
-            name: "Свободная форма",
-            dff: `${MODELS_BASE_PATH}svobodnaya.dff`,
-            txd: `${MODELS_BASE_PATH}svobodnaya.txd`
+        svobodnaya: { 
+            name: "Свободная форма", 
+            dff: `${MODELS_BASE_PATH}svobodnaya.dff`, 
+            txd: `${MODELS_BASE_PATH}svobodnaya.txd`,
+            accessories: {
+				cap_black: { position: { x: 0.165, y: 0.053, z: 0.002 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1.025, y: 1, z: 1 }, bone: 'head' },
+				cap_green_moh: { position: { x: 0.165, y: 0.053, z: 0.002 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1.025, y: 1, z: 1 }, bone: 'head' },
+				beret_black: { position: { x: 0.199, y: 0.020, z: -0.004 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                beret_black_sign: { position: { x: 0.199, y: 0.020, z: -0.004 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                beret_krapoviy: { position: { x: 0.199, y: 0.020, z: 0.008 }, rotation: { x: 0, y: 0, z: 180 }, scale: { x: 1, y: 0.93, z: 0.96 }, bone: 'head' },
+				glasses: { position: { x: 0.109, y: 0.055, z: 0.005 }, rotation: { x: 90, y: 90, z: 94 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                buff: { position: { x: 0.007, y: -0.013, z: 0.004 }, rotation: { x: 90, y: -20, z: -87 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Jaw' },
+                helmet_tor_s: { position: { x: 0.110, y: 0.024, z: 0 }, rotation: { x: 90, y: 0, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_tor_m: { position: { x: 0.127, y: -0.003, z: 0.005 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+				helmet_zsh_1_2m: { position: { x: 0.120, y: 0.006, z: 0.012 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m_glasses: { position: { x: 0.120, y: 0.006, z: 0.012 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                helmet_zsh_1_2m_visor: { position: { x: 0.122, y: 0.033, z: 0 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'head' },
+                armor_light: { position: { x: -0.111, y: 0.096, z: -0.014 }, rotation: { x: 90, y: 80, z: 90 }, scale: { x: 1, y: 1.06, z: 1 }, bone: 'Neck' },
+                armor_tactics: { position: { x: -0.234, y: 0.090, z: 0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.1, z: 1 }, bone: 'Neck' },
+				armor_tactics_3m: { position: { x: -0.234, y: 0.092, z: 0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.09, z: 1 }, bone: 'Neck' },
+                armor_bagariy_v1: { position: { x: -0.195, y: 0.1, z: 0 }, rotation: { x: 90, y: 71, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Neck' },
+                armor_bagariy_v2: { position: { x: -0.184, y: 0.06, z: 0 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.15, z: 1 }, bone: 'Neck' },
+				armor_green_moh: { position: { x: -0.130, y: 0.074, z: 0.005 }, rotation: { x: 87, y: 80, z: -90 }, scale: { x: 1.045, y: 1.13, z: 1 }, bone: 'Neck' },
+                armor_specnaz: { position: { x: -0.229, y: 0.117, z: -0.024 }, rotation: { x: 90, y: 80, z: -90 }, scale: { x: 1, y: 1.2, z: 1 }, bone: 'Neck' },
+				bandage_friendly: { position: { x: 0.148, y: 0.043, z: -0.014 }, rotation: { x: 0, y: -90, z: -13 }, scale: { x: 1.2, y: 1.2, z: 1 }, bone: 'L UpperArm' },
+                bandage_rz: { position: { x: 0.148, y: 0.05, z: -0.011 }, rotation: { x: 0, y: -90, z: 180 }, scale: { x: 1.125, y: 1.035, z: 1 }, bone: 'L UpperArm' },
+                backpack: { position: { x: -0.177, y: -0.024, z: 0 }, rotation: { x: 90, y: 75, z: -90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Neck' },
+				backpack_travel: { position: { x: -0.273, y: -0.129, z: 0 }, rotation: { x: 90, y: 70, z: 90 }, scale: { x: 1, y: 1, z: 1 }, bone: 'Neck' }
+            }
         },
-        leader: {
-            name: "Форма лидера",
-            dff: `${MODELS_BASE_PATH}leader.dff`,
-            txd: `${MODELS_BASE_PATH}leader.txd`
+        leader: { 
+            name: "Форма лидера", 
+            dff: `${MODELS_BASE_PATH}leader.dff`, 
+            txd: `${MODELS_BASE_PATH}leader.txd`,
+            accessories: {
+                cap_furazhka_1: { position: { x: -0.563, y: -0.043, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 0.97, y: 0.97, z: 0.97 }, bone: 'head' },
+				cap_furazhka_2: { position: { x: -0.563, y: -0.043, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 0.97, y: 0.97, z: 0.97 }, bone: 'head' },
+                beret_black_sign: { position: { x: 0.203, y: 0.018, z: -0.008 }, rotation: { x: 90, y: 90, z: 90 }, scale: { x: 0.955, y: 0.97, z: 1 }, bone: 'head' },
+                beret_krapoviy: { position: { x: 0.2, y: 0.02, z: 0.004 }, rotation: { x: 0, y: 0, z: 180 }, scale: { x: 1, y: 0.93, z: 0.96 }, bone: 'head' },
+                bandage_rz: { position: { x: 0.129, y: 0.023, z: -0.011 }, rotation: { x: -180, y: -90, z: 0 }, scale: { x: 1, y: 1.075, z: 1 }, bone: 'L UpperArm' }
+            }
         },
-        razminirovanie: {
-            name: "Форма Разминирование",
-            dff: `${MODELS_BASE_PATH}razminirovanie.dff`,
-            txd: `${MODELS_BASE_PATH}razminirovanie.txd`
+        razminirovanie: { 
+            name: "Форма Разминирование", 
+            dff: `${MODELS_BASE_PATH}razminirovanie.dff`, 
+            txd: `${MODELS_BASE_PATH}razminirovanie.txd`,
+            accessories: {
+
+            }
         }
     };
 
-    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
+    const ACCESSORIES_INFO = [
+		{ id: 'cap_black', name: 'Кепка чёрная', slot: 'head' },
+		{ id: 'cap_blue_moh', name: 'Кепка синий мох', slot: 'head' },
+		{ id: 'cap_green_moh', name: 'Кепка зелёный мох', slot: 'head' },
+		{ id: 'beret_black', name: 'Чёрный берет', slot: 'head' },
+		{ id: 'beret_black_sign', name: 'Чёрный берет со знаком отличия', slot: 'head' },
+		{ id: 'beret_krapoviy', name: 'Краповый берет', slot: 'head' },
+		{ id: 'cap_furazhka_1', name: 'Фуражка 1', slot: 'head' },
+		{ id: 'cap_furazhka_2', name: 'Фуражка 1', slot: 'head' },
+		
+		{ id: 'glasses', name: 'Очки', slot: 'face' },
+		{ id: 'buff', name: 'Бафф', slot: 'Jaw' },
+		
+		{ id: 'helmet_pilot', name: 'Шлем пилота', slot: 'head' },
+		{ id: 'helmet_tor_s', name: 'Шлем ТОР (S)', slot: 'head' },
+		{ id: 'helmet_tor_m', name: 'Шлем ТОР (М)', slot: 'head' },
+		{ id: 'helmet_zsh_1_2m', name: 'Шлем ЗШ-1-2М', slot: 'head' },
+		{ id: 'helmet_zsh_1_2m_glasses', name: 'Шлем ЗШ-1-2М с очками', slot: 'head' },
+		{ id: 'helmet_zsh_1_2m_visor', name: 'Шлем ЗШ-1-2М с забралом', slot: 'head' },
+		
+		{ id: 'armor_light', name: 'Бронелифчик', slot: 'body' },
+		{ id: 'armor_tactics', name: 'Бронежилет Тактика', slot: 'body' },
+		{ id: 'armor_tactics_3m', name: 'Бронежилет Тактика (3M)', slot: 'body' },
+		{ id: 'armor_bagariy_v1', name: 'Бронежилет Багарий v1', slot: 'body' },
+		{ id: 'armor_bagariy_v2', name: 'Бронежилет Багарий v2', slot: 'body' },
+		{ id: 'armor_green_moh', name: 'Бронежилет зелёный мох', slot: 'body' },
+		{ id: 'armor_specnaz', name: 'Бронежилет Спецназ', slot: 'body' },
+		
+		{ id: 'bandage_friendly', name: 'Повязка свой/чужой', slot: 'arm_left' },
+		{ id: 'bandage_rz', name: 'Повязка РЗ', slot: 'arm_left' },
+		
+		{ id: 'backpack', name: 'Рюкзак', slot: 'back' },
+		{ id: 'backpack_travel', name: 'Рюкзак походный', slot: 'back' },
+		
+		{ id: 'shield_1', name: 'Щит 1', slot: 'hand_left' },
+		{ id: 'shield_2', name: 'Щит 2', slot: 'hand_left' }
 
+	];
+
+    const ACCESSORY_SLOT_GROUP = {
+        armor_bagariy_v1: 'body',
+        armor_bagariy_v2: 'body',
+        armor_specnaz: 'body',
+        armor_tactics: 'body',
+        armor_tactics_3m: 'body',
+        armor_green_moh: 'body',
+        armor_light: 'body',
+        bandage_friendly: 'arm_left',
+        bandage_rz: 'arm_left',
+        helmet_tor_s: 'head',
+        helmet_tor_m: 'head',
+        helmet_pilot: 'head',
+        helmet_zsh_1_2m: 'head',
+        helmet_zsh_1_2m_visor: 'head',
+        helmet_zsh_1_2m_glasses: 'head',
+        backpack: 'back',
+        backpack_travel: 'back',
+        cap_black: 'head',
+        cap_green_moh: 'head',
+        cap_blue_moh: 'head',
+        beret_black: 'head',
+        beret_black_sign: 'head',
+        beret_krapoviy: 'head',
+        cap_furazhka_1: 'head',
+		cap_furazhka_2: 'head',
+        buff: 'neck',
+        glasses: 'face',
+        shield_1: 'hand_left',
+        shield_2: 'hand_left'
+    };
+
+    const ACCESSORY_TXD_MAP = {
+        buff: 'ros_attach_w.txd',
+        armor_bagariy_v1: 'ros_attach.txd',
+        armor_bagariy_v2: 'ros_attach_w.txd',
+        armor_specnaz: 'ros_attach_w.txd',
+        armor_tactics: 'ros_attach_w.txd',
+        armor_tactics_3m: 'ros_attach_w.txd',
+        armor_green_moh: 'ros_attach_w.txd',
+        armor_light: 'ros_attach.txd',
+        cap_green_moh: 'ros_attach.txd',
+        cap_blue_moh: 'ros_attach.txd',
+        cap_black: 'ros_attach.txd',
+        beret_krapoviy: 'ros_attach_w.txd',
+        glasses: 'ros_attach.txd',
+        bandage_rz: 'ros_attach_w.txd',
+        bandage_friendly: 'ros_attach_w.txd',
+        backpack: 'ros_attach_w.txd',
+        backpack_travel: 'ros_attach_w.txd',
+        cap_furazhka_1: 'ros_attach_w.txd',
+		cap_furazhka_2: 'fur_ros_gen.txd',
+        beret_black: 'ros_attach.txd',
+        beret_black_sign: 'ros_attach.txd',
+        helmet_zsh_1_2m: 'ros_attach.txd',
+        helmet_zsh_1_2m_visor: 'ros_attach.txd',
+        helmet_zsh_1_2m_glasses: 'ros_attach.txd',
+        helmet_tor_m: 'ros_attach.txd',
+        helmet_tor_s: 'ros_attach_w.txd',
+        helmet_pilot: 'ros_attach.txd',
+        shield_1: 'shield_1.txd',
+        shield_2: 'objectsst.txd'
+    };
+
+    let loadedTextures = {};
     let viewer = null;
     let currentUniform = "siniy_moh";
+    let accessoryGroups = {};
+    let loadedAccessories = {};
+    let equippedAccessories = {};
+    let accessorySlots = { head: null, body: null, back: null, arm_left: null, neck: null, face: null, hand_left: null };
+    let accessoryAttachments = {};
+
+    async function loadAllAccessoriesTxd() {
+        const txdFiles = [...new Set(Object.values(ACCESSORY_TXD_MAP))];
+        
+        for (const txdFile of txdFiles) {
+            try {
+                const path = `${ACCESSORIES_BASE_PATH}${txdFile}`;
+                const response = await fetch(path);
+                if (!response.ok) throw new Error(`TXD not found: ${path}`);
+                const buffer = await response.arrayBuffer();
+                
+                const txd = new TXDReader().parse(buffer);
+                loadedTextures[txdFile] = txd;
+
+                if (viewer) {
+                    for (const tex of txd.textures) {
+                        if (tex.imageData) {
+                            const texture = viewer.createTexture(tex);
+                            viewer.textures.set(tex.name.toLowerCase(), texture);
+                        }
+                    }
+                }
+
+            } catch (error) {
+            }
+        }
+    }
+
+    function applyTexturesToAccessory(group, accessoryId) {
+        const txdFileName = ACCESSORY_TXD_MAP[accessoryId];
+        if (!txdFileName) {
+            return;
+        }
+        
+        const txd = loadedTextures[txdFileName];
+        if (!txd) {
+            return;
+        }
+        
+        try {
+            viewer.applyTexturesToModel(group);
+            viewer.makeMatte(group);
+        } catch (error) {
+        }
+    }
+
+    async function loadShieldAnimation() {
+        try {
+            const response = await fetch(ANIM2_IFP_PATH);
+            if (!response.ok) throw new Error(`anim2.ifp not found: ${ANIM2_IFP_PATH}`);
+            const buffer = await response.arrayBuffer();
+            const ifp = new IFPReader().parse(buffer);
+            
+            if (ifp.animations) {
+                shieldAnimations = ifp.animations;
+                if (viewer) {
+                    for (const anim of ifp.animations) {
+                        if (!viewer.animations.find(a => a.name === anim.name)) {
+                            viewer.animations.push(anim);
+                        }
+                    }
+                }
+                shieldAnimationLoaded = true;
+            } else {
+                shieldAnimationLoaded = false;
+            }
+        } catch (error) {
+            shieldAnimationLoaded = false;
+        }
+    }
 
     async function initViewer() {
         const container = document.getElementById('uniform3dContainer');
@@ -335,25 +739,34 @@
             if (loadingEl) loadingEl.style.display = 'none';
         }, 500);
         
+        await loadAllAccessoriesTxd();
+        await loadAllAccessories();
+        await loadShieldAnimation();
         await loadUniform(currentUniform);
+        updateAccessoriesUI();
     }
 
     async function loadUniform(uniformId) {
         const config = UNIFORM_MODELS[uniformId];
-        if (!config) {
-            return;
-        }
+        if (!config) return;
+
+        clearAllAccessories();
         
         const loadingEl = document.getElementById('uniform3dLoading');
-        
         if (loadingEl) loadingEl.style.display = 'flex';
         
         try {
-            
             await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
-            
+
+            if (shieldAnimations.length > 0 && viewer) {
+                for (const anim of shieldAnimations) {
+                    if (!viewer.animations.find(a => a.name === anim.name)) {
+                        viewer.animations.push(anim);
+                    }
+                }
+            }
+
             const availableAnims = viewer.getAnimationNames();
-            
             const preferredAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed"];
             let targetAnim = null;
             
@@ -372,18 +785,272 @@
                 viewer.playAnimation(targetAnim);
             }
             
+            updateAccessoriesUI();
+            
         } catch (error) {
         } finally {
             if (loadingEl) loadingEl.style.display = 'none';
         }
     }
-    
+
+    async function loadAllAccessories() {
+        const accessoriesList = document.getElementById('accessoriesList');
+        
+        for (const info of ACCESSORIES_INFO) {
+            try {
+                const dffPath = `${ACCESSORIES_BASE_PATH}${info.id}.dff`;
+                
+                const dffResponse = await fetch(dffPath);
+                if (!dffResponse.ok) throw new Error(`DFF not found: ${dffPath}`);
+                const dffBuffer = await dffResponse.arrayBuffer();
+                
+                const dff = new DFFReader().parse(dffBuffer);
+                if (!dff) throw new Error("Failed to parse DFF");
+                
+                const meshGroup = viewer.createMesh(dff);
+                
+                applyTexturesToAccessory(meshGroup, info.id);
+                
+                meshGroup.visible = false;
+                viewer.scene.add(meshGroup);
+                
+                accessoryGroups[info.id] = meshGroup;
+                loadedAccessories[info.id] = true;
+                accessoryAttachments[info.id] = {
+                    group: meshGroup,
+                    bone: 'spine',
+                    isAttached: false
+                };
+                
+            } catch (error) {
+                loadedAccessories[info.id] = false;
+            }
+        }
+        
+        updateAccessoriesUI();
+    }
+
+    function applyAccessoryPosition(accessoryId, group, uniformId) {
+        const config = UNIFORM_MODELS[uniformId];
+        if (!config || !config.accessories) return false;
+        
+        const posConfig = config.accessories[accessoryId];
+        if (!posConfig) return false;
+        
+        group.position.set(posConfig.position.x, posConfig.position.y, posConfig.position.z);
+        group.rotation.set(
+            posConfig.rotation.x * Math.PI / 180,
+            posConfig.rotation.y * Math.PI / 180,
+            posConfig.rotation.z * Math.PI / 180
+        );
+        group.scale.set(posConfig.scale.x, posConfig.scale.y, posConfig.scale.z);
+        
+        return true;
+    }
+
+    function toggleAccessory(accessoryId) {
+        const info = ACCESSORIES_INFO.find(a => a.id === accessoryId);
+        if (!info) return;
+        
+        const group = accessoryGroups[accessoryId];
+        if (!group || !loadedAccessories[accessoryId]) return;
+        
+        const slot = ACCESSORY_SLOT_GROUP[accessoryId] || 'body';
+        
+        const isShield = accessoryId === 'shield_1' || accessoryId === 'shield_2';
+        
+        if (equippedAccessories[accessoryId]) {
+            const attachment = accessoryAttachments[accessoryId];
+            if (attachment && attachment.isAttached) {
+                viewer.detachAccessoryFromBone(group);
+                attachment.isAttached = false;
+            }
+            group.visible = false;
+            delete equippedAccessories[accessoryId];
+            if (accessorySlots[slot] === accessoryId) {
+                accessorySlots[slot] = null;
+            }
+            
+            if (isShield) {
+                isShieldAnimating = false;
+                const availableAnims = viewer.getAnimationNames();
+                const preferredAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed"];
+                let targetAnim = null;
+                for (const anim of preferredAnims) {
+                    if (availableAnims.includes(anim)) {
+                        targetAnim = anim;
+                        break;
+                    }
+                }
+                if (targetAnim) {
+                    viewer.playAnimation(targetAnim);
+                }
+            }
+        } else {
+            if (accessorySlots[slot]) {
+                const oldId = accessorySlots[slot];
+                if (accessoryGroups[oldId]) {
+                    const oldAttachment = accessoryAttachments[oldId];
+                    if (oldAttachment && oldAttachment.isAttached) {
+                        viewer.detachAccessoryFromBone(accessoryGroups[oldId]);
+                        oldAttachment.isAttached = false;
+                    }
+                    accessoryGroups[oldId].visible = false;
+                }
+                delete equippedAccessories[oldId];
+            }
+            
+            const config = UNIFORM_MODELS[currentUniform];
+            let targetBone = 'spine';
+            if (config && config.accessories && config.accessories[accessoryId]) {
+                targetBone = config.accessories[accessoryId].bone || 'spine';
+            }
+            
+            const attachment = accessoryAttachments[accessoryId];
+            if (attachment) {
+                attachment.bone = targetBone;
+                group.visible = true;
+                applyAccessoryPosition(accessoryId, group, currentUniform);
+                const success = viewer.attachAccessoryToBone(group, targetBone);
+                attachment.isAttached = success;
+            }
+            
+            equippedAccessories[accessoryId] = true;
+            accessorySlots[slot] = accessoryId;
+            
+            if (isShield && shieldAnimationLoaded && !isShieldAnimating) {
+                isShieldAnimating = true;
+                
+                setTimeout(() => {
+                    const success = viewer.playAnimationOnce('shit01', () => {
+                        isShieldAnimating = false;
+                    });
+                    
+                    if (!success) {
+                        isShieldAnimating = false;
+                    }
+                }, 100);
+            }
+        }
+        
+        updateAccessoriesUI();
+    }
+
+    function clearAllAccessories() {
+        for (const info of ACCESSORIES_INFO) {
+            const group = accessoryGroups[info.id];
+            if (group) {
+                const attachment = accessoryAttachments[info.id];
+                if (attachment && attachment.isAttached) {
+                    viewer.detachAccessoryFromBone(group);
+                    attachment.isAttached = false;
+                }
+                group.visible = false;
+            }
+        }
+        equippedAccessories = {};
+        accessorySlots = { head: null, body: null, back: null, arm_left: null, neck: null, face: null, hand_left: null };
+        
+        isShieldAnimating = false;
+        const availableAnims = viewer.getAnimationNames();
+        const preferredAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed"];
+        let targetAnim = null;
+        for (const anim of preferredAnims) {
+            if (availableAnims.includes(anim)) {
+                targetAnim = anim;
+                break;
+            }
+        }
+        if (targetAnim) {
+            viewer.playAnimation(targetAnim);
+        }
+        
+        updateAccessoriesUI();
+    }
+
+    function updateAccessoriesUI() {
+        const container = document.getElementById('accessoriesList');
+        if (!container) return;
+        
+        const config = UNIFORM_MODELS[currentUniform];
+
+        if (!config || !config.accessories || Object.keys(config.accessories).length === 0) {
+            container.innerHTML = `
+                <div class="no-accessories-msg">
+                    <i class="fas fa-tshirt"></i>
+                    <p>Для этой формы снаряжение не предусмотрено</p>
+                </div>
+            `;
+            return;
+        }
+
+        const availableIds = Object.keys(config.accessories);
+        const availableInfos = ACCESSORIES_INFO.filter(info => availableIds.includes(info.id));
+        
+        if (availableInfos.length === 0) {
+            container.innerHTML = `
+                <div class="no-accessories-msg">
+                    <i class="fas fa-tshirt"></i>
+                    <p>Для этой формы снаряжение не предусмотрено</p>
+                </div>
+            `;
+            return;
+        }
+        
+        let html = '';
+        for (const info of availableInfos) {
+            const isLoaded = loadedAccessories[info.id];
+            const isEquipped = !!equippedAccessories[info.id];
+            
+            html += `
+                <div class="accessory-item">
+                    <label>
+                        <input type="checkbox" 
+                               data-accessory-id="${info.id}"
+                               ${isEquipped ? 'checked' : ''}
+                               ${!isLoaded ? 'disabled' : ''}>
+                        <span class="accessory-name">${info.name}</span>
+                    </label>
+                    <span class="accessory-status ${isEquipped ? 'equipped' : ''}">
+                        ${isEquipped ? '✓ Надето' : (isLoaded ? 'Снято' : '❌ Ошибка')}
+                    </span>
+                </div>
+            `;
+        }
+        
+        container.innerHTML = html;
+        
+        container.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+            cb.addEventListener('change', (e) => {
+                const id = e.target.dataset.accessoryId;
+                toggleAccessory(id);
+            });
+        });
+    }
+
     function resetCamera() {
         if (viewer) {
             viewer.resetCamera();
         }
     }
-    
+
+    function showGearModal() {
+        const modal = document.getElementById('gearModal');
+        if (modal) {
+            modal.style.display = 'flex';
+            updateAccessoriesUI();
+            document.body.style.overflow = 'hidden';
+            document.body.style.paddingRight = '15px';
+        }
+    }
+
+    function hideGearModal() {
+        const modal = document.getElementById('gearModal');
+        if (modal) modal.style.display = 'none';
+        document.body.style.overflow = '';
+        document.body.style.paddingRight = '';
+    }
+
     function addImageModal() {
         if (document.getElementById('globalImageModal')) return;
 
@@ -476,6 +1143,54 @@
         { name: "Кувалда", image: "sledgehammer.png" },
         { name: "Бензорез", image: "grinder.png" }
     ];
+	
+	const FLEET_IMAGES = [
+		{ src: "../images/fractions/fsvng/fleet/kamaz_43118.png", caption: "КамАЗ-43118 Росгвардия" },
+		{ src: "../images/fractions/fsvng/fleet/patrul_tigr.png", caption: "Бронеавтомобиль «Патруль» (ГАЗ-2330 «Тигр»)" },
+		{ src: "../images/fractions/fsvng/fleet/gazon_next_avtozak.png", caption: "ГАЗон NEXT (автозак)" },
+		{ src: "../images/fractions/fsvng/fleet/paz_3205.png", caption: "ПАЗ-3205" },
+		{ src: "../images/fractions/fsvng/fleet/uaz_patriot_cv.png", caption: "УАЗ Патриот (в цветографике Росгвардии)" },
+		{ src: "../images/fractions/fsvng/fleet/lada_granta.png", caption: "LADA Granta" },
+		{ src: "../images/fractions/fsvng/fleet/gaz_2975_tigr.png", caption: "ГАЗ-2975 «Тигр»" },
+		{ src: "../images/fractions/fsvng/fleet/cross_motocycle.png", caption: "Кроссовый мотоцикл" },
+		{ src: "../images/fractions/fsvng/fleet/ford_transit_razmin.png", caption: "Ford Transit (разминирование)" },
+		{ src: "../images/fractions/fsvng/fleet/ford_transit.png", caption: "Ford Transit" },
+		{ src: "../images/fractions/fsvng/fleet/hyundai_solaris.png", caption: "Hyundai Solaris" },
+		{ src: "../images/fractions/fsvng/fleet/btr_82.png", caption: "БТР-82" },
+		{ src: "../images/fractions/fsvng/fleet/ural_4320.png", caption: "Урал-4320" },
+		{ src: "../images/fractions/fsvng/fleet/uaz_patriot.png", caption: "УАЗ Патриот" },
+		{ src: "../images/fractions/fsvng/fleet/uaz_hunter.png", caption: "УАЗ Хантер" },
+		{ src: "../images/fractions/fsvng/fleet/gazel_next_reanim.png", caption: "ГАЗель NEXT (реанимация)" },
+		{ src: "../images/fractions/fsvng/fleet/uaz_patriot_kinolog.png", caption: "УАЗ Патриот (кинологическая служба)" }
+	];
+	
+	function renderFleetGallery() {
+		const galleryContainer = document.getElementById('fleetGallery');
+		if (!galleryContainer) return;
+
+		const imagesHtml = FLEET_IMAGES.map(img => `
+			<div class="vinyl-image-item">
+				<img src="${img.src}" 
+					 alt="${img.caption}" 
+					 class="clickable-image vinyl-img"
+					 data-full-img="${img.src}"
+					 data-caption="${img.caption}"
+					 onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'vehicle-img-placeholder\\'>Изображение не найдено</div>'">
+			</div>
+		`).join('');
+
+		galleryContainer.innerHTML = imagesHtml;
+		
+		const images = document.querySelectorAll('.clickable-image');
+		images.forEach(img => {
+			img.addEventListener('click', (e) => {
+				e.stopPropagation();
+				const fullImgSrc = img.getAttribute('data-full-img') || img.src;
+				const caption = img.getAttribute('data-caption') || img.alt;
+				window.openImageModal(fullImgSrc, caption);
+			});
+		});
+	}
 
     function escapeHtml(str) {
         if (!str) return '';
@@ -523,6 +1238,7 @@
 
     document.addEventListener('DOMContentLoaded', () => {
         addImageModal();
+		renderFleetGallery();
         renderWeapons();
         initViewer();
         
@@ -531,12 +1247,14 @@
         const gearBtn = document.getElementById('gearButton');
         const closeGearModal = document.getElementById('closeGearModal');
         const closeGearModalBtn = document.getElementById('closeGearModalBtn');
+        const clearAllBtn = document.getElementById('clearAllAccessories');
         const gearModal = document.getElementById('gearModal');
         
         if (uniformSelect) {
             uniformSelect.addEventListener('change', (e) => {
                 currentUniform = e.target.value;
                 loadUniform(currentUniform);
+                setTimeout(() => updateAccessoriesUI(), 100);
             });
         }
         
@@ -544,24 +1262,17 @@
             resetCameraBtn.addEventListener('click', resetCamera);
         }
         
-        if (gearBtn && gearModal) {
-            gearBtn.addEventListener('click', () => {
-                gearModal.style.display = 'flex';
-            });
+        if (gearBtn) {
+            gearBtn.addEventListener('click', showGearModal);
         }
         
-        const closeModal = () => {
-            if (gearModal) gearModal.style.display = 'none';
-        };
-        
-        if (closeGearModal) closeGearModal.addEventListener('click', closeModal);
-        if (closeGearModalBtn) closeGearModalBtn.addEventListener('click', closeModal);
+        if (closeGearModal) closeGearModal.addEventListener('click', hideGearModal);
+        if (closeGearModalBtn) closeGearModalBtn.addEventListener('click', hideGearModal);
+        if (clearAllBtn) clearAllBtn.addEventListener('click', clearAllAccessories);
         if (gearModal) {
             gearModal.addEventListener('click', (e) => {
-                if (e.target === gearModal) closeModal();
+                if (e.target === gearModal) hideGearModal();
             });
         }
     });
 </script>
-</body>
-</html>

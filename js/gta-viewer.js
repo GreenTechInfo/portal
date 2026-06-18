@@ -692,7 +692,114 @@ export class GTACharacterViewer {
         return false;
     }
         
-    resetCamera() {
+	playAnimationOnce(animName, onComplete, stopFrame) {
+		const anim = this.animations.find(a => a.name === animName);
+		if (!anim) {
+			return false;
+		}
+		
+		if (!this.currentModel) return false;
+		
+		const canAnimate = this.skeleton || (this.frameObjects && this.bones.size > 0);
+		if (!canAnimate) return false;
+		
+		if (this.mixer) this.mixer.stopAllAction();
+		
+		let mixerRoot = this.currentModel;
+		this.currentModel.traverse((child) => {
+			if (child.isSkinnedMesh) mixerRoot = child;
+		});
+		
+		this.mixer = new THREE.AnimationMixer(mixerRoot);
+		const tracks = [];
+		let matchedBones = 0;
+		
+		for (const bone of anim.bones) {
+			if (bone.keyframes.length === 0) continue;
+			
+			const boneName = bone.name.toLowerCase().trim().replace(/~/g, " ");
+			
+			let boneInfo = this.bones.get(boneName);
+			if (!boneInfo?.bone) {
+				for (const [name, info] of this.bones) {
+					const normalized = name.replace(/~/g, " ").trim();
+					if (normalized === boneName) { boneInfo = info; break; }
+				}
+			}
+			if (!boneInfo?.bone) {
+				for (const [name, info] of this.bones) {
+					const normalized = name.replace(/~/g, " ").trim();
+					if (normalized.endsWith(boneName) || boneName.endsWith(normalized)) {
+						boneInfo = info; break;
+					}
+				}
+			}
+			if (!boneInfo?.bone && bone.boneId !== undefined) {
+				boneInfo = this.bonesById.get(bone.boneId);
+			}
+			if (!boneInfo?.bone) continue;
+			
+			matchedBones++;
+			const targetBone = boneInfo.bone;
+			const times = bone.keyframes.map((kf) => kf.time);
+			
+			const quatValues = [];
+			for (const kf of bone.keyframes) {
+				quatValues.push(kf.rotation.x, kf.rotation.y, kf.rotation.z, kf.rotation.w);
+			}
+			tracks.push(new THREE.QuaternionKeyframeTrack(`${targetBone.name}.quaternion`, times, quatValues));
+			
+			if (bone.isRoot) {
+				const posValues = [];
+				let hasPos = false;
+				for (const kf of bone.keyframes) {
+					if (kf.position) {
+						hasPos = true;
+						posValues.push(kf.position.x, kf.position.y, kf.position.z);
+					}
+				}
+				if (hasPos && posValues.length === times.length * 3) {
+					tracks.push(new THREE.VectorKeyframeTrack(`${targetBone.name}.position`, times, posValues));
+				}
+			}
+		}
+		
+		if (tracks.length > 0) {
+			const clip = new THREE.AnimationClip(anim.name, -1, tracks);
+			const action = this.mixer.clipAction(clip);
+			action.setLoop(THREE.LoopOnce);
+			action.clampWhenFinished = true;
+			action.play();
+
+			let stopTime;
+			if (stopFrame !== undefined) {
+				const totalFrames = anim.bones[0]?.keyframes?.length || 0;
+				if (stopFrame >= 0 && stopFrame < totalFrames) {
+					stopTime = anim.bones[0].keyframes[stopFrame]?.time || 0;
+				} else {
+					stopTime = clip.duration;
+				}
+			} else {
+				stopTime = clip.duration;
+			}
+
+			const mixer = this.mixer;
+
+			setTimeout(() => {
+				action.time = stopTime;
+
+				mixer.update(0);
+								
+				if (onComplete) onComplete();
+			}, (stopTime * 1000) + 100);
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	resetCamera() {
         if (this.currentModel) {
             const distance = this.modelSize * 1.5;
             this.camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
@@ -723,8 +830,7 @@ export class GTACharacterViewer {
 		}
 
 		let targetBone = null;
-		
-		// Ищем в скелете
+
 		if (this.skeleton) {
 			for (const bone of this.skeleton.bones) {
 				if (bone.name.toLowerCase() === boneName.toLowerCase()) {
@@ -733,8 +839,7 @@ export class GTACharacterViewer {
 				}
 			}
 		}
-		
-		// Если не нашли, ищем в иерархии модели
+
 		if (!targetBone) {
 			this.currentModel.traverse((child) => {
 				if (child.isBone && child.name.toLowerCase() === boneName.toLowerCase()) {
@@ -748,21 +853,17 @@ export class GTACharacterViewer {
 				this.skeleton ? this.skeleton.bones.map(b => b.name) : 'no skeleton');
 			return false;
 		}
-		
-		// Сохраняем текущую локальную позицию (относительно текущего родителя)
+
 		const localPos = accessoryGroup.position.clone();
 		const localQuat = accessoryGroup.quaternion.clone();
 		const localScl = accessoryGroup.scale.clone();
-		
-		// Открепляем от текущего родителя
+
 		if (accessoryGroup.parent) {
 			accessoryGroup.parent.remove(accessoryGroup);
 		}
-		
-		// Прикрепляем к кости
+
 		targetBone.add(accessoryGroup);
-		
-		// Восстанавливаем локальную позицию (теперь она локальна относительно кости)
+
 		accessoryGroup.position.copy(localPos);
 		accessoryGroup.quaternion.copy(localQuat);
 		accessoryGroup.scale.copy(localScl);
@@ -772,8 +873,7 @@ export class GTACharacterViewer {
 	
 	detachAccessoryFromBone(accessoryGroup) {
 		if (!accessoryGroup.parent) return false;
-		
-		// Открепляем от кости и добавляем обратно в сцену
+
 		const parent = accessoryGroup.parent;
 		const worldPos = new THREE.Vector3();
 		const worldQuat = new THREE.Quaternion();
