@@ -7,6 +7,31 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .screenshot-item {
+            border-radius: 12px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 1px solid var(--border);
+            transition: transform 0.2s, border-color 0.2s, box-shadow 0.2s;
+            background: rgba(0,0,0,0.3);
+        }
+        .screenshot-item:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: 0 8px 25px rgba(46, 164, 79, 0.15);
+        }
+        .screenshot-item img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s;
+        }
+        .screenshot-item:hover img {
+            transform: scale(1.03);
+        }
+    </style>
 </head>
 <body>
 
@@ -25,10 +50,10 @@
     <main class="content" id="fractionContent">
         <h1 class="page-title">Судебная организация Нижегородской области</h1>
         <p class="page-subtitle"></p>
-        
+
         <div class="info-block">
             <h3>О фракции</h3>
-            <p><strong>Судебная организация</strong> — это объединение ключевых публично-правовых институтов, образующих систему юстиции Российской Федерации. Её предназначение заключается в комплексной реализации государственной функции по осуществлению правосудия, принудительному исполнению актов судебной власти, обеспечению гарантий права на квалифицированную юридическую помощь, а также в исполнении уголовно-правовых санкций, связанных с изоляцией от общества.</p>
+            <p><strong>Судебная организация</strong> — это объединение ключевых публично-правовых институтов, образующих систему юстиции Российской Федерации. Её предназначение заключается в комплексной реализации государственной функции по осуществлению правосудия, принудительному исполнению актов судебной власти, обеспечению гарантий права на квалифицированную юридическую помощь.</p>
         </div>
 
         <div class="info-block">
@@ -46,18 +71,110 @@
                     <i class="fas fa-scale-balanced" style="color: var(--accent); margin-right: 10px;"></i>
                     <strong>Палата адвокатов Нижегородской области</strong>
                 </div>
+                <div style="background: rgba(255,255,255,0.03); padding: 14px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <i class="fas fa-envelope" style="color: var(--accent); margin-right: 10px;"></i>
+                    <strong>ГУФССП России по Нижегородской области</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <h3>Судебная организация в игре</h3>
+            <p>Погрузитесь в атмосферу судебной системы вместе с нами. Ниже представлены моменты из жизни судей, адвокатов и работников аппарата суда.</p>
+            
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; margin-top: 16px;">
+                <div class="screenshot-item" onclick="openImageModal('../images/fractions/court/1.png', '')">
+                    <img src="../images/fractions/court/1.png" alt="Скриншот 1" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:220px;color:var(--text-secondary);font-size:0.9rem;background:rgba(0,0,0,0.3);\'><i class=\'fas fa-image\' style=\'font-size:32px;opacity:0.3;margin-right:12px;\'></i>Скриншот 1</div>'">
+                </div>
+
+                <div class="screenshot-item" onclick="openImageModal('../images/fractions/court/2.png', '')">
+                    <img src="../images/fractions/court/2.png" alt="Скриншот 2" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:220px;color:var(--text-secondary);font-size:0.9rem;background:rgba(0,0,0,0.3);\'><i class=\'fas fa-image\' style=\'font-size:32px;opacity:0.3;margin-right:12px;\'></i>Скриншот 2</div>'">
+                </div>
+
+                <div class="screenshot-item" onclick="openImageModal('../images/fractions/court/3.png', '')">
+                    <img src="../images/fractions/court/3.png" alt="Скриншот 3" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'display:flex;align-items:center;justify-content:center;height:220px;color:var(--text-secondary);font-size:0.9rem;background:rgba(0,0,0,0.3);\'><i class=\'fas fa-image\' style=\'font-size:32px;opacity:0.3;margin-right:12px;\'></i>Скриншот 3</div>'">
+                </div>
             </div>
         </div>
 
         <div class="info-block">
             <h3>Требования для вступления</h3>
-            <div style="text-align: center; padding: 48px 24px;">
-                <i class="fas fa-hard-hat" style="font-size: 48px; color: var(--accent); opacity: 0.6; margin-bottom: 16px; display: block;"></i>
-                <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">Раздел находится в стадии наполнения</p>
-                <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">
-                    Хотите помочь с информацией? 
-                    <a href="about-site.html" style="color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);">Пишите нам</a>
-                </p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px;">
+                <div style="background: rgba(255,255,255,0.02); padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
+                    <h4 style="color: var(--accent); margin-top: 0; margin-bottom: 12px; font-size: 1rem;">IC требования</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Гражданство РФ</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Возраст не младше 25 лет</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Отсутствие судимостей (в том числе снятых и погашенных) и уголовного преследования (в том числе прекращенного по реабилитирующим основаниям)</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Наличие высшего юридического образования по специальности "Юриспруденция"</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Не состоять на учете в наркологическом или психоневрологическом диспансере в связи с лечением от алкоголизма, наркомании, токсикомании, хронических и затяжных психических расстройств</li>
+                        <li style="padding: 4px 0;">• Стаж работы в области юриспруденции не менее 5 лет</li>
+                    </ul>
+                </div>
+                <div style="background: rgba(255,255,255,0.02); padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
+                    <h4 style="color: var(--accent); margin-top: 0; margin-bottom: 12px; font-size: 1rem;">OOC требования</h4>
+                    <ul style="list-style: none; padding: 0; margin: 0; color: var(--text-secondary); font-size: 0.92rem; line-height: 1.6;">
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Минимального уровня нет, важно желание работать в этой сфере</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Грамотная письменная речь</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Знание правил сервера и основ ролевой игры</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Наличие недвижимости или быть прописанным</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Знание и умение работы с законодательством РФ по выбранному направлению (желательно)</li>
+                        <li style="padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.04);">• Отсутствие серьёзных OOC-наказаний</li>
+                        <li style="padding: 4px 0;">• Опыт работы с документами приветствуется</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <h3>Трудоустройство в аппарат суда и помощником адвоката</h3>
+            <p>Судебная организация предлагает всем желающим с нуля погрузиться в судебную систему и адвокатуру. Для этого необходимо пройти обучение в высшем учебном заведении, а по окончании — получить гарантированное трудоустройство на выбранную должность.</p>
+            <div style="margin: 20px 0 8px;">
+                <a href="https://forum.greentech-rp.com/index.php?app=forums&module=forums&controller=topic&id=30633#comment-209440" target="_blank" class="link-button" style="display: inline-block; background: var(--accent); color: #fff; padding: 12px 28px; border-radius: 30px; text-decoration: none; font-weight: 600; transition: background 0.2s;">
+                    <i class="fas fa-graduation-cap"></i> Поступить на обучение
+                </a>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <h3>Порядок отбора кандидатов на должность судьи</h3>
+            <p>В соответствии с Законом РФ от 26.06.1992 № 3132-1 "О статусе судей в Российской Федерации", отбор кандидатов на должность судьи осуществляется на конкурсной основе.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0;">
+                <div style="background: rgba(46,164,79,0.08); padding: 16px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <h4 style="color: var(--accent); margin-top: 0;">1. Объявление вакансии</h4>
+                    <p style="margin-bottom: 0; font-size: 0.95rem;">Квалификационная коллегия судей Нижегородской области объявляет об открытии вакансии в средствах массовой информации.</p>
+                </div>
+                <div style="background: rgba(46,164,79,0.08); padding: 16px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <h4 style="color: var(--accent); margin-top: 0;">2. Квалификационный экзамен</h4>
+                    <p style="margin-bottom: 0; font-size: 0.95rem;">Экзаменационная комиссия проверяет теоретические знания и практические навыки кандидата, необходимые для работы в должности судьи.</p>
+                </div>
+                <div style="background: rgba(46,164,79,0.08); padding: 16px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <h4 style="color: var(--accent); margin-top: 0;">3. Решение коллегии</h4>
+                    <p style="margin-bottom: 0; font-size: 0.95rem;">Квалификационная коллегия рассматривает кандидатуру и выносит решение о рекомендации на должность судьи либо отказывает в рекомендации.</p>
+                </div>
+                <div style="background: rgba(46,164,79,0.08); padding: 16px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <h4 style="color: var(--accent); margin-top: 0;">4. Наделение полномочиями</h4>
+                    <p style="margin-bottom: 0; font-size: 0.95rem;">При наличии положительного заключения кандидат наделяется полномочиями судьи.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="info-block">
+            <h3>Порядок присвоения статуса адвоката</h3>
+            <p>В соответствии с Федеральным законом от 31.05.2002 № 63-ФЗ "Об адвокатской деятельности и адвокатуре в Российской Федерации", лицо, отвечающее требованиям, вправе обратиться в квалификационную комиссию с заявлением о присвоении ему статуса адвоката.</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 16px 0;">
+                <div style="background: rgba(46,164,79,0.08); padding: 16px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <h4 style="color: var(--accent); margin-top: 0;">1. Подача заявления и проверка</h4>
+                    <p style="margin-bottom: 0; font-size: 0.95rem;">Претендент подает заявление в квалификационную комиссию. При необходимости организуется проверка достоверности предоставленных документов.</p>
+                </div>
+                <div style="background: rgba(46,164,79,0.08); padding: 16px; border-radius: 10px; border-left: 3px solid var(--accent);">
+                    <h4 style="color: var(--accent); margin-top: 0;">2. Квалификационный экзамен</h4>
+                    <p style="margin-bottom: 0; font-size: 0.95rem;">Претендент сдает экзамен по знанию основ законодательства РФ, а также законодательства в сфере адвокатской деятельности.</p>
+                </div>
+                <div style="background: rgba(46,164,79,0.08); padding: 16px; border-radius: 10px; border-left: 3px solid var(--accent); grid-column: span 2;">
+                    <h4 style="color: var(--accent); margin-top: 0;">3. Присвоение статуса</h4>
+                    <p style="margin-bottom: 0; font-size: 0.95rem;">При успешной сдаче экзамена квалификационная комиссия принимает решение о присвоении претенденту статуса адвоката на неопределенный срок.</p>
+                </div>
             </div>
         </div>
 
@@ -69,30 +186,19 @@
                         <tr><th>Команда</th><th>Назначение</th></tr>
                     </thead>
                     <tbody>
-                        <tr><td><code>/duty</code></span></td><td>Заступить на службу (надеть форму)</td></tr>
-                        <tr><td><code>/offduty</code></span></td><td>Завершить службу (переодеться в гражданское)</td></tr>
-                        <tr><td><code>/r [текст]</code></span></td><td>RP рация внутри фракции</span></td></tr>
-                        <tr><td><code>/ro [текст]</code></span></td><td>NonRP чат рации внутри фракции</span></td></tr>
-                        <tr><td><code>/d [текст]</code></span></td><td>RP чат рации департамента</span></td></tr>
-                        <tr><td><code>/od [текст]</code></span></td><td>NonRP чат рации департамента</span></td></tr>
-                        <tr><td><code>/members</code></span></td><td>Список сотрудников фракции онлайн</span></td></tr>
+                        <tr><td><code>/duty</code></td><td>Заступить на службу (надеть форму)</td></tr>
+                        <tr><td><code>/offduty</code></td><td>Завершить службу (переодеться в гражданское)</td></tr>
+                        <tr><td><code>/r [текст]</code></td><td>RP рация внутри фракции</td></tr>
+                        <tr><td><code>/ro [текст]</code></td><td>NonRP чат рации внутри фракции</td></tr>
+                        <tr><td><code>/d [текст]</code></td><td>RP чат рации департамента</td></tr>
+                        <tr><td><code>/od [текст]</code></td><td>NonRP чат рации департамента</td></tr>
+                        <tr><td><code>/members</code></td><td>Список сотрудников фракции онлайн</td></tr>
+                        <tr><td><code>/prigovor [id]</code></td><td>Назначить уголовное наказание</td></tr>
+                        <tr><td><code>/givephsud [id]</code></td><td>Выдать повестку в суд</td></tr>
+                        <tr><td><code>/takelicsud [id]</code></td><td>Лишить права управления транспортными средствами</td></tr>
+                        <tr><td><code>/unconviction</code></td><td>Снять судимость</td></tr>
                     </tbody>
                 </table>
-            </div>	
-        </div>
-		
-		<div class="info-block">
-            <h3>Автопарк судебной организации</h3>
-            <p>Автомобили обеспечения судебной деятельности Нижегородского областного суда и гарнизонного военного суда.</p>
-            <div class="vinyl-gallery" id="fleetGallery">
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; min-height: 200px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed var(--border); grid-column: 1 / -1;">
-                    <i class="fas fa-hard-hat" style="font-size: 48px; color: var(--text-secondary); opacity: 0.4; margin-bottom: 16px;"></i>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">Раздел находится в стадии наполнения</p>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">
-                        Хотите помочь с информацией? 
-                        <a href="about-site.html" style="color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);">Пишите нам</a>
-                    </p>
-                </div>
             </div>
         </div>
 
@@ -320,5 +426,56 @@
         }
     });
 </script>
+
+<script>
+    function openImageModal(src, caption) {
+        let modal = document.getElementById('globalImageModal');
+        
+        if (!modal) {
+            modal = document.createElement('div');
+            modal.id = 'globalImageModal';
+            modal.style.cssText = 'display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.95);z-index:10000;cursor:pointer;align-items:center;justify-content:center;flex-direction:column;';
+            modal.innerHTML = '<div style="position:relative;max-width:90%;max-height:85vh;"><img id="globalModalImage" src="" alt="Увеличенное изображение" style="max-width:100%;max-height:85vh;object-fit:contain;border-radius:8px;"><button id="globalCloseModalBtn" style="position:absolute;top:-50px;right:-50px;background:none;border:none;color:white;font-size:32px;cursor:pointer;padding:8px;transition:transform 0.2s;">✕</button></div><div id="globalModalCaption" style="margin-top:16px;color:var(--text-secondary);font-size:0.9rem;text-align:center;max-width:80%;background:rgba(0,0,0,0.6);padding:8px 16px;border-radius:8px;"></div>';
+            document.body.appendChild(modal);
+
+            const modalImg = document.getElementById('globalModalImage');
+            const modalCaption = document.getElementById('globalModalCaption');
+            const closeBtn = document.getElementById('globalCloseModalBtn');
+
+            function closeModal() {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+            }
+
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) closeModal();
+            });
+            
+            if (closeBtn) {
+                closeBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    closeModal();
+                });
+            }
+            
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape' && modal.style.display === 'flex') {
+                    closeModal();
+                }
+            });
+        }
+
+        const modalImg = document.getElementById('globalModalImage');
+        const modalCaption = document.getElementById('globalModalCaption');
+        
+        if (modal && modalImg) {
+            modalImg.src = src;
+            modalCaption.textContent = caption || '';
+            modal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        }
+    }
+</script>
+
 </body>
 </html>
