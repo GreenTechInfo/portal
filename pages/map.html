@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Карта - GreenTech info</title>
+    <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon.png">
+    
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="../css/style.css">
+    
+    <style>
+        #mapContainer {
+            width: 100%;
+            background: #0a0e14;
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            position: relative;
+        }
+        
+        #map {
+            width: 100%;
+            height: 100%;
+            background: #0a0e14;
+        }
+        
+        .leaflet-control-attribution {
+            display: none !important;
+        }
+        
+        .leaflet-control-zoom {
+            border: 1px solid var(--border) !important;
+            border-radius: 8px !important;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3) !important;
+        }
+        
+        .leaflet-control-zoom a {
+            background: var(--card-bg) !important;
+            color: var(--text) !important;
+            border-bottom: 1px solid var(--border) !important;
+            transition: background 0.2s;
+            width: 30px !important;
+            height: 30px !important;
+            line-height: 30px !important;
+        }
+        
+        .leaflet-control-zoom a:hover {
+            background: var(--accent) !important;
+            color: #fff !important;
+        }
+        
+        .leaflet-control-zoom a:last-child {
+            border-bottom: none !important;
+        }
+        
+        .city-polygon {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .city-polygon:hover {
+            fill-opacity: 0.6 !important;
+            stroke-width: 3 !important;
+        }
+        
+        .polygon-tooltip {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 4px 10px;
+            font-family: system-ui, -apple-system, sans-serif;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            pointer-events: none;
+        }
+
+        .polygon-tooltip .name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .polygon-tooltip .type {
+            font-size: 10px;
+            color: var(--text-secondary);
+            margin-top: 1px;
+        }
+
+        .map-controls-wrapper {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            max-width: 200px;
+        }
+        
+        @media (max-width: 600px) {
+            .map-controls-wrapper {
+                top: 8px;
+                right: 8px;
+                max-width: 160px;
+            }
+        }
+
+        .leaflet-control-zoom {
+            position: relative;
+        }
+
+        .reset-view-btn {
+            position: absolute;
+            bottom: 80px;
+            right: 12px;
+            z-index: 1000;
+            width: 30px;
+            height: 30px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.2s;
+            font-size: 14px;
+        }
+
+        .reset-view-btn:hover {
+            background: var(--accent);
+            color: #fff;
+            border-color: var(--accent);
+        }
+
+        .reset-view-btn i {
+            pointer-events: none;
+        }
+
+        @media (max-width: 600px) {
+            .reset-view-btn {
+                bottom: 90px;
+                right: 8px;
+                width: 26px;
+                height: 26px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Меню">☰</button>
+    <div class="logo" id="logo">
+        <img src="../images/icons/logo.png" alt="GreenTech RP" style="height: 40px; width: auto;">
+    </div>
+</header>
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<div class="main-layout">
+    <nav class="sidebar" id="sidebar"></nav>
+
+    <main class="content" id="mapContent">
+        <h1 class="page-title">Карта Нижегородской области</h1>
+        
+        <div id="mapContainer">
+			<div id="map"></div>
+			
+			<div class="map-controls-wrapper">
+				<button class="settings-toggle" id="settingsToggle">
+					<i class="fas fa-sliders-h"></i>
+					<span>Настройки</span>
+				</button>
+				
+				<div class="map-controls" id="filterPanel">
+					<div class="control-group">
+						<div class="group-title">Отображение</div>
+						<div class="btn-group">
+							<button class="filter-toggle active active-city" data-filter="cities">
+								<i class="fas fa-city"></i> Города
+							</button>
+							<button class="filter-toggle active active-institution" data-filter="institutions">
+								<i class="fas fa-landmark"></i> Гос. учр.
+							</button>
+							<button class="filter-toggle active active-job" data-filter="jobs">
+								<i class="fas fa-briefcase"></i> Работы
+							</button>
+							<button class="filter-toggle active active-dealership" data-filter="dealerships">
+								<i class="fas fa-car"></i> Автосалоны
+							</button>
+							<button class="filter-toggle active active-fishing" data-filter="fishing">
+								<i class="fas fa-fish"></i> Рыбалка
+							</button>
+							<button class="filter-toggle active active-other" data-filter="others">
+								<i class="fas fa-ellipsis-h"></i> Прочее
+							</button>
+						</div>
+					</div>
+				</div>
+			</div>
+
+            <button class="reset-view-btn" id="resetViewBtn" title="Сбросить вид">
+                <i class="fas fa-expand"></i>
+            </button>
+		</div>
+        
+    </main>
+</div>
+
+<button class="scroll-top-btn" id="scrollTopBtn" aria-label="Наверх">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+</button>
+
+<footer class="footer">
+    <div class="footer-copyright">
+        © 2026 GreenTech Info. Информационный портал.
+    </div>
+    <div class="footer-right">
+        <a href="about-site.html" class="about-site-btn">
+            О сайте
+        </a>
+    </div>
+</footer>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const settingsToggle = document.getElementById('settingsToggle');
+        const filterPanel = document.getElementById('filterPanel');
+        let settingsOpen = false;
+
+        filterPanel.style.display = 'none';
+        settingsToggle.classList.remove('active');
+        
+        settingsToggle.addEventListener('click', function() {
+            settingsOpen = !settingsOpen;
+            filterPanel.style.display = settingsOpen ? 'flex' : 'none';
+            settingsToggle.classList.toggle('active', settingsOpen);
+        });
+    });
+</script>
+
+<script src="../js/common.js"></script>
+<script src="../js/navigation.js"></script>
+<script src="../data/map-data.js"></script>
+<script src="../js/map.js"></script>
+
+</body>
+</html>

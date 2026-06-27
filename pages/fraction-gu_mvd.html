@@ -97,16 +97,7 @@
 		<div class="info-block">
             <h3>Автопарк ГУ МВД</h3>
             <p>Служебный транспорт отдела полиции, используемый для охраны правопорядка и оперативного реагирования.</p>
-            <div class="vinyl-gallery" id="fleetGallery">
-                <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px 20px; text-align: center; min-height: 200px; background: rgba(255,255,255,0.02); border-radius: 12px; border: 1px dashed var(--border); grid-column: 1 / -1;">
-                    <i class="fas fa-hard-hat" style="font-size: 48px; color: var(--text-secondary); opacity: 0.4; margin-bottom: 16px;"></i>
-                    <p style="color: var(--text-secondary); font-size: 0.95rem; margin: 0;">Раздел находится в стадии наполнения</p>
-                    <p style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 12px;">
-                        Хотите помочь с информацией? 
-                        <a href="about-site.html" style="color: var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);">Пишите нам</a>
-                    </p>
-                </div>
-            </div>
+            <div class="vinyl-gallery" id="fleetGallery"></div>
         </div>
 
         <div class="info-block uniform-3d-block">
@@ -372,6 +363,40 @@
         { name: "АКС-74У", image: "aks74u.png" }
     ];
 
+    const FLEET_IMAGES = [
+        { src: "../images/fractions/gu_mvd/fleet/fleet1.png", caption: "Служебный автопарк ГУ МВД" },
+        { src: "../images/fractions/gu_mvd/fleet/fleet2.png", caption: "Служебный автопарк ГУ МВД" },
+        { src: "../images/fractions/gu_mvd/fleet/fleet3.png", caption: "Служебный автопарк ГУ МВД" }
+    ];
+
+    function renderFleetGallery() {
+        const galleryContainer = document.getElementById('fleetGallery');
+        if (!galleryContainer) return;
+
+        const imagesHtml = FLEET_IMAGES.map(img => `
+            <div class="vinyl-image-item">
+                <img src="${img.src}" 
+                     alt="${img.caption}" 
+                     class="clickable-image vinyl-img"
+                     data-full-img="${img.src}"
+                     data-caption="${img.caption}"
+                     onerror="this.onerror=null; this.parentElement.innerHTML='<div class=\\'vehicle-img-placeholder\\'>Изображение не найдено</div>'">
+            </div>
+        `).join('');
+
+        galleryContainer.innerHTML = imagesHtml;
+        
+        const images = document.querySelectorAll('.clickable-image');
+        images.forEach(img => {
+            img.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const fullImgSrc = img.getAttribute('data-full-img') || img.src;
+                const caption = img.getAttribute('data-caption') || img.alt;
+                window.openImageModal(fullImgSrc, caption);
+            });
+        });
+    }
+
     function escapeHtml(str) {
         if (!str) return '';
         return String(str).replace(/[&<>]/g, function(m) {
@@ -429,6 +454,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         addImageModal();
         renderWeapons();
+        renderFleetGallery(); // Теперь функция объявлена ДО вызова
         initViewer();
         
         const uniformSelect = document.getElementById('uniformSelect');

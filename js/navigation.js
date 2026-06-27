@@ -5,7 +5,8 @@ const NAVIGATION_DATA = {
         { href: "pages/rules.html", icon: "rules.png", text: "Правила сервера" },
         { href: "pages/systems.html", icon: "systems.png", text: "Системы сервера" },
         { href: "pages/animations.html", icon: "animations.png", text: "Анимации" },
-        { href: "pages/jobs.html", icon: "jobs.png", text: "Работы" }
+        { href: "pages/jobs.html", icon: "jobs.png", text: "Работы" },
+        { href: "pages/map.html", icon: "map.png", text: "Карта" }
     ],
     
     vehiclesSubmenu: {

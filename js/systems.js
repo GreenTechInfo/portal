@@ -1292,7 +1292,6 @@ const SYSTEMS_DATA = [
             ]
         }
     },
-	
     {
 		id: "sgu",
 		name: "СГУ и проблесковые маячки",
@@ -1300,15 +1299,87 @@ const SYSTEMS_DATA = [
 		color: "#dc2626",
 		description: "Управление спецсигналами на патрульных автомобилях: маячки, сирена, мегафон",
 		details: {
-			overview: `<div style="display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 60px 40px; width: 100%; box-sizing: border-box;">
-				<i class="fas fa-hard-hat" style="font-size: 64px; color: var(--text-secondary); margin-bottom: 20px;"></i>
-				<p style="color: var(--text-secondary); max-width: 800px; margin: 0 auto;">Информации о системе СГУ и проблесковых маячках пока нет. Если у вас есть подробная информация и вы хотите помочь — пишите нам!</p>
-				<div style="margin-top: 20px; font-size: 0.85rem; color: var(--text-secondary); width: 100%;">
-				</div>
-			</div>`,
-			sections: []
+			overview: `<p>СГУ (Сигнальная громкоговорящая установка) и проблесковые маячки предназначены для использования на служебных автомобилях экстренных служб. Система позволяет подавать звуковые и световые сигналы для обозначения приоритетного проезда и привлечения внимания.</p>
+			<div style="margin: 16px 0; text-align: center;">
+				${renderImage("../images/systems/sgu/pult.png", null, "300px")}
+			</div>
+			<p><strong>Как открыть пульт управления:</strong> Нажмите клавишу <kbd>P</kbd> (русская <kbd>З</kbd>), находясь в автомобиле.</p>
+			`,
+			
+			sections: [
+				{
+					title: "Управление СГУ",
+					icon: "fa-gamepad",
+					content: `<p>Управление осуществляется с помощью клавиш, когда открыт пульт СГУ:</p>
+					<table class="commands-table" style="margin-top: 12px;">
+						<thead>
+							<tr>
+								<th>Клавиша</th>
+								<th>Действие</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr><td><kbd>1</kbd></td><td>Кратковременная сирена (завывающая)</td></tr>
+							<tr><td><kbd>2</kbd></td><td>Активация проблескового маячка</td></tr>
+							<tr><td><kbd>[</kbd> (рус. <kbd>Х</kbd>)</td><td>Переключение режимов маячка вперёд</td></tr>
+							<tr><td><kbd>]</kbd> (рус. <kbd>Ъ</kbd>)</td><td>Переключение режимов маячка назад</td></tr>
+							<tr><td><kbd>3</kbd></td><td>Кратковременный звуковой сигнал ("крякалка")</td></tr>
+							<tr><td><kbd>4</kbd></td><td>Непрерывная сирена</td></tr>
+						</tbody>
+					</table>
+					<p style="margin-top: 12px; color: var(--text-secondary); font-size: 0.85rem;">
+						Закрыть пульт СГУ можно повторным нажатием клавиши <kbd>P</kbd>.
+					</p>`
+				},
+				{
+					title: "Режимы проблесковых маячков",
+					icon: "fa-lightbulb",
+					content: `<p>Переключайте режимы маячов клавишами <kbd>[</kbd> и <kbd>]</kbd> (рус. <kbd>Х</kbd> и <kbd>Ъ</kbd>). Все режимы показаны ниже:</p>
+					<div style="margin: 16px 0; text-align: center;">
+						<video autoplay loop muted playsinline disablePictureInPicture style="width: 100%; max-width: 900px; border-radius: 12px; border: 1px solid var(--border); background: #0a0e14; box-shadow: 0 8px 30px rgba(0,0,0,0.5); pointer-events: none;">
+							<source src="../images/systems/sgu/modes.mp4" type="video/mp4">
+							<div style="padding: 40px; color: var(--text-secondary);">⚠️ Ваш браузер не поддерживает видео.</div>
+						</video>
+					</div>`
+				},
+				{
+					title: "Настройка звуков СГУ",
+					icon: "fa-music",
+					content: `<p>Вы можете изменить звук сирены на свой вкус с помощью команды:</p>
+					<div style="background: var(--bg); padding: 12px 16px; border-radius: 8px; margin: 12px 0;">
+						<code style="color: var(--accent); font-size: 1rem;">/sgu_sound [номер]</code>
+					</div>
+					<p>Доступно 3 варианта звуков:</p>
+					<ul class="info-list" style="margin: 12px 0;">
+						<li>Элина №1</li>
+						<li>Элина №2</li>
+						<li>Элект</li>
+					</ul>
+					<p style="margin-top: 12px;">Нажмите на видео, чтобы прослушать звук:</p>
+					<div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; margin-top: 12px;">
+						<div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center;">
+							<div style="font-weight: 600; color: #fff; margin-bottom: 8px;">Элина №1</div>
+							<video playsinline disablePictureInPicture style="width: 100%; border-radius: 8px; background: #0a0e14; cursor: pointer;" data-sound="1">
+								<source src="../images/systems/sgu/sound1.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center;">
+							<div style="font-weight: 600; color: #fff; margin-bottom: 8px;">Элина №2</div>
+							<video playsinline disablePictureInPicture style="width: 100%; border-radius: 8px; background: #0a0e14; cursor: pointer;" data-sound="2">
+								<source src="../images/systems/sgu/sound2.mp4" type="video/mp4">
+							</video>
+						</div>
+						<div style="background: var(--card-bg); border: 1px solid var(--border); border-radius: 12px; padding: 12px; text-align: center;">
+							<div style="font-weight: 600; color: #fff; margin-bottom: 8px;">Элект</div>
+							<video playsinline disablePictureInPicture style="width: 100%; border-radius: 8px; background: #0a0e14; cursor: pointer;" data-sound="3">
+								<source src="../images/systems/sgu/sound3.mp4" type="video/mp4">
+							</video>
+						</div>
+					</div>`
+				}
+			]
 		}
-	},
+	}
 ];
 
 let showingDetail = false;
@@ -1642,3 +1713,60 @@ function updateURLForSystem(systemId) {
         window.location.hash = '';
     }
 }
+
+
+document.addEventListener('click', function(e) {
+    const video = e.target.closest('video[data-sound]');
+    if (!video) return;
+    
+    // Находим все видео с data-sound и их родительские контейнеры
+    const allSoundVideos = document.querySelectorAll('video[data-sound]');
+    
+    // Сбрасываем подсветку и превью у всех видео
+    allSoundVideos.forEach(v => {
+        const parent = v.closest('div[style*="background: var(--card-bg)"]');
+        if (parent) {
+            parent.style.border = '1px solid var(--border)';
+            parent.style.boxShadow = 'none';
+        }
+        if (v !== video) {
+            v.pause();
+            v.currentTime = 0;
+            // Не используем load() - просто сбрасываем время
+        }
+    });
+    
+    // Запускаем или останавливаем текущее
+    const parent = video.closest('div[style*="background: var(--card-bg)"]');
+    if (video.paused) {
+        video.play().catch(e => console.log('Ошибка воспроизведения:', e));
+        // Подсвечиваем зелёным
+        if (parent) {
+            parent.style.border = '2px solid var(--accent)';
+            parent.style.boxShadow = '0 0 20px rgba(46, 164, 79, 0.3)';
+        }
+    } else {
+        video.pause();
+        // Снимаем подсветку
+        if (parent) {
+            parent.style.border = '1px solid var(--border)';
+            parent.style.boxShadow = 'none';
+        }
+        // Сбрасываем на первый кадр без перезагрузки
+        video.currentTime = 0;
+    }
+});
+
+// Обработчик окончания видео
+document.addEventListener('ended', function(e) {
+    const video = e.target.closest('video[data-sound]');
+    if (!video) return;
+    
+    const parent = video.closest('div[style*="background: var(--card-bg)"]');
+    if (parent) {
+        parent.style.border = '1px solid var(--border)';
+        parent.style.boxShadow = 'none';
+    }
+    // Сбрасываем на первый кадр без перезагрузки
+    video.currentTime = 0;
+}, true);
