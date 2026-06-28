@@ -13,7 +13,6 @@ const FRACTIONS_DATA = {
         name: "УФСБ",
         description: "Федеральная служба безопасности — обеспечение государственной безопасности, борьба с терроризмом и экстремизмом.",
         color: "#2c3e50",
-        // УФСБ теперь имеет свою отдельную страницу
         hasCustomPage: true
     },
     pravitelstvo: {
@@ -86,7 +85,6 @@ const FractionsManager = {
     renderSimpleFraction(container, fractionId) {
         const fraction = this.getFractionById(fractionId);
         if (fraction) {
-            // Если у фракции есть кастомная страница, показываем сообщение о редиректе
             if (fraction.hasCustomPage) {
                 container.innerHTML = `
                     <div class="info-block" style="text-align: center; padding: 40px;">
@@ -96,7 +94,6 @@ const FractionsManager = {
                         <a href="fraction-ufsb.html" class="about-site-btn" style="display: inline-block; padding: 10px 25px; background: var(--accent); color: #fff; border-radius: 8px; text-decoration: none;">Перейти сейчас →</a>
                     </div>
                 `;
-                // Автоматический редирект через 2 секунды
                 setTimeout(() => {
                     window.location.href = 'fraction-ufsb.html';
                 }, 2000);
@@ -126,8 +123,7 @@ const FractionsManager = {
     
     renderArmyFraction(container, level = 3) {
         const army = ARMY_DATA;
-        
-        // Функция для расчета зарплаты с учетом выслуги
+
         const calculateSalaryWithBonus = (salary, seniorityYears = 0) => {
             let bonusPercent = 0;
             if (seniorityYears >= 2 && seniorityYears < 5) bonusPercent = 10;
@@ -140,38 +136,30 @@ const FractionsManager = {
             return Math.floor(salary * (1 + bonusPercent / 100));
         };
 
-        // Генерация HTML для таблицы руководства
         const commandRows = army.salaryData.command.map(item => {
             const salary = item.salary > 0 ? item.salary.toLocaleString() + " ₽" : "—";
             return `<tr><td>${escapeHtml(item.title)}</td><td>${salary}</td></tr>`;
         }).join('');
 
-        // Генерация HTML для таблицы медиков
         const medicalRows = army.salaryData.medical.map(item => {
             return `<tr><td>${escapeHtml(item.title)}</td><td>${item.salary.toLocaleString()} ₽</td></tr>`;
         }).join('');
 
-        // Генерация HTML для таблицы личного состава
         const personnelRows = army.salaryData.personnel.map(item => {
             return `<tr><td>${escapeHtml(item.title)}</td><td>${item.salary.toLocaleString()} ₽</td></tr>`;
         }).join('');
-        
-        // Генерация HTML для таблицы званий
+
         const rankRows = army.salaryData.ranks.map(rank => {
             return `<tr><td>${escapeHtml(rank.rank)}</td><td>${rank.salary.toLocaleString()} ₽</td></tr>`;
         }).join('');
 
-        // Генерация HTML для надбавок
         const bonusRows = army.salaryData.seniorityBonuses.map(bonus => {
             return `<tr><td>${escapeHtml(bonus.years)}</td><td>+${bonus.percent}%</td></tr>`;
         }).join('');
 
-        // --- НОВЫЙ КОД ДЛЯ ОРУЖЕЙНОЙ С КАРТИНКАМИ ---
-        // Разделяем оружие по категориям
         const armyWeapons = army.weapons.filter(w => w.category === 'army');
         const vaiWeapons = army.weapons.filter(w => w.category === 'vai');
-        
-        // Функция для генерации карточки оружия
+
         const renderWeaponCard = (weapon) => {
             const imagePath = `../images/weapons/${weapon.image}`;
             return `
@@ -190,8 +178,7 @@ const FractionsManager = {
         const vaiWeaponsHtml = vaiWeapons.map(w => renderWeaponCard(w)).join('');
         
         const commandsHtml = army.commands.map(c => `<tr><td><code>${escapeHtml(c.cmd)}</code></td><td>${escapeHtml(c.desc)}</td></tr>`).join('');
-        
-        // Данные о форме для 3D просмотра
+
         const uniforms = [
             { name: "Форма №5", file: "forma5", label: "Форма №5" },
             { name: "Офисная форма", file: "office_form", label: "Офисная форма" },
@@ -325,13 +312,10 @@ const FractionsManager = {
             </div>
         `;
 
-        // Загружаем скрипты для 3D и инициализируем
         this.init3DSystem(uniforms);
     },
-   
-    // Инициализация 3D системы
+
     init3DSystem(uniforms) {
-        // Загружаем скрипты динамически
         if (typeof THREE === 'undefined') {
             this.loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/build/three.min.js', () => {
                 this.loadScript('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js', () => {
@@ -355,7 +339,6 @@ const FractionsManager = {
     setup3DScene(uniforms) {
         const originalConsoleLog = console.log;
         console.log = function(...args) {
-            // Пропускаем сообщения от dff-loader
             if (args[0] && typeof args[0] === 'string' && 
                 (args[0].includes('TXDLoader') || 
                  args[0].includes('DFFLoader') ||
@@ -367,12 +350,10 @@ const FractionsManager = {
         
         const container = document.getElementById('uniform3dContainer');
         if (!container) return;
-        
-        // Скрываем загрузку
+
         const loadingEl = document.getElementById('uniform3dLoading');
         if (loadingEl) loadingEl.style.display = 'none';
-        
-        // Настройки поворота модели
+
         const MODEL_ROTATION_DEGREES = {
             x: -90,
             y: 90,
@@ -386,84 +367,71 @@ const FractionsManager = {
         
         let scene, camera, renderer, controls, currentModel = null;
         let modelCenterY = 0, modelSize = 1;
-        let isPanning = false; // Флаг для перемещения модели
-        
-        // Создаем сцену
+        let isPanning = false; 
+
         scene = new THREE.Scene();
         scene.background = new THREE.Color(0x0a0e14);
-        
-        // Камера
+
         camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
         camera.position.set(5, 3, 8);
-        
-        // Рендер
+
         renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(container.clientWidth, container.clientHeight);
         renderer.shadowMap.enabled = false;
         container.innerHTML = '';
         container.appendChild(renderer.domElement);
-        
-        // Контролы с поддержкой перемещения (ПКМ)
+
         controls = new THREE.OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
         controls.dampingFactor = 0.05;
         controls.rotateSpeed = 1.0;
         controls.zoomSpeed = 1.2;
         controls.enableZoom = true;
-        controls.enablePan = true;      // Включаем перемещение
-        controls.panSpeed = 0.8;        // Скорость перемещения
+        controls.enablePan = true;      
+        controls.panSpeed = 0.8;     
         controls.mouseButtons = {
-            LEFT: THREE.MOUSE.ROTATE,   // ЛКМ - вращение
-            MIDDLE: THREE.MOUSE.ZOOM,   // Средняя кнопка - зум
-            RIGHT: THREE.MOUSE.PAN      // ПКМ - перемещение
+            LEFT: THREE.MOUSE.ROTATE, 
+            MIDDLE: THREE.MOUSE.ZOOM,  
+            RIGHT: THREE.MOUSE.PAN      
         };
         controls.target.set(0, 0, 0);
         
-        // --- РАВНОМЕРНОЕ ОСВЕЩЕНИЕ СО ВСЕХ СТОРОН ---
-        
-        // Ambient light - базовое равномерное освещение
+
         const ambientLight = new THREE.AmbientLight(0x606080, 0.7);
         scene.add(ambientLight);
-        
-        // Основной направленный свет спереди-сверху
+
         const mainLight = new THREE.DirectionalLight(0xfff5e6, 0.9);
         mainLight.position.set(2, 5, 3);
         scene.add(mainLight);
-        
-        // Заполняющий свет сзади
+
         const backFillLight = new THREE.DirectionalLight(0x88aaff, 0.6);
         backFillLight.position.set(-2, 3, -4);
         scene.add(backFillLight);
-        
-        // Свет слева
+
         const leftLight = new THREE.DirectionalLight(0xffcc88, 0.6);
         leftLight.position.set(-4, 2, 2);
         scene.add(leftLight);
-        
-        // Свет справа
+
         const rightLight = new THREE.DirectionalLight(0x88ccff, 0.6);
         rightLight.position.set(4, 2, 2);
         scene.add(rightLight);
-        
-        // Нижний заполняющий свет (чтобы снизу не было темно)
+
         const bottomLight = new THREE.PointLight(0x6688aa, 0.4);
         bottomLight.position.set(0, -3, 0);
         scene.add(bottomLight);
-        
-        // Верхний мягкий свет
+
         const topLight = new THREE.PointLight(0xffccaa, 0.5);
         topLight.position.set(0, 5, 0);
         scene.add(topLight);
-        
-        // Кольцевое освещение (6 источников по кругу)
+
         const ringColors = [0xffaa66, 0xff6688, 0x66ffaa, 0x66aaff, 0xaa66ff, 0xffaa88];
         const ringPositions = [
-            { x: 4, z: 0, y: 2 },    // право
-            { x: -4, z: 0, y: 2 },   // лево
-            { x: 0, z: 4, y: 2 },    // перед
-            { x: 0, z: -4, y: 2 },   // зад
-            { x: 2.8, z: 2.8, y: 2 }, // перед-право
-            { x: -2.8, z: -2.8, y: 2 } // зад-лево
+            { x: 4, z: 0, y: 2 },    
+            { x: -4, z: 0, y: 2 },   
+            { x: 0, z: 4, y: 2 },
+            { x: 0, z: -4, y: 2 },   
+            { x: 2.8, z: 2.8, y: 2 }, 
+            { x: -2.8, z: -2.8, y: 2 } 
         ];
         
         ringPositions.forEach((pos, i) => {
@@ -472,11 +440,9 @@ const FractionsManager = {
             scene.add(ringLight);
         });
         
-        // Дополнительный мягкий рассеянный свет от окружающей среды
         const fillAmbient = new THREE.AmbientLight(0x445566, 0.3);
         scene.add(fillAmbient);
-        
-        // Функция для исправления материалов SkinnedMesh
+
         function fixSkinnedMeshMaterials(modelGroup) {
             modelGroup.traverse((child) => {
                 if (child.isSkinnedMesh) {
@@ -499,8 +465,7 @@ const FractionsManager = {
                 }
             });
         }
-        
-        // Функция загрузки модели
+
         async function loadUniformModel(uniformFile, uniformName) {
             if (currentModel) {
                 scene.remove(currentModel);
@@ -565,8 +530,7 @@ const FractionsManager = {
                 console.error('Ошибка загрузки формы:', error);
             }
         }
-        
-        // Сброс камеры
+
         function resetCamera() {
             if (currentModel) {
                 const distance = modelSize * 1.5;
@@ -579,8 +543,7 @@ const FractionsManager = {
                 controls.update();
             }
         }
-        
-        // Привязываем выпадающий список
+
         const uniformSelect = document.getElementById('uniformSelect');
         if (uniformSelect) {
             uniformSelect.addEventListener('change', (e) => {
@@ -589,30 +552,26 @@ const FractionsManager = {
                 const uniformName = selectedOption.getAttribute('data-name') || selectedOption.textContent;
                 loadUniformModel(uniformFile, uniformName);
             });
-            
-            // Автоматически загружаем первую форму
+
             if (uniforms.length > 0) {
                 setTimeout(() => {
                     loadUniformModel(uniforms[0].file, uniforms[0].name);
                 }, 500);
             }
         }
-        
-        // Привязываем кнопку сброса камеры
+
         const resetBtn = document.getElementById('resetUniformCamera');
         if (resetBtn) {
             resetBtn.addEventListener('click', resetCamera);
         }
-        
-        // Анимация
+
         function animate() {
             requestAnimationFrame(animate);
             if (controls) controls.update();
             if (renderer && scene && camera) renderer.render(scene, camera);
         }
         animate();
-        
-        // Адаптация под размер
+
         window.addEventListener('resize', () => {
             if (!container) return;
             const width = container.clientWidth;

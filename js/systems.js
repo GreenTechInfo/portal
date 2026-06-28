@@ -8,10 +8,8 @@ function escapeHtml(str) {
     });
 }
 
-// Функция для вставки изображения с подписью
 function renderImage(src, caption, width = "100%") {
     if (!src) return '';
-    // Генерируем уникальный ID для этого изображения
     const imgId = 'img_' + Math.random().toString(36).substr(2, 9);
     
     return `
@@ -27,7 +25,6 @@ function renderImage(src, caption, width = "100%") {
     `;
 }
 
-// Данные о системе документов
 const SYSTEMS_DATA = [
     {
         id: "documents",
@@ -1178,7 +1175,7 @@ const SYSTEMS_DATA = [
         id: "car-selling",
         name: "Продажа автомобиля (утилизация и скупщик)",
         icon: "fa-hand-holding-usd",
-        color: "#f97316", // ← Оранжевый (не используется: у отдыха #f59e0b - другой оттенок)
+        color: "#f97316",
         description: "Как продать автомобиль: сдать в утилизацию или продать скупщику на Б/У рынке",
         details: {
             overview: `<p>Помимо продажи или обмена автомобиля с другим игроком, на сервере есть два способа быстро продать транспорт государству — сдать в утилизацию или продать специальному скупщику на рынке б/у автомобилей.</p>
@@ -1480,8 +1477,7 @@ function renderSystemsGrid(container) {
             ${cardsHtml}
         </div>
     `;
-    
-    // Эффект свечения при движении мыши
+
     const cards = container.querySelectorAll('.system-card');
     cards.forEach(card => {
         card.addEventListener('mousemove', (e) => {
@@ -1496,14 +1492,12 @@ function renderSystemsGrid(container) {
     attachSystemCardHandlers(container);
 }
 
-// Рендер детальной информации
 function renderSystemDetail(container, system) {
      if (!system) return;
 
     updateURLForSystem(system.id);
     
     const sectionsHtml = system.details.sections.map(section => {
-        // Команды
         let commandsHtml = '';
         if (section.commands && section.commands.length > 0) {
             commandsHtml = `
@@ -1522,8 +1516,7 @@ function renderSystemDetail(container, system) {
                 </div>
             `;
         }
-        
-        // Шаги с фото
+
         let stepsHtml = '';
         if (section.steps && section.steps.length > 0) {
             stepsHtml = `
@@ -1540,8 +1533,7 @@ function renderSystemDetail(container, system) {
                 </div>
             `;
         }
-        
-        // Локации с фото
+
         let locationsHtml = '';
         if (section.locations && section.locations.length > 0) {
             locationsHtml = `
@@ -1561,13 +1553,11 @@ function renderSystemDetail(container, system) {
             `;
         }
         
-        // Дополнительный шаг
         let extraStepHtml = '';
         if (section.extraStep) {
             extraStepHtml = `<div style="margin-top: 12px;">${section.extraStep}</div>`;
         }
-        
-        // Заметка
+
         let noteHtml = '';
         if (section.note) {
             noteHtml = `<div class="note-block"><i class="fas fa-info-circle"></i> ${escapeHtml(section.note)}</div>`;
@@ -1689,7 +1679,6 @@ function initHashChangeListener(container) {
     });
 }
 
-// Запуск
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('systemsContent');
     if (container) {
@@ -1718,11 +1707,9 @@ function updateURLForSystem(systemId) {
 document.addEventListener('click', function(e) {
     const video = e.target.closest('video[data-sound]');
     if (!video) return;
-    
-    // Находим все видео с data-sound и их родительские контейнеры
+
     const allSoundVideos = document.querySelectorAll('video[data-sound]');
-    
-    // Сбрасываем подсветку и превью у всех видео
+
     allSoundVideos.forEach(v => {
         const parent = v.closest('div[style*="background: var(--card-bg)"]');
         if (parent) {
@@ -1732,32 +1719,26 @@ document.addEventListener('click', function(e) {
         if (v !== video) {
             v.pause();
             v.currentTime = 0;
-            // Не используем load() - просто сбрасываем время
         }
     });
-    
-    // Запускаем или останавливаем текущее
+
     const parent = video.closest('div[style*="background: var(--card-bg)"]');
     if (video.paused) {
         video.play().catch(e => console.log('Ошибка воспроизведения:', e));
-        // Подсвечиваем зелёным
         if (parent) {
             parent.style.border = '2px solid var(--accent)';
             parent.style.boxShadow = '0 0 20px rgba(46, 164, 79, 0.3)';
         }
     } else {
         video.pause();
-        // Снимаем подсветку
         if (parent) {
             parent.style.border = '1px solid var(--border)';
             parent.style.boxShadow = 'none';
         }
-        // Сбрасываем на первый кадр без перезагрузки
         video.currentTime = 0;
     }
 });
 
-// Обработчик окончания видео
 document.addEventListener('ended', function(e) {
     const video = e.target.closest('video[data-sound]');
     if (!video) return;
@@ -1767,6 +1748,5 @@ document.addEventListener('ended', function(e) {
         parent.style.border = '1px solid var(--border)';
         parent.style.boxShadow = 'none';
     }
-    // Сбрасываем на первый кадр без перезагрузки
     video.currentTime = 0;
 }, true);

@@ -845,7 +845,7 @@ function renderJobsList(container) {
 function renderJobDetail(container, job) {
 	window.scrollTo({
         top: 0,
-        behavior: 'instant' // плавная прокрутка
+        behavior: 'instant'
     });
 	
     let commandsHtml = '';

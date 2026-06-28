@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Инициализация навигации
     if (typeof initNavigation === 'function') {
         initNavigation();
     }
-    
-    // Остальной код (мобильное меню, кнопка наверх, etc.)
+
     const sidebar = document.getElementById('sidebar');
     const sidebarOverlay = document.getElementById('sidebarOverlay');
     const mobileMenuBtn = document.getElementById('mobileMenuBtn');
@@ -36,8 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = window.location.pathname.includes('/pages/') ? '../index.html' : 'index.html';
         });
     }
-    
-    // Кнопка наверх
+
     const scrollTopBtn = document.getElementById('scrollTopBtn');
     if (scrollTopBtn) {
         window.addEventListener('scroll', () => {

@@ -132,7 +132,7 @@ export class IFPReader {
     if (kfTag === "KRT0" || kfTag === "KRTS") {
       isRoot = true;
       const hasScale = kfTag === "KRTS";
-      const stride = 32 + (hasScale ? 12 : 0); // rot(16) + pos(12) + time(4) [+ scale(12)]
+      const stride = 32 + (hasScale ? 12 : 0);
 
       for (let i = 0; i < frameCount && this.pos + stride <= kfEnd; i++) {
         const kf = {

@@ -233,7 +233,7 @@
         async function fetchNews() {
 			const CACHE_KEY = 'greentech_news_cache';
 			const CACHE_TIME_KEY = 'greentech_news_time';
-			const CACHE_DURATION = 720 * 60 * 1000 * 2; // 12*2 = 24 часов
+			const CACHE_DURATION = 720 * 60 * 1000 * 2; // 24 часа
 
 			try {
 				const cached = localStorage.getItem(CACHE_KEY);

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ГУФСИН - GreenTech info</title>
+    <title>ГУФСИН - GreenTech Wiki</title>
     <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
@@ -194,7 +194,7 @@
 
 <footer class="footer">
     <div class="footer-copyright">
-        © 2026 GreenTech Info. Информационный портал.
+        © 2026 GreenTech Wiki. Информационный портал.
     </div>
     <div class="footer-right">
         <a href="about-site.html" class="about-site-btn">
@@ -445,8 +445,7 @@
                 if (!dff) throw new Error("Failed to parse DFF");
                 
                 const meshGroup = viewer.createMesh(dff);
-                
-                // Применяем общую текстуру для всех аксессуаров
+
                 applySharedTexturesToMesh(meshGroup);
                 
                 meshGroup.visible = false;
@@ -490,7 +489,6 @@
                 accessorySlots[slot] = null;
             }
         } else {
-            // Если в слоте уже есть аксессуар, снимаем его
             if (accessorySlots[slot]) {
                 const oldId = accessorySlots[slot];
                 if (accessoryGroups[oldId]) {
@@ -699,7 +697,6 @@
         { name: "АКС-74У", image: "aks74u.png", category: "fsin" }
     ];
 
-    // ========== АВТОПАРК ==========
     const FLEET_IMAGES = [
         { src: "../images/fractions/fsin/fleet/1.png", caption: "Lada Granta" },
         { src: "../images/fractions/fsin/fleet/2.png", caption: "УАЗ «Буханка»" },
@@ -797,7 +794,6 @@
             uniformSelect.addEventListener('change', (e) => {
                 currentUniform = e.target.value;
                 loadUniform(currentUniform);
-                // После загрузки формы обновляем UI снаряжения
                 setTimeout(() => updateAccessoriesUI(), 100);
             });
         }

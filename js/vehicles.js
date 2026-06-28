@@ -13,14 +13,12 @@ let currentSort = { field: 'price', order: 'asc' };
 let currentSearchTerm = '';
 
 function renderVehicleList(container) {
-    // Копируем массив автомобилей из глобальных данных
     currentVehicles = [...VEHICLES_DATA.vehicles];
     
     const getValue = (value) => {
         return value && value !== "" ? value : "н/д";
     };
-    
-    // Функция для получения числового значения для сортировки
+
     const getNumericValue = (vehicle, field) => {
         if (field === 'price') {
             return vehicle.price || Infinity;
@@ -30,18 +28,15 @@ function renderVehicleList(container) {
         }
         return 0;
     };
-    
-    // Функция сортировки и фильтрации
+
     const filterAndSortVehicles = () => {
         let filtered = [...currentVehicles];
-        
-        // Поиск по названию
+
         if (currentSearchTerm.trim() !== '') {
             const searchLower = currentSearchTerm.toLowerCase();
             filtered = filtered.filter(v => v.name.toLowerCase().includes(searchLower));
         }
-        
-        // Сортировка
+
         filtered.sort((a, b) => {
             let aVal = getNumericValue(a, currentSort.field);
             let bVal = getNumericValue(b, currentSort.field);
@@ -66,8 +61,7 @@ function renderVehicleList(container) {
 		if (vehicle.dealer === "boats") return "Лодочный";
 		return "н/д";
 	};
-    
-    // Функция рендеринга списка автомобилей
+
     const renderVehiclesList = () => {
         const vehicles = filterAndSortVehicles();
         const grid = container.querySelector('.vehicles-grid');
@@ -98,8 +92,7 @@ function renderVehicleList(container) {
             const seats = getValue(v.seats);
             
             const fuelIcon = fuelType === "Электро" ? "fa-bolt" : "fa-gas-pump";
-            
-            // Путь к картинке - используем ID автомобиля
+
             const imagePath = v.id ? `../images/vehicles/${v.id}.png` : null;
             
             return `
@@ -167,13 +160,11 @@ function renderVehicleList(container) {
         
         grid.innerHTML = vehiclesHtml;
     };
-    
-    // Обработчик изменения сортировки
+
     const updateSort = (field, order) => {
         currentSort = { field, order };
         renderVehiclesList();
-        
-        // Обновляем активное состояние кнопок
+
         const buttons = container.querySelectorAll('.sort-btn');
         buttons.forEach(btn => {
             btn.classList.remove('active');
@@ -183,19 +174,16 @@ function renderVehicleList(container) {
         });
     };
     
-    // Обработчик поиска
     const updateSearch = (term) => {
         currentSearchTerm = term;
         renderVehiclesList();
     };
-    
-    // HTML структура страницы
+
     container.innerHTML = `
 		<h1 class="page-title">Список автомобилей</h1>
 		<p class="page-subtitle">Все доступные транспортные средства на сервере GreenTech RP</p>
 		
 		<div class="info-block">
-			<!-- Панель поиска и сортировки - стилизована как в анимациях -->
 			<div class="anim-search-bar">
 				<input type="text" 
 					   id="vehicleSearchInput" 
@@ -215,16 +203,13 @@ function renderVehicleList(container) {
 					</button>
 				</div>
 			</div>
-			
-			<!-- Сетка автомобилей -->
+
 			<div class="vehicles-grid"></div>
 		</div>
 	`;
-    
-    // Первоначальный рендер
+
     renderVehiclesList();
-    
-    // Вешаем обработчики
+
     const searchInput = container.querySelector('#vehicleSearchInput');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
@@ -243,7 +228,6 @@ function renderVehicleList(container) {
 }
 
 function renderTuningPage(container) {
-    // Список автомобилей с визуальным тюнингом (оставляем как есть, можно будет дополнить)
     const visualTuningCars = [
         "BMW G90", "Lada Vesta", "Lada Kalina", "GAZ Volga 24", "Dodge Challenger",
         "Porsche 911", "BMW X5 E53", "Lada Priora", "Skoda Octavia", "BMW i8",
@@ -266,14 +250,12 @@ function renderTuningPage(container) {
         "Тонировка — затемнение стёкол"
     ];
 
-    // Генерация HTML списка автомобилей для визуального тюнинга
     const carsListHtml = visualTuningCars.map(car => `<li>${escapeHtml(car)}</li>`).join('');
 
     container.innerHTML = `
         <h1 class="page-title">Тюнинг ателье</h1>
         <p class="page-subtitle">Сделай свой автомобиль уникальным — от технических улучшений до визуального стайлинга</p>
 
-        <!-- Общая информация об ателье -->
         <div class="info-block">
             <h3>О тюнинг ателье</h3>
             <p>Тюнинг ателье — это главное место для всех автолюбителей, которые хотят сделать свой автомобиль быстрее, красивее и комфортнее. Оно расположено в центре Арзамаса, на улице Севастопольской.</p>
@@ -293,7 +275,6 @@ function renderTuningPage(container) {
                  onerror="this.onerror=null; this.style.display='none'; this.parentElement.innerHTML='<div class=\'vehicle-img-placeholder\' style=\'padding: 30px; text-align: center; max-width: 400px; margin: 0 auto; cursor: pointer;\'>Изображение тюнинг временно недоступно</div>'">
         </div>
 
-        <!-- Технический тюнинг -->
         <div class="info-block">
             <h3>Технический тюнинг (Бокс №2)</h3>
             <p>В боксе №2 доступен технический тюнинг <strong>всех</strong> автомобилей.</p>
@@ -313,7 +294,6 @@ function renderTuningPage(container) {
             </div>
         </div>
 
-        <!-- Визуальный тюнинг -->
         <div class="info-block">
             <h3>Визуальный тюнинг (Бокс №1)</h3>
             <p>В боксе №1 доступен визуальный тюнинг для <strong>отдельных моделей</strong> автомобилей.</p>
@@ -333,7 +313,6 @@ function renderTuningPage(container) {
             </div>
         </div>
 
-        <!-- Список автомобилей с визуальным тюнингом -->
         <div class="info-block">
             <h3>Модели, на которые доступен визуальный тюнинг</h3>
             <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px;">
@@ -344,14 +323,12 @@ function renderTuningPage(container) {
         </div>
     `;
 
-    // Добавляем модальное окно после рендера
     addImageModal();
 }
 
 function addImageModal() {
     if (document.getElementById('imageModal')) return;
 
-    // Создаём модальное окно
     const modal = document.createElement('div');
     modal.id = 'imageModal';
     modal.style.cssText = `
@@ -369,7 +346,6 @@ function addImageModal() {
         flex-direction: column;
     `;
 
-    // Контент модального окна
     modal.innerHTML = `
         <div style="position: relative; max-width: 90%; max-height: 85vh;">
             <img id="modalImage" src="" alt="Увеличенное изображение" style="max-width: 100%; max-height: 85vh; object-fit: contain; border-radius: 8px;">
@@ -405,17 +381,14 @@ function addImageModal() {
     const modalCaption = document.getElementById('modalCaption');
     const closeBtn = document.getElementById('closeModalBtn');
 
-    // Функция закрытия модального окна
     function closeModal() {
         modal.style.display = 'none';
-        document.body.style.overflow = ''; // Восстанавливаем скролл
-        modalCaption.textContent = ''; // Очищаем описание
+        document.body.style.overflow = '';
+        modalCaption.textContent = '';
     }
 
-    // Закрытие по клику на фон
     modal.addEventListener('click', closeModal);
 
-    // Закрытие по кнопке (останавливаем всплытие, чтобы не закрылось дважды)
     if (closeBtn) {
         closeBtn.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -423,17 +396,14 @@ function addImageModal() {
         });
     }
 
-    // Закрытие по клавише ESC
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape' && modal.style.display === 'flex') {
             closeModal();
         }
     });
 
-    // Обработчики для всех кликабельных изображений
     const images = document.querySelectorAll('.clickable-image');
     images.forEach(img => {
-        // Удаляем старый обработчик, если есть
         const newImg = img.cloneNode(true);
         img.parentNode.replaceChild(newImg, img);
         
@@ -442,18 +412,16 @@ function addImageModal() {
             const fullImgSrc = newImg.getAttribute('data-full-img') || newImg.src;
             if (fullImgSrc && fullImgSrc !== '') {
                 modalImg.src = fullImgSrc;
-                // Берём описание из атрибута data-caption или из alt
                 const caption = newImg.getAttribute('data-caption') || newImg.alt;
                 modalCaption.textContent = caption;
                 modal.style.display = 'flex';
-                document.body.style.overflow = 'hidden'; // Блокируем скролл фона
+                document.body.style.overflow = 'hidden'; 
             }
         });
     });
 }
 
 function renderPaintJobPage(container) {
-    // Данные о винилах для конкретных автомобилей на основе вики
     const vinylCarsData = [
         { name: "Audi Q7", imageCount: 3 },
         { name: "Lexus IS-F", imageCount: 3 },
@@ -477,8 +445,7 @@ function renderPaintJobPage(container) {
 
     const carsGalleryHtml = vinylCarsData.map(car => {
         let sanitizedName = car.name.replace(/\s+/g, '_').replace(/[^\w\-]/g, '');
-        
-        // Фикс для ВАЗ
+
         if (car.name === "ВАЗ-2114") sanitizedName = "VAZ-2114";
         if (car.name === "ВАЗ 2107") sanitizedName = "VAZ_2107";
         
@@ -534,7 +501,6 @@ function renderPaintJobPage(container) {
 }
 
 function renderWheelsPage(container) {
-    // Данные о дисках из официальной вики (ID, Название, Внешний вид для alt)
     const wheelsList = [
         { id: 1, name: "TSW Trackstar"},
         { id: 2, name: "LS 1330"},
@@ -584,12 +550,10 @@ function renderWheelsPage(container) {
             ${wheelsHtml}
         </div>
     `;
-    
-    // Добавляем модальное окно для просмотра изображений
+
     addImageModal();
 }
 
-// Запуск в зависимости от страницы
 document.addEventListener('DOMContentLoaded', () => {
     const vehiclesContainer = document.getElementById('vehiclesContent');
     const tuningContainer = document.getElementById('tuningContent');

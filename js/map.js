@@ -68,9 +68,6 @@ document.addEventListener('DOMContentLoaded', function() {
     map.setMaxBounds(bounds);
     map.setMinZoom(-2);
 
-    // ============================================
-    // УНИВЕРСАЛЬНЫЙ СОЗДАТЕЛЬ МАРКЕРОВ
-    // ============================================
     function createMarker(item, color, icon, popupClass, zIndexOffset = 1000) {
         const latLng = pixelToLatLng(item.coords[0], item.coords[1], MAP_WIDTH, MAP_HEIGHT);
         
@@ -109,10 +106,8 @@ document.addEventListener('DOMContentLoaded', function() {
             zIndexOffset: zIndexOffset
         });
         
-        // Сохраняем данные
         marker._itemData = item;
-        
-        // Строим содержимое попапа
+
         let popupContent = `
             <div class="${popupClass}">
                 <div style="display:flex;align-items:center;gap:10px;margin-bottom:6px;">
@@ -140,8 +135,7 @@ document.addEventListener('DOMContentLoaded', function() {
             maxWidth: 260,
             minWidth: 180
         });
-        
-        // Эффекты при наведении
+
         marker.on('mouseover', function(e) {
             const el = this.getElement();
             if (el) {
@@ -166,10 +160,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         return marker;
     }
-
-    // ============================================
-    // СОЗДАНИЕ СЛОЕВ
-    // ============================================
 
     function createInstitutionMarkers() {
         if (institutionLayer) {
@@ -255,10 +245,6 @@ document.addEventListener('DOMContentLoaded', function() {
         
         map.addLayer(otherLayer);
     }
-
-    // ============================================
-    // ПОЛИГОНЫ
-    // ============================================
 
     function updatePolygonsDuringDrag() {
         if (!polygonLayer) return;
@@ -381,10 +367,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // ============================================
-    // УПРАВЛЕНИЕ ВИДОМ
-    // ============================================
-
     function fitMapToWidth() {
         const containerWidth = mapContainer.clientWidth;
         const targetZoom = Math.log2(containerWidth / MAP_WIDTH);
@@ -463,10 +445,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // ============================================
-    // СОБЫТИЯ КАРТЫ
-    // ============================================
-
     map.on('dragstart', function() {
         if (dragRedrawInterval) {
             clearInterval(dragRedrawInterval);
@@ -550,10 +528,6 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50);
     });
     
-    // ============================================
-    // ИНИЦИАЛИЗАЦИЯ
-    // ============================================
-
     createPolygons();
     createInstitutionMarkers();
     createJobMarkers();
@@ -585,10 +559,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('resetViewBtn').addEventListener('click', function() {
         fitMapToWidth();
     });
-
-    // ============================================
-    // СТИЛИ
-    // ============================================
 
     const style = document.createElement('style');
     style.textContent = `

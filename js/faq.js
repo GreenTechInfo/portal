@@ -241,13 +241,10 @@ function renderFAQPage(container) {
         </div>
     `;
 
-    // Добавляем стили для FAQ
     addFAQStyles(container);
-    
-    // Добавляем обработчики для аккордеона
+
     attachFAQAccordionHandlers(container);
-    
-    // Добавляем обработчик поиска
+
     attachFAQSearchHandler(container);
 }
 
@@ -387,7 +384,6 @@ function attachFAQAccordionHandlers(container) {
     faqItems.forEach(item => {
         const question = item.querySelector('.faq-question');
         if (question) {
-            // Удаляем старый обработчик
             const newQuestion = question.cloneNode(true);
             question.parentNode.replaceChild(newQuestion, question);
             
@@ -401,8 +397,7 @@ function attachFAQAccordionHandlers(container) {
 function attachFAQSearchHandler(container) {
     const searchInput = container.querySelector('#faqSearchInput');
     if (!searchInput) return;
-    
-    // Удаляем старый обработчик
+
     const newSearchInput = searchInput.cloneNode(true);
     searchInput.parentNode.replaceChild(newSearchInput, searchInput);
     
@@ -445,7 +440,6 @@ function attachFAQSearchHandler(container) {
     });
 }
 
-// Запуск при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('faqContent');
     if (container) {

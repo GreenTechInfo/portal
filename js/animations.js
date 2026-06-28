@@ -94,8 +94,7 @@ function renderAnimationsPage(container) {
             </ul>
         </div>
     `;
-    
-    // Привязываем обработчики ПОСЛЕ того, как элементы созданы
+
     attachEventListeners();
 }
 
@@ -104,13 +103,12 @@ function attachEventListeners() {
     const categorySelect = document.getElementById('animCategorySelect');
     
     if (searchInput) {
-        // Удаляем старый обработчик, если есть, и добавляем новый
         const newSearchInput = searchInput.cloneNode(true);
         searchInput.parentNode.replaceChild(newSearchInput, searchInput);
         
         newSearchInput.addEventListener('input', (e) => {
             currentSearchTerm = e.target.value;
-            updateAnimationsList(); // Обновляем только список, а не всю страницу
+            updateAnimationsList(); 
         });
     }
     
@@ -125,7 +123,6 @@ function attachEventListeners() {
     }
 }
 
-// Новая функция: обновляет только сетку анимаций, не пересоздавая поиск
 function updateAnimationsList() {
     if (!mainContainer) return;
     
@@ -171,8 +168,7 @@ function updateAnimationsList() {
             </details>
         </div>
     ` : "";
-    
-    // Обновляем только сетку и блок с 18+
+
     const animsGrid = mainContainer.querySelector('.anims-grid');
     const matureBlock = mainContainer.querySelector('.mature-block');
     
@@ -184,7 +180,6 @@ function updateAnimationsList() {
         if (matureBlock) {
             matureBlock.outerHTML = matureHtml;
         } else {
-            // Вставляем после сетки
             if (animsGrid && animsGrid.nextSibling) {
                 animsGrid.insertAdjacentHTML('afterend', matureHtml);
             } else if (animsGrid) {
@@ -206,13 +201,11 @@ function getFilteredAnimations() {
     if (currentSearchTerm) {
     const term = currentSearchTerm.toLowerCase();
     filtered = filtered.filter(anim => {
-        // Поиск по команде и описанию
         if (anim.cmd.toLowerCase().includes(term) || 
             anim.desc.toLowerCase().includes(term)) {
             return true;
         }
-        
-        // Поиск по subitems
+
         if (anim.subitems && anim.subitems.length) {
             return anim.subitems.some(subitem => 
                 subitem.toLowerCase().includes(term)
@@ -226,7 +219,6 @@ function getFilteredAnimations() {
     return filtered;
 }
 
-// Запуск при загрузке страницы
 document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('animationsContent');
     if (container) {

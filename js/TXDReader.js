@@ -525,7 +525,6 @@ export class TXDReader {
             const colorIdx = (indices >> (idx * 2)) & 3;
             const color = palette[colorIdx];
 
-            // 3 бита на альфу, упакованы в 6 байт
             const bitPos = idx * 3;
             const bytePos = bitPos >> 3;
             const shift = bitPos & 7;

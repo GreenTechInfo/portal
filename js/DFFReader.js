@@ -190,13 +190,13 @@ export class DFFReader {
 
   readNativeValue(dataType, normalized, offset) {
     switch (dataType) {
-      case 0: // Float
+      case 0:
         return {
           value: this.data.getFloat32(offset, true),
           byteSize: 4
         };
 
-      case 1: // Int8
+      case 1:
         {
           const rawValue = this.data.getInt8(offset);
           return {
@@ -205,7 +205,7 @@ export class DFFReader {
           };
         }
 
-      case 2: // UInt8
+      case 2: 
         {
           const rawValue = this.data.getUint8(offset);
           return {
@@ -214,7 +214,7 @@ export class DFFReader {
           };
         }
 
-      case 3: // Int16
+      case 3: 
         {
           const rawValue = this.data.getInt16(offset, true);
           return {
@@ -223,7 +223,7 @@ export class DFFReader {
           };
         }
 
-      case 4: // UInt16
+      case 4: 
         {
           const rawValue = this.data.getUint16(offset, true);
           return {
@@ -303,7 +303,7 @@ export class DFFReader {
         }
 
         switch (attrib.index) {
-          case 0: // Позиция
+          case 0: 
             if (values.length >= 3) {
               vertices.push({
                 x: values[0],
@@ -313,7 +313,7 @@ export class DFFReader {
             }
             break;
 
-          case 1: // UV координаты
+          case 1: 
             if (texCoords.length > 0 && values.length >= 2) {
               const scale = attrib.type === 3 || attrib.type === 4 ? 1 / 1024 : 1;
               texCoords[0].push({
@@ -323,7 +323,7 @@ export class DFFReader {
             }
             break;
 
-          case 2: // Нормали
+          case 2: 
             if (values.length >= 3) {
               normals.push({
                 x: values[0],
@@ -333,7 +333,7 @@ export class DFFReader {
             }
             break;
 
-          case 3: // Цвет вершин
+          case 3:
             if (values.length >= 4) {
               prelitColors.push({
                 r: attrib.normalized ? Math.round(values[0] * 255) : values[0],
@@ -344,7 +344,7 @@ export class DFFReader {
             }
             break;
 
-          case 4: // Веса костей
+          case 4: 
             if (values.length >= 4) {
               vertexBoneWeights.push({
                 x: values[0],
@@ -355,7 +355,7 @@ export class DFFReader {
             }
             break;
 
-          case 5: // Индексы костей
+          case 5: 
             if (values.length >= 4) {
               vertexBoneIndices.push({
                 x: values[0],
@@ -366,7 +366,7 @@ export class DFFReader {
             }
             break;
 
-          case 6: // Дополнительный цвет вершин
+          case 6: 
             if (values.length >= 4) {
               extraVertColor.push({
                 r: attrib.normalized ? Math.round(values[0] * 255) : values[0],
@@ -504,7 +504,7 @@ export class DFFReader {
         {
           const clumpEnd = this.position + header.length;
           const structHeader = this.readHeader();
-          const isVersion3 = structHeader.version >= 0x30400; // 197632
+          const isVersion3 = structHeader.version >= 0x30400; 
           const numAtomics = this.readUInt32();
           let numLights = 0;
           let numCameras = 0;
@@ -526,7 +526,7 @@ export class DFFReader {
 
           for (let i = 0; i < numAtomics && (!this.isLocked || !(this.position >= clumpEnd)); i++) {
             if (this.isLocked && this.canRead(4)) {
-              if (this.data.getUint32(this.position, true) === 65054) { // Маркер окончания
+              if (this.data.getUint32(this.position, true) === 65054) { 
                 break;
               }
             }

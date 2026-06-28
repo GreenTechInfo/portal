@@ -4,7 +4,7 @@ export class AccessorySystem {
     constructor(viewer) {
         this.viewer = viewer;
         this.accessories = [];
-        this.activeAccessories = new Map(); // accessoryId -> { group, config }
+        this.activeAccessories = new Map(); 
         this.slots = {
             head: null,
             body: null
@@ -12,34 +12,27 @@ export class AccessorySystem {
         this.slotGroups = {};
     }
 
-    // Загрузка аксессуара из файлов
     async loadAccessory(config, onProgress) {
         const { id, name, slot, dffPath, txdPath, position, rotation, scale } = config;
         
         try {
-            // Загружаем TXD
             const txdResponse = await fetch(txdPath);
             if (!txdResponse.ok) throw new Error(`TXD not found: ${txdPath}`);
             const txdBuffer = await txdResponse.arrayBuffer();
-            
-            // Загружаем DFF
+
             const dffResponse = await fetch(dffPath);
             if (!dffResponse.ok) throw new Error(`DFF not found: ${dffPath}`);
             const dffBuffer = await dffResponse.arrayBuffer();
 
-            // Создаем временный объект для загрузки
             const tempViewer = this.viewer;
-            
-            // Сохраняем текущую модель
+
             const currentModel = tempViewer.currentModel;
-            
-            // Загружаем DFF через существующий метод
+
             const dff = new DFFReader().parse(dffBuffer);
             if (!dff) throw new Error("Failed to parse DFF");
             
             const meshGroup = tempViewer.createMesh(dff);
-            
-            // Применяем текстуры
+
             const txd = new TXDReader().parse(txdBuffer);
             for (const tex of txd.textures) {
                 if (tex.imageData) {
@@ -50,7 +43,6 @@ export class AccessorySystem {
             tempViewer.applyTexturesToModel(meshGroup);
             tempViewer.makeMatte(meshGroup);
 
-            // Настраиваем позицию и поворот
             if (position) {
                 meshGroup.position.set(position.x, position.y, position.z);
             }
@@ -61,11 +53,9 @@ export class AccessorySystem {
                 meshGroup.scale.set(scale.x, scale.y, scale.z);
             }
 
-            // Создаем группу для аксессуара
             const accessoryGroup = new THREE.Group();
             accessoryGroup.add(meshGroup);
-            
-            // Добавляем к сцене
+
             tempViewer.scene.add(accessoryGroup);
 
             const accessoryData = {
@@ -87,7 +77,6 @@ export class AccessorySystem {
         }
     }
 
-    // Надеть аксессуар
     equip(accessoryId) {
         const accessory = this.accessories.find(a => a.id === accessoryId);
         if (!accessory) {
@@ -96,13 +85,11 @@ export class AccessorySystem {
         }
 
         const slot = accessory.slot;
-        
-        // Если уже есть аксессуар в этом слоте - снимаем его
+
         if (this.slots[slot]) {
             this.unequip(this.slots[slot]);
         }
 
-        // Показываем аксессуар
         accessory.group.visible = true;
         this.slots[slot] = accessoryId;
         this.activeAccessories.set(accessoryId, accessory);
@@ -110,7 +97,6 @@ export class AccessorySystem {
         return true;
     }
 
-    // Снять аксессуар
     unequip(accessoryId) {
         const accessory = this.accessories.find(a => a.id === accessoryId);
         if (!accessory) return false;
@@ -126,7 +112,6 @@ export class AccessorySystem {
         return true;
     }
 
-    // Переключить аксессуар (надеть/снять)
     toggle(accessoryId) {
         if (this.activeAccessories.has(accessoryId)) {
             return this.unequip(accessoryId);
@@ -135,7 +120,6 @@ export class AccessorySystem {
         }
     }
 
-    // Обновить позицию аксессуара
     updatePosition(accessoryId, position) {
         const accessory = this.accessories.find(a => a.id === accessoryId);
         if (!accessory) return false;
@@ -144,7 +128,6 @@ export class AccessorySystem {
         return true;
     }
 
-    // Обновить поворот аксессуара
     updateRotation(accessoryId, rotation) {
         const accessory = this.accessories.find(a => a.id === accessoryId);
         if (!accessory) return false;
@@ -153,7 +136,6 @@ export class AccessorySystem {
         return true;
     }
 
-    // Обновить масштаб аксессуара
     updateScale(accessoryId, scale) {
         const accessory = this.accessories.find(a => a.id === accessoryId);
         if (!accessory) return false;
@@ -162,7 +144,6 @@ export class AccessorySystem {
         return true;
     }
 
-    // Получить список загруженных аксессуаров
     getAccessories() {
         return this.accessories.map(a => ({
             id: a.id,
@@ -172,12 +153,10 @@ export class AccessorySystem {
         }));
     }
 
-    // Получить активные аксессуары
     getActiveAccessories() {
         return Array.from(this.activeAccessories.keys());
     }
 
-    // Очистить все аксессуары
     clearAll() {
         for (const [id, accessory] of this.activeAccessories) {
             accessory.group.visible = false;
@@ -189,7 +168,6 @@ export class AccessorySystem {
         this.activeAccessories.clear();
     }
 
-    // Удалить аксессуар из сцены
     removeAccessory(accessoryId) {
         const accessory = this.accessories.find(a => a.id === accessoryId);
         if (!accessory) return false;
@@ -206,7 +184,6 @@ export class AccessorySystem {
         return true;
     }
 
-    // Загрузить несколько аксессуаров
     async loadAccessories(accessoriesConfig, onProgress) {
         const results = [];
         for (let i = 0; i < accessoriesConfig.length; i++) {
@@ -228,7 +205,5 @@ export class AccessorySystem {
     }
 }
 
-// Класс DFFReader и TXDReader нужны для работы
-// Они импортируются из существующих файлов
 import { DFFReader } from "./DFFReader.js";
 import { TXDReader } from "./TXDReader.js";
