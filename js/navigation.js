@@ -6,6 +6,7 @@ const NAVIGATION_DATA = {
         { href: "pages/systems.html", icon: "systems.png", text: "Системы сервера" },
         { href: "pages/animations.html", icon: "animations.png", text: "Анимации" },
         { href: "pages/jobs.html", icon: "jobs.png", text: "Работы" },
+		{ href: "pages/skins.html", icon: "skins.png", text: "Скины" },
         { href: "pages/map.html", icon: "map.png", text: "Карта" }
     ],
     

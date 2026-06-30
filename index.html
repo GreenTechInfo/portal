@@ -5,8 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>GreenTech Wiki — Информационный портал</title>
 
-    <script type='text/javascript' src='//samp-rating.ru/web/api/18738/'></script>
-
     <link rel="icon" type="image/png" sizes="16x16" href="images/icons/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="css/style.css">
@@ -72,17 +70,12 @@
                 <h3><i class="fas fa-server"></i> Статус сервера</h3>
                 <div class="servers-grid">
                     <div class="server-card">
-                        <div class="server-status online" id="statusDot"></div>
+                        <div class="server-status offline" id="statusDot"></div>
                         <div class="server-info">
-                            <div class="server-name" id="serverName">
-                                <script type='text/javascript'>document.write(api.hostname);</script>
-                            </div>
+                            <div class="server-name" id="serverName">Проверка сервера...</div>
                             <div class="server-online">
-                                <span class="online-count" id="onlineNumber">
-                                    <script type='text/javascript'>document.write(api.players);</script>
-                                </span> / <span id="maxPlayers">
-                                    <script type='text/javascript'>document.write(api.maxplayers);</script>
-                                </span> игроков онлайн
+                                <span class="online-count" id="onlineNumber">—</span> /
+                                <span id="maxPlayers">—</span> игроков онлайн
                             </div>
                         </div>
                     </div>
@@ -139,20 +132,42 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
         const statusDot = document.getElementById('statusDot');
+        const serverName = document.getElementById('serverName');
+        const onlineNumber = document.getElementById('onlineNumber');
+        const maxPlayers = document.getElementById('maxPlayers');
 
-        function updateServerStatus() {
+        async function updateServerStatus() {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 4000);
+
             try {
-                if (typeof api !== 'undefined' && api.status == 1) {
-                    statusDot.className = 'server-status online';
-                } else {
-                    statusDot.className = 'server-status offline';
+                const response = await fetch('js/server-status.php', {
+                    cache: 'no-store',
+                    signal: controller.signal
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
                 }
-            } catch (e) {
+
+                const data = await response.json();
+                const isOnline = data.status === true || data.status === 1;
+
+                statusDot.className = `server-status ${isOnline ? 'online' : 'offline'}`;
+                serverName.textContent = isOnline ? data.hostname : 'Сервер недоступен';
+                onlineNumber.textContent = isOnline ? data.players : '0';
+                maxPlayers.textContent = data.maxplayers || '—';
+            } catch (error) {
                 statusDot.className = 'server-status offline';
+                serverName.textContent = 'Сервер недоступен';
+                onlineNumber.textContent = '0';
+                maxPlayers.textContent = '—';
+            } finally {
+                clearTimeout(timeout);
             }
         }
 
-        setTimeout(updateServerStatus, 500);
+        updateServerStatus();
     });
 
     (function() {
