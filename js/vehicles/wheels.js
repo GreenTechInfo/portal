@@ -1,5 +1,3 @@
-// js/vehicles/wheels.js
-
 import { escapeHtml } from './helpers.js';
 import { addImageModal, initImageModalClicks } from './image-modal.js';
 

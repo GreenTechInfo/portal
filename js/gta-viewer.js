@@ -30,6 +30,8 @@ export class GTACharacterViewer {
         this.boneHierarchyRoot = null;
         this.modelCenterY = 0;
         this.modelSize = 1;
+		this.isDestroyed = false;
+		this.animationId = null; 
         
         this.init();
     }
@@ -130,6 +132,8 @@ export class GTACharacterViewer {
     }
     
     animate() {
+		if (this.isDestroyed) return;
+		
         requestAnimationFrame(() => this.animate());
         
         const delta = this.clock.getDelta();
@@ -141,40 +145,47 @@ export class GTACharacterViewer {
         this.renderer.render(this.scene, this.camera);
     }
     
-    async loadModel(dffPath, txdPath, ifpPath) {
-        if (this.currentModel) {
-            this.scene.remove(this.currentModel);
-            this.currentModel = null;
-        }
-        if (this.mixer) {
-            this.mixer.stopAllAction();
-            this.mixer = null;
-        }
-        
-        this.bones.clear();
-        this.bonesById.clear();
-        this.textures.clear();
-        this.animations = [];
-        this.currentAnim = null;
-        
-        try {
-            if (txdPath) {
-                await this.loadTXD(txdPath);
-            }
+    async loadModel(dffPath, txdPath, ifpPath, modelData = null) {
+		if (this.currentModel) {
+			this.scene.remove(this.currentModel);
+			this.currentModel = null;
+		}
+		if (this.mixer) {
+			this.mixer.stopAllAction();
+			this.mixer = null;
+		}
+		
+		this.bones.clear();
+		this.bonesById.clear();
+		this.textures.clear();
+		this.animations = [];
+		this.currentAnim = null;
+		
+		try {
+			if (txdPath) {
+				await this.loadTXD(txdPath);
+			}
 
-            if (dffPath) {
-                await this.loadDFF(dffPath);
-            }
+			if (dffPath) {
+				await this.loadDFF(dffPath);
+			}
+			
+			if (modelData) {
+				this.modelData = modelData;
+				if (this.currentModel) {
+					this.currentModel.userData.modelData = modelData;
+				}
+			}
 
-            if (ifpPath) {
-                await this.loadIFP(ifpPath);
-            }
-            
-        } catch (error) {
-            console.error('Error loading model:', error);
-            throw error;
-        }
-    }
+			if (ifpPath) {
+				await this.loadIFP(ifpPath);
+			}
+			
+		} catch (error) {
+			console.error('Error loading model:', error);
+			throw error;
+		}
+	}
     
     async loadTXD(path) {
         const response = await fetch(path);
@@ -212,24 +223,39 @@ export class GTACharacterViewer {
     }
     
     applyTexturesToModel(model) {
-        model.traverse((child) => {
-            if (!child.isMesh && !child.isSkinnedMesh) return;
-            const materials = Array.isArray(child.material) ? child.material : [child.material];
-            for (const mat of materials) {
-                if (mat.userData?.textureName && this.textures.has(mat.userData.textureName)) {
-                    mat.map = this.textures.get(mat.userData.textureName);
-                    mat.color.setRGB(1, 1, 1);
-                    mat.vertexColors = false;
-                }
-                if (mat.userData?.maskName && this.textures.has(mat.userData.maskName)) {
-                    mat.alphaMap = this.textures.get(mat.userData.maskName);
-                }
-                mat.roughness = 0.9;
-                mat.metalness = 0.0;
-                this.updateMaterialAlpha(mat);
-            }
-        });
-    }
+		if (!model) return;
+		
+		let textureCount = 0;
+		let missingCount = 0;
+		
+		model.traverse((child) => {
+			if (!child.isMesh && !child.isSkinnedMesh) return;
+			
+			const materials = Array.isArray(child.material) ? child.material : [child.material];
+			for (const mat of materials) {
+				if (mat.userData?.textureName) {
+					const texName = mat.userData.textureName;
+					if (this.textures.has(texName)) {
+						const texture = this.textures.get(texName);
+						mat.map = texture;
+						mat.color.setRGB(1, 1, 1);
+						mat.vertexColors = false;
+						textureCount++;
+					} else {
+						missingCount++;
+						console.warn(`Текстура не найдена: ${texName}`);
+					}
+				}
+				if (mat.userData?.maskName && this.textures.has(mat.userData.maskName)) {
+					mat.alphaMap = this.textures.get(mat.userData.maskName);
+				}
+				mat.roughness = 0.9;
+				mat.metalness = 0.0;
+				this.updateMaterialAlpha(mat);
+			}
+		});
+
+}
     
     updateMaterialAlpha(material) {
         const hasAlphaMap = !!material.map?.hasAlpha;
@@ -243,16 +269,23 @@ export class GTACharacterViewer {
     }
     
     async loadDFF(path) {
-        const response = await fetch(path);
-        if (!response.ok) throw new Error(`DFF not found: ${path}`);
-        
-        const buffer = await response.arrayBuffer();
-        const dff = new DFFReader().parse(buffer);
-        if (!dff) throw new Error("Failed to parse DFF");
-        
-        this.displayModel(this.createMesh(dff));
-    }
+		const response = await fetch(path);
+		if (!response.ok) throw new Error(`DFF not found: ${path}`);
+		
+		const buffer = await response.arrayBuffer();
+		const dff = new DFFReader().parse(buffer);
+		if (!dff) throw new Error("Failed to parse DFF");
+		
+		const fileName = path.split('/').pop();
+		dff.name = fileName.replace(/\.dff$/i, '');
 
+		const model = this.createMesh(dff);
+
+		this.applyTexturesToModel(model);
+		
+		this.displayModel(model);
+	}
+	
     makeMatte(modelGroup) {
         modelGroup.traverse((child) => {
             if (child.isMesh || child.isSkinnedMesh) {
@@ -273,275 +306,357 @@ export class GTACharacterViewer {
     }
     
     createMesh(dff) {
-        const group = new THREE.Group();
-        this.bones.clear();
-        this.bonesById.clear();
-        this.skeleton = null;
-        this.modelHasSkin = false;
-        this.nonSkinnedMeshes = [];
-        this.frameObjects = null;
+		const group = new THREE.Group();
+		this.bones.clear();
+		this.bonesById.clear();
+		this.skeleton = null;
+		this.modelHasSkin = false;
+		this.nonSkinnedMeshes = [];
+		this.frameObjects = null;
 
-        const nodeIdToFrame = new Map();
-        const frameToNodeId = new Map();
-        let rootHANodes = null;
-        
-        for (let i = 0; i < dff.RWFrameList.length; i++) {
-            const frame = dff.RWFrameList[i];
-            const hanim = frame.RWExtension?.CHUNK_HANIM;
-            if (hanim) {
-                if (hanim.nodeId !== undefined) {
-                    nodeIdToFrame.set(hanim.nodeId, i);
-                    frameToNodeId.set(i, hanim.nodeId);
-                }
-                if (hanim.numNodes > 0 && hanim.nodes) {
-                    rootHANodes = hanim.nodes;
-                }
-            }
-        }
-        
-        const skinBoneToFrame = [];
-        if (rootHANodes) {
-            for (const node of rootHANodes) {
-                const frameIdx = nodeIdToFrame.get(node.nodeId);
-                skinBoneToFrame.push(frameIdx !== undefined ? frameIdx : node.nodeIndex);
-            }
-        }
-        
-        const rootBones = [];
-        const allBones = [];
-        
-        if (dff.RWFrameList?.length > 0) {
-            dff.RWFrameList.forEach((frame, idx) => {
-                const bone = new THREE.Bone();
-                const boneName = frame.RWExtension?.CHUNK_FRAME || `bone_${idx}`;
-                bone.name = boneName;
-                
-                const { rotationMatrix, position } = frame.RWFrame;
-                const matrix = new THREE.Matrix4();
-                matrix.set(
-                    rotationMatrix[0], rotationMatrix[3], rotationMatrix[6], position[0],
-                    rotationMatrix[1], rotationMatrix[4], rotationMatrix[7], position[1],
-                    rotationMatrix[2], rotationMatrix[5], rotationMatrix[8], position[2],
-                    0, 0, 0, 1
-                );
-                bone.applyMatrix4(matrix);
-                allBones[idx] = bone;
-                
-                const nodeId = frameToNodeId.get(idx);
-                const boneInfo = { index: idx, name: boneName, bone, parentIndex: frame.parentIndex, nodeId };
-                this.bones.set(boneName.toLowerCase(), boneInfo);
-                if (nodeId !== undefined) this.bonesById.set(nodeId, boneInfo);
-            });
-            
-            dff.RWFrameList.forEach((frame, idx) => {
-                const bone = allBones[idx];
-                const parentIdx = frame.RWFrame.parentIndex;
-                if (parentIdx >= 0 && allBones[parentIdx]) {
-                    allBones[parentIdx].add(bone);
-                } else {
-                    rootBones.push(bone);
-                }
-            });
-            
-            this.skeletonBones = skinBoneToFrame.length > 0 
-                ? skinBoneToFrame.map(fi => allBones[fi]).filter(b => b)
-                : allBones.slice(1);
-            this.boneHierarchyRoot = rootBones[0];
-        }
+		const frameObjects = [];
+		const frameNames = [];
+		
+		if (dff.RWFrameList) {
+			for (let i = 0; i < dff.RWFrameList.length; i++) {
+				const frame = dff.RWFrameList[i];
+				const name = frame.RWExtension?.CHUNK_FRAME || `frame_${i}`;
+				frameNames.push(name);
+				
+				const frameObj = new THREE.Object3D();
+				frameObj.name = name;
+				
+				const { rotationMatrix, position } = frame.RWFrame;
+				const matrix = new THREE.Matrix4();
+				matrix.set(
+					rotationMatrix[0], rotationMatrix[3], rotationMatrix[6], position[0],
+					rotationMatrix[1], rotationMatrix[4], rotationMatrix[7], position[1],
+					rotationMatrix[2], rotationMatrix[5], rotationMatrix[8], position[2],
+					0, 0, 0, 1
+				);
+				
+				const pos = new THREE.Vector3();
+				const quat = new THREE.Quaternion();
+				const scl = new THREE.Vector3();
+				matrix.decompose(pos, quat, scl);
+				
+				frameObj.position.copy(pos);
+				frameObj.quaternion.copy(quat);
+				frameObj.scale.copy(scl);
+				
+				frameObjects.push(frameObj);
+			}
+		}
 
-        for (const geom of dff.RWGeometryList) {
-            const geo = new THREE.BufferGeometry();
-            const skin = geom.RWExtension?.CHUNK_SKIN;
-            const hasSkin = skin && skin.numBones > 0;
-            const binMesh = geom.RWExtension?.CHUNK_BINMESH;
-            
-            const matTriangles = {};
-            if (binMesh?.splits?.length > 0 && binMesh.splits[0].indices) {
-                const isStrip = binMesh.faceType === 1;
-                for (const split of binMesh.splits) {
-                    if (!matTriangles[split.matIndex]) matTriangles[split.matIndex] = [];
-                    if (isStrip) {
-                        for (let i = 0; i < split.indices.length - 2; i++) {
-                            const a = split.indices[i], b = split.indices[i + 1], c = split.indices[i + 2];
-                            if (a === b || b === c || a === c) continue;
-                            matTriangles[split.matIndex].push(i % 2 === 0 ? [a, c, b] : [a, b, c]);
-                        }
-                    } else {
-                        for (let i = 0; i < split.indices.length; i += 3) {
-                            matTriangles[split.matIndex].push([split.indices[i], split.indices[i + 1], split.indices[i + 2]]);
-                        }
-                    }
-                }
-            } else {
-                for (const tri of geom.triangles) {
-                    if (!matTriangles[tri.materialId]) matTriangles[tri.materialId] = [];
-                    matTriangles[tri.materialId].push([tri.vertex1, tri.vertex2, tri.vertex3]);
-                }
-            }
-            
-            const totalTris = Object.values(matTriangles).reduce((a, b) => a + b.length, 0);
-            const posArray = new Float32Array(totalTris * 9);
-            const normArray = geom.morphTargets[0]?.hasNormals ? new Float32Array(totalTris * 9) : null;
-            const uvArray = geom.texCoords ? new Float32Array(totalTris * 6) : null;
-            const colArray = null;
-            const skinIdxArray = hasSkin ? new Float32Array(totalTris * 12) : null;
-            const skinWgtArray = hasSkin ? new Float32Array(totalTris * 12) : null;
-            
-            let vi = 0;
-            for (const matId of Object.keys(matTriangles)) {
-                const tris = matTriangles[matId];
-                geo.addGroup(vi, tris.length * 3, Number(matId));
-                
-                for (const [v1, v2, v3] of tris) {
-                    for (const viLocal of [v1, v2, v3]) {
-                        const vert = geom.morphTargets[0].vertices[viLocal];
-                        posArray[vi * 3] = vert.x;
-                        posArray[vi * 3 + 1] = vert.y;
-                        posArray[vi * 3 + 2] = vert.z;
-                        
-                        if (normArray && geom.morphTargets[0].normals) {
-                            const n = geom.morphTargets[0].normals[viLocal];
-                            normArray[vi * 3] = n.x;
-                            normArray[vi * 3 + 1] = n.y;
-                            normArray[vi * 3 + 2] = n.z;
-                        }
-                        
-                        if (uvArray && geom.texCoords[0]) {
-                            const uv = geom.texCoords[0][viLocal];
-                            uvArray[vi * 2] = uv.u;
-                            uvArray[vi * 2 + 1] = uv.v;
-                        }
-                        
-                        if (hasSkin && skin.vertexBoneIndices[viLocal]) {
-                            const result = this.sanitizeSkinWeights(
-                                skin.vertexBoneIndices[viLocal],
-                                skin.vertexBoneWeights[viLocal]
-                            );
-                            for (let b = 0; b < 4; b++) {
-                                skinIdxArray[vi * 4 + b] = result.indices[b];
-                                skinWgtArray[vi * 4 + b] = result.weights[b];
-                            }
-                        }
-                        vi++;
-                    }
-                }
-            }
-            
-            geo.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
-            if (normArray) geo.setAttribute("normal", new THREE.BufferAttribute(normArray, 3));
-            else geo.computeVertexNormals();
-            if (uvArray) geo.setAttribute("uv", new THREE.BufferAttribute(uvArray, 2));
-            
-            if (hasSkin) {
-                geo.setAttribute("skinIndex", new THREE.BufferAttribute(skinIdxArray, 4));
-                geo.setAttribute("skinWeight", new THREE.BufferAttribute(skinWgtArray, 4));
-            }
-            geo.computeBoundingSphere();
+		if (dff.RWFrameList) {
+			for (let i = 0; i < dff.RWFrameList.length; i++) {
+				const parentIndex = dff.RWFrameList[i].RWFrame.parentIndex;
+				if (parentIndex >= 0 && parentIndex < frameObjects.length) {
+					frameObjects[parentIndex].add(frameObjects[i]);
+				} else {
+					group.add(frameObjects[i]);
+				}
+			}
+		}
 
-            const materials = geom.RWMaterialList.map((matData) => {
-                const mat = new THREE.MeshStandardMaterial({
-                    vertexColors: false,
-                    roughness: 0.9, 
-                    metalness: 0.0,     
-                    emissive: 0x000000, 
-                    side: THREE.DoubleSide
-                });
-                if (matData.RWMaterial.color) {
-                    mat.color = new THREE.Color(
-                        matData.RWMaterial.color.r / 255,
-                        matData.RWMaterial.color.g / 255,
-                        matData.RWMaterial.color.b / 255
-                    );
-                    mat.opacity = (matData.RWMaterial.color.a ?? 255) / 255;
-                }
-                if (matData.RWMaterial.isTextured && matData.RWMaterial.RWTexture) {
-                    const texName = matData.RWMaterial.RWTexture.name?.toLowerCase();
-                    const maskName = matData.RWMaterial.RWTexture.maskName?.toLowerCase();
-                    mat.userData.textureName = texName;
-                    mat.userData.maskName = maskName;
-                    if (texName && this.textures.has(texName)) {
-                        mat.map = this.textures.get(texName);
-                        mat.color.setRGB(1, 1, 1);
-                    }
-                    if (maskName && this.textures.has(maskName)) {
-                        mat.alphaMap = this.textures.get(maskName);
-                    }
-                }
-                this.updateMaterialAlpha(mat);
-                return mat;
-            });
-            
-            let mesh;
-            if (hasSkin && this.skeletonBones?.length > 0) {
-                mesh = new THREE.SkinnedMesh(geo, materials);
-                
-                if (this.boneHierarchyRoot) mesh.add(this.boneHierarchyRoot);
-                else if (this.skeletonBones[0]) mesh.add(this.skeletonBones[0]);
-                
-                group.add(mesh);
-                mesh.updateMatrixWorld(true);
-                
-                if (skin.skinToBoneMatrix?.length > 0) {
-                    const inverses = [];
-                    const targetWorlds = [];
-                    
-                    for (const stb of skin.skinToBoneMatrix) {
-                        const m = new THREE.Matrix4();
-                        m.set(
-                            stb[0], stb[4], stb[8],  stb[12],
-                            stb[1], stb[5], stb[9],  stb[13],
-                            stb[2], stb[6], stb[10], stb[14],
-                            stb[3], stb[7], stb[11], stb[15]
-                        );
-                        inverses.push(m.clone());
-                        targetWorlds.push(m.clone().invert());
-                    }
-                    
-                    const boneToHAIndex = new Map();
-                    for (let i = 0; i < this.skeletonBones.length; i++) {
-                        boneToHAIndex.set(this.skeletonBones[i], i);
-                    }
-                    
-                    for (let i = 0; i < this.skeletonBones.length && i < targetWorlds.length; i++) {
-                        const bone = this.skeletonBones[i];
-                        const targetWorld = targetWorlds[i];
-                        
-                        let parentWorld = new THREE.Matrix4();
-                        if (bone.parent) {
-                            const parentIdx = boneToHAIndex.get(bone.parent);
-                            if (parentIdx !== undefined && parentIdx < targetWorlds.length) {
-                                parentWorld = targetWorlds[parentIdx];
-                            }
-                        }
-                        
-                        const local = parentWorld.clone().invert().multiply(targetWorld);
-                        const pos = new THREE.Vector3();
-                        const quat = new THREE.Quaternion();
-                        const scl = new THREE.Vector3();
-                        local.decompose(pos, quat, scl);
-                        bone.position.copy(pos);
-                        bone.quaternion.copy(quat);
-                        bone.scale.copy(scl);
-                    }
-                }
-                
-                mesh.updateMatrixWorld(true);
-                this.skeleton = new THREE.Skeleton(this.skeletonBones);
-                mesh.bind(this.skeleton);
-                this.modelHasSkin = true;
-            } else {
-                mesh = new THREE.Mesh(geo, materials);
-                group.add(mesh);
-                this.nonSkinnedMeshes.push({ mesh, geomIndex: dff.RWGeometryList.indexOf(geom) });
-            }
-        }
+		this.frameObjects = frameObjects;
 
-        this.makeMatte(group);
-        
-        group.rotation.set(-Math.PI / 2, 0, 0);
-        return group;
-    }
-    
+		const nodeIdToFrame = new Map();
+		const frameToNodeId = new Map();
+		let rootHANodes = null;
+		
+		for (let i = 0; i < dff.RWFrameList.length; i++) {
+			const frame = dff.RWFrameList[i];
+			const hanim = frame.RWExtension?.CHUNK_HANIM;
+			if (hanim) {
+				if (hanim.nodeId !== undefined) {
+					nodeIdToFrame.set(hanim.nodeId, i);
+					frameToNodeId.set(i, hanim.nodeId);
+				}
+				if (hanim.numNodes > 0 && hanim.nodes) {
+					rootHANodes = hanim.nodes;
+				}
+			}
+		}
+		
+		const skinBoneToFrame = [];
+		if (rootHANodes) {
+			for (const node of rootHANodes) {
+				const frameIdx = nodeIdToFrame.get(node.nodeId);
+				skinBoneToFrame.push(frameIdx !== undefined ? frameIdx : node.nodeIndex);
+			}
+		}
+		
+		const rootBones = [];
+		const allBones = [];
+		
+		if (dff.RWFrameList?.length > 0) {
+			dff.RWFrameList.forEach((frame, idx) => {
+				const bone = new THREE.Bone();
+				const boneName = frameNames[idx] || frame.RWExtension?.CHUNK_FRAME || `bone_${idx}`;
+				bone.name = boneName;
+				
+				const { rotationMatrix, position } = frame.RWFrame;
+				const matrix = new THREE.Matrix4();
+				matrix.set(
+					rotationMatrix[0], rotationMatrix[3], rotationMatrix[6], position[0],
+					rotationMatrix[1], rotationMatrix[4], rotationMatrix[7], position[1],
+					rotationMatrix[2], rotationMatrix[5], rotationMatrix[8], position[2],
+					0, 0, 0, 1
+				);
+				bone.applyMatrix4(matrix);
+				allBones[idx] = bone;
+				
+				const nodeId = frameToNodeId.get(idx);
+				const boneInfo = { index: idx, name: boneName, bone, parentIndex: frame.parentIndex, nodeId };
+				this.bones.set(boneName.toLowerCase(), boneInfo);
+				if (nodeId !== undefined) this.bonesById.set(nodeId, boneInfo);
+			});
+			
+			dff.RWFrameList.forEach((frame, idx) => {
+				const bone = allBones[idx];
+				const parentIdx = frame.RWFrame.parentIndex;
+				if (parentIdx >= 0 && allBones[parentIdx]) {
+					allBones[parentIdx].add(bone);
+				} else {
+					rootBones.push(bone);
+				}
+			});
+			
+			this.skeletonBones = skinBoneToFrame.length > 0 
+				? skinBoneToFrame.map(fi => allBones[fi]).filter(b => b)
+				: allBones.slice(1);
+			this.boneHierarchyRoot = rootBones[0];
+		}
+
+		for (let geomIdx = 0; geomIdx < dff.RWGeometryList.length; geomIdx++) {
+			const geom = dff.RWGeometryList[geomIdx];
+			const geo = new THREE.BufferGeometry();
+			const skin = geom.RWExtension?.CHUNK_SKIN;
+			const hasSkin = skin && skin.numBones > 0;
+			const binMesh = geom.RWExtension?.CHUNK_BINMESH;
+			
+			const matTriangles = {};
+			if (binMesh?.splits?.length > 0 && binMesh.splits[0].indices) {
+				const isStrip = binMesh.faceType === 1;
+				for (const split of binMesh.splits) {
+					if (!matTriangles[split.matIndex]) matTriangles[split.matIndex] = [];
+					if (isStrip) {
+						for (let i = 0; i < split.indices.length - 2; i++) {
+							const a = split.indices[i], b = split.indices[i + 1], c = split.indices[i + 2];
+							if (a === b || b === c || a === c) continue;
+							matTriangles[split.matIndex].push(i % 2 === 0 ? [a, c, b] : [a, b, c]);
+						}
+					} else {
+						for (let i = 0; i < split.indices.length; i += 3) {
+							matTriangles[split.matIndex].push([split.indices[i], split.indices[i + 1], split.indices[i + 2]]);
+						}
+					}
+				}
+			} else {
+				for (const tri of geom.triangles) {
+					if (!matTriangles[tri.materialId]) matTriangles[tri.materialId] = [];
+					matTriangles[tri.materialId].push([tri.vertex1, tri.vertex2, tri.vertex3]);
+				}
+			}
+			
+			const totalTris = Object.values(matTriangles).reduce((a, b) => a + b.length, 0);
+			const posArray = new Float32Array(totalTris * 9);
+			const normArray = geom.morphTargets[0]?.hasNormals ? new Float32Array(totalTris * 9) : null;
+			const uvArray = geom.texCoords ? new Float32Array(totalTris * 6) : null;
+			const skinIdxArray = hasSkin ? new Float32Array(totalTris * 12) : null;
+			const skinWgtArray = hasSkin ? new Float32Array(totalTris * 12) : null;
+			
+			let vi = 0;
+			for (const matId of Object.keys(matTriangles)) {
+				const tris = matTriangles[matId];
+				geo.addGroup(vi, tris.length * 3, Number(matId));
+				
+				for (const [v1, v2, v3] of tris) {
+					for (const viLocal of [v1, v2, v3]) {
+						const vert = geom.morphTargets[0].vertices[viLocal];
+						posArray[vi * 3] = vert.x;
+						posArray[vi * 3 + 1] = vert.y;
+						posArray[vi * 3 + 2] = vert.z;
+						
+						if (normArray && geom.morphTargets[0].normals) {
+							const n = geom.morphTargets[0].normals[viLocal];
+							normArray[vi * 3] = n.x;
+							normArray[vi * 3 + 1] = n.y;
+							normArray[vi * 3 + 2] = n.z;
+						}
+						
+						if (uvArray && geom.texCoords[0]) {
+							const uv = geom.texCoords[0][viLocal];
+							uvArray[vi * 2] = uv.u;
+							uvArray[vi * 2 + 1] = uv.v;
+						}
+						
+						if (hasSkin && skin.vertexBoneIndices[viLocal]) {
+							const result = this.sanitizeSkinWeights(
+								skin.vertexBoneIndices[viLocal],
+								skin.vertexBoneWeights[viLocal]
+							);
+							for (let b = 0; b < 4; b++) {
+								skinIdxArray[vi * 4 + b] = result.indices[b];
+								skinWgtArray[vi * 4 + b] = result.weights[b];
+							}
+						}
+						vi++;
+					}
+				}
+			}
+			
+			geo.setAttribute("position", new THREE.BufferAttribute(posArray, 3));
+			if (normArray) geo.setAttribute("normal", new THREE.BufferAttribute(normArray, 3));
+			else geo.computeVertexNormals();
+			if (uvArray) geo.setAttribute("uv", new THREE.BufferAttribute(uvArray, 2));
+			
+			if (hasSkin) {
+				geo.setAttribute("skinIndex", new THREE.BufferAttribute(skinIdxArray, 4));
+				geo.setAttribute("skinWeight", new THREE.BufferAttribute(skinWgtArray, 4));
+			}
+			geo.computeBoundingSphere();
+
+			let targetFrame = null;
+			let meshName = `geometry_${geomIdx}`;
+			
+			if (dff.RWAtomicList) {
+				for (const atomic of dff.RWAtomicList) {
+					if (atomic.geometryIndex === geomIdx) {
+						const frameIdx = atomic.frameIndex;
+						if (frameIdx !== undefined && frameIdx < frameObjects.length) {
+							targetFrame = frameObjects[frameIdx];
+							meshName = frameNames[frameIdx] || `frame_${frameIdx}`;
+							break;
+						}
+					}
+				}
+			}
+			
+			if (!targetFrame) {
+				targetFrame = group;
+			}
+
+			const materials = geom.RWMaterialList.map((matData) => {
+				const texName = matData.RWMaterial.RWTexture?.name?.toLowerCase() || '';
+				const color = matData.RWMaterial.color;
+				const isGlass = texName.includes('glass') || 
+								texName.includes('window') || 
+								texName.includes('windscreen') ||
+								texName.includes('glass') ||
+								(color && color.a < 250);
+				
+				const mat = new THREE.MeshStandardMaterial({
+					vertexColors: false,
+					roughness: isGlass ? 0.1 : 0.9,
+					metalness: isGlass ? 0.3 : 0.0,
+					emissive: 0x000000,
+					side: THREE.DoubleSide,
+					transparent: isGlass,
+					depthWrite: !isGlass,
+					renderOrder: isGlass ? 1 : 0,
+					opacity: isGlass ? 0.6 : 1.0
+				});
+				
+				if (color) {
+					mat.color = new THREE.Color(color.r / 255, color.g / 255, color.b / 255);
+					if (!isGlass) {
+						mat.opacity = (color.a ?? 255) / 255;
+					}
+				}
+
+				if (matData.RWMaterial.isTextured && matData.RWMaterial.RWTexture) {
+					const texNameLower = texName;
+					const maskName = matData.RWMaterial.RWTexture.maskName?.toLowerCase();
+					mat.userData.textureName = texNameLower;
+					mat.userData.maskName = maskName;
+					
+					if (texNameLower && this.textures.has(texNameLower)) {
+						const texture = this.textures.get(texNameLower);
+						mat.map = texture;
+						mat.color.setRGB(1, 1, 1);
+					}
+					
+					if (maskName && this.textures.has(maskName)) {
+						mat.alphaMap = this.textures.get(maskName);
+					}
+				}
+				
+				this.updateMaterialAlpha(mat);
+				return mat;
+			});
+
+			let mesh;
+			if (hasSkin && this.skeletonBones?.length > 0) {
+				mesh = new THREE.SkinnedMesh(geo, materials);
+				mesh.name = meshName;
+				
+				if (this.boneHierarchyRoot) mesh.add(this.boneHierarchyRoot);
+				else if (this.skeletonBones[0]) mesh.add(this.skeletonBones[0]);
+				
+				targetFrame.add(mesh);
+				mesh.updateMatrixWorld(true);
+				
+				if (skin.skinToBoneMatrix?.length > 0) {
+					const targetWorlds = [];
+					for (const stb of skin.skinToBoneMatrix) {
+						const m = new THREE.Matrix4();
+						m.set(
+							stb[0], stb[4], stb[8],  stb[12],
+							stb[1], stb[5], stb[9],  stb[13],
+							stb[2], stb[6], stb[10], stb[14],
+							stb[3], stb[7], stb[11], stb[15]
+						);
+						targetWorlds.push(m.clone().invert());
+					}
+					
+					const boneToHAIndex = new Map();
+					for (let i = 0; i < this.skeletonBones.length; i++) {
+						boneToHAIndex.set(this.skeletonBones[i], i);
+					}
+					
+					for (let i = 0; i < this.skeletonBones.length && i < targetWorlds.length; i++) {
+						const bone = this.skeletonBones[i];
+						const targetWorld = targetWorlds[i];
+						
+						let parentWorld = new THREE.Matrix4();
+						if (bone.parent) {
+							const parentIdx = boneToHAIndex.get(bone.parent);
+							if (parentIdx !== undefined && parentIdx < targetWorlds.length) {
+								parentWorld = targetWorlds[parentIdx];
+							}
+						}
+						
+						const local = parentWorld.clone().invert().multiply(targetWorld);
+						const pos = new THREE.Vector3();
+						const quat = new THREE.Quaternion();
+						const scl = new THREE.Vector3();
+						local.decompose(pos, quat, scl);
+						bone.position.copy(pos);
+						bone.quaternion.copy(quat);
+						bone.scale.copy(scl);
+					}
+				}
+				
+				mesh.updateMatrixWorld(true);
+				this.skeleton = new THREE.Skeleton(this.skeletonBones);
+				mesh.bind(this.skeleton);
+				this.modelHasSkin = true;
+			} else {
+				mesh = new THREE.Mesh(geo, materials);
+				mesh.name = meshName;
+				targetFrame.add(mesh);
+				this.nonSkinnedMeshes.push({ mesh, geomIndex: geomIdx });
+			}
+		}
+
+		const dffName = dff.name || 'model';
+		group.name = dffName;
+
+		return group;
+	}
+	
     sanitizeSkinWeights(indices, weights) {
         const idx = [
             indices?.x ?? 0, indices?.y ?? 0,
@@ -562,36 +677,226 @@ export class GTACharacterViewer {
         for (let i = 0; i < 4; i++) wgt[i] /= sum;
         return { indices: idx, weights: wgt, rawSum: sum, normalized: true, fallback: false };
     }
-    
+   	
     displayModel(model) {
-        if (this.currentModel) this.scene.remove(this.currentModel);
-        this.currentModel = model;
-        
-        if (this.modelHasSkin) {
-            model.rotation.set(-Math.PI / 2, 0, 4.75);
-        }
-        
-        this.scene.add(model);
-
-        const box = new THREE.Box3().setFromObject(model);
-        const center = box.getCenter(new THREE.Vector3());
-        const minY = box.min.y;
-        const size = box.getSize(new THREE.Vector3());
-        
-        this.modelSize = Math.max(size.x, size.y, size.z);
-        this.modelCenterY = size.y / 2;
-
-        model.position.x = -center.x;
-        model.position.z = -center.z;
-        model.position.y = -minY;
+		if (this.currentModel) this.scene.remove(this.currentModel);
+		this.currentModel = model;
 		
+		if (this.modelHasSkin) {
+			model.rotation.set(-Math.PI / 2, 0, 4.75);
+		}
+		
+		this.scene.add(model);
 
-        const distance = this.modelSize * 1.5;
-        this.camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
-        this.controls.target.set(0, this.modelCenterY, 0);
-        this.controls.update();
-    }
+		let vloFound = false;
+		let damFound = false;
+		
+		model.traverse((child) => {
+			if (child.isMesh || child.isSkinnedMesh) {
+				let obj = child;
+				let shouldHide = false;
+				let reason = '';
+				
+				while (obj && obj !== model) {
+					const name = obj.name?.toLowerCase() || '';
+					if (name.includes('_vlo')) {
+						shouldHide = true;
+						reason = '_vlo';
+						break;
+					}
+					if (name.includes('_tun')) {
+						shouldHide = true;
+						reason = '_tun';
+						break;
+					}
+					if (name.includes('_dam')) {
+						shouldHide = true;
+						reason = '_dam';
+						break;
+					}
+					obj = obj.parent;
+				}
+				
+				if (shouldHide) {
+					child.visible = false;
+					if (reason === '_vlo') vloFound = true;
+					if (reason === '_dam') damFound = true;
+				}
+			}
+		});
+		
+		if (!this.modelHasSkin) {
+			this.cloneWheels(model);
+		}
+
+		const box = new THREE.Box3().setFromObject(model);
+		const center = box.getCenter(new THREE.Vector3());
+		const minY = box.min.y;
+		const size = box.getSize(new THREE.Vector3());
+		
+		this.modelSize = Math.max(size.x, size.y, size.z);
+		this.modelCenterY = size.y / 2;
+
+		model.position.x = -center.x;
+		model.position.z = -center.z;
+		model.position.y = -minY;
+
+		const distance = this.modelSize * 1.5;
+		this.camera.position.set(distance * 0.7, distance * 0.7, distance * 0.5);
+		this.controls.target.set(0, this.modelCenterY, 0);
+		this.controls.update();
+	}
+	
+	cloneWheels(model) {
+		const wheelDummies = [];
+		const dummyNames = ['wheel_lf_dummy', 'wheel_rf_dummy', 'wheel_lb_dummy', 'wheel_rb_dummy'];
+		
+		model.traverse((child) => {
+			if (child.isObject3D && dummyNames.includes(child.name?.toLowerCase())) {
+				wheelDummies.push(child);
+			}
+		});
+
+		if (wheelDummies.length === 0) {
+			const frameNames = ['wheel_lf', 'wheel_rf', 'wheel_lb', 'wheel_rb'];
+			model.traverse((child) => {
+				if (child.isObject3D && frameNames.includes(child.name?.toLowerCase())) {
+					wheelDummies.push(child);
+				}
+			});
+		}
+		
+		if (wheelDummies.length === 0) {
+			return;
+		}
+
+		let wheelMesh = null;
+		let wheelFrame = null;
+
+		model.traverse((child) => {
+			if (child.isMesh || child.isSkinnedMesh) {
+				const name = child.name?.toLowerCase() || '';
+				let parent = child.parent;
+				let isInsideWheelDummy = false;
+				while (parent) {
+					const parentName = parent.name?.toLowerCase() || '';
+					if (parentName.includes('wheel_') && parentName.includes('_dummy')) {
+						isInsideWheelDummy = true;
+						break;
+					}
+					parent = parent.parent;
+				}
+				
+				if (isInsideWheelDummy && !child.userData.isClonedWheel) {
+					wheelMesh = child;
+					wheelFrame = child.parent;
+				}
+			}
+		});
+		
+		if (!wheelMesh) {
+			return;
+		}
+
+
+		const originalMesh = wheelMesh;
+		const originalParent = wheelFrame;
+
+		let clonedCount = 0;
+		for (const dummy of wheelDummies) {
+			let hasWheel = false;
+			dummy.children.forEach(child => {
+				if (child.isMesh || child.isSkinnedMesh) {
+					const name = child.name?.toLowerCase() || '';
+					if (name === 'wheel' || name.includes('wheel')) {
+						hasWheel = true;
+					}
+				}
+			});
+
+			if (hasWheel) continue;
+
+			if (dummy === originalParent) continue;
+
+			const clonedMesh = originalMesh.clone();
+			clonedMesh.name = originalMesh.name;
+			clonedMesh.userData.isClonedWheel = true;
+			clonedMesh.userData.originalWheel = true;
+
+			clonedMesh.position.set(0, 0, 0);
+			clonedMesh.rotation.set(0, 0, 0);
+			clonedMesh.scale.set(1, 1, 1);
+
+			const isLeft = dummy.name.toLowerCase().includes('_lf') || dummy.name.toLowerCase().includes('_lb');
+			if (isLeft) {
+				clonedMesh.scale.x = -1;
+			}
+
+			dummy.add(clonedMesh);
+			clonedCount++;
+		}
+
+		if (clonedCount > 0 && originalParent) {
+			let wheelCount = 0;
+			model.traverse((child) => {
+				if (child.isMesh || child.isSkinnedMesh) {
+					const name = child.name?.toLowerCase() || '';
+					if (name === 'wheel' || name.includes('wheel')) {
+						if (!child.userData.isClonedWheel) {
+							wheelCount++;
+						}
+					}
+				}
+			});
+
+			if (wheelCount > 0 && originalMesh.visible) {
+				if (clonedCount >= 3) {
+					originalMesh.visible = false;
+				}
+			}
+		}
+
+	}
     
+	fixMaskGlass(accessoryGroup) {
+		if (!accessoryGroup) return;
+		
+		accessoryGroup.traverse((child) => {
+			if (!child.isMesh && !child.isSkinnedMesh) return;
+			
+			const materials = Array.isArray(child.material) ? child.material : [child.material];
+			for (const mat of materials) {
+				const texName = mat.userData?.textureName?.toLowerCase() || '';
+				const isGlass = texName.includes('glass') || 
+								texName.includes('window') || 
+								texName.includes('windscreen') ||
+								texName.includes('visir') ||
+								texName.includes('visor') ||
+								texName.includes('lens') ||
+								mat.opacity < 0.95;
+				
+				if (isGlass) {
+					mat.transparent = true;
+					mat.depthWrite = false;    
+					mat.renderOrder = 1;       
+					mat.depthTest = true;     
+					mat.roughness = 0.1;         
+					mat.metalness = 0.3;       
+					mat.opacity = 0.4;          
+					mat.alphaTest = 0.1;       
+					mat.side = THREE.DoubleSide; 
+					mat.needsUpdate = true;
+				} else {
+					mat.transparent = false;
+					mat.depthWrite = true;
+					mat.renderOrder = 0;
+					mat.opacity = 1.0;
+					mat.needsUpdate = true;
+				}
+			}
+		});
+	}
+	
     async loadIFP(path) {
         const response = await fetch(path);
         if (!response.ok) throw new Error(`IFP not found: ${path}`);
@@ -891,5 +1196,303 @@ export class GTACharacterViewer {
 		accessoryGroup.scale.copy(worldScale);
 		
 		return true;
+	}
+	
+	destroy() {
+		this.isDestroyed = true;
+
+		if (this.animationId) {
+			cancelAnimationFrame(this.animationId);
+			this.animationId = null;
+		}
+
+		if (this.mixer) {
+			this.mixer.stopAllAction();
+			this.mixer = null;
+		}
+
+		if (this.scene) {
+			this.scene.traverse((child) => {
+				if (child.isMesh || child.isSkinnedMesh) {
+					if (child.geometry) child.geometry.dispose();
+					if (Array.isArray(child.material)) {
+						child.material.forEach(mat => mat.dispose());
+					} else if (child.material) {
+						child.material.dispose();
+					}
+				}
+			});
+			while (this.scene.children.length > 0) {
+				this.scene.remove(this.scene.children[0]);
+			}
+			this.scene = null;
+		}
+
+		for (const texture of this.textures.values()) {
+			texture.dispose();
+		}
+		this.textures.clear();
+
+		if (this.renderer) {
+			this.renderer.dispose();
+			if (this.renderer.domElement && this.renderer.domElement.parentNode) {
+				this.renderer.domElement.parentNode.removeChild(this.renderer.domElement);
+			}
+			this.renderer = null;
+		}
+
+		if (this.container) {
+			while (this.container.firstChild) {
+				this.container.removeChild(this.container.firstChild);
+			}
+			this.container = null;
+		}
+
+		if (this.controls) {
+			this.controls.dispose();
+			this.controls = null;
+		}
+
+		this.camera = null;
+		this.currentModel = null;
+		this.bones.clear();
+		this.bonesById.clear();
+		this.skeleton = null;
+		this.skeletonBones = [];
+		this.nonSkinnedMeshes = [];
+		this.boneHierarchyRoot = null;
+
+		window.removeEventListener('resize', this.resizeHandler);
+	}
+	
+	openAllDoors() {
+		if (!this.currentModel) return false;
+		
+		const modelData = this.modelData || this.currentModel?.userData?.modelData || {};
+		if (modelData.enableDoors === false) {
+			return false;
+		}
+		
+		const partsToAnimate = [];
+		const targetNames = [
+			'door_lf_dummy', 'door_lr_dummy', 'door_rr_dummy', 'door_rf_dummy',
+			'bonnet_dummy', 'boot_dummy'
+		];
+		
+		this.currentModel.traverse((child) => {
+			if (child.isObject3D) {
+				const name = child.name?.toLowerCase() || '';
+				if (targetNames.includes(name)) {
+					const isOpen = child.userData?.isOpen || false;
+					if (!isOpen) {
+						partsToAnimate.push({
+							object: child,
+							name: name,
+							originalRotation: child.rotation.clone(),
+							originalPosition: child.position.clone()
+						});
+					}
+				}
+			}
+		});
+
+		if (partsToAnimate.length === 0) {
+			return false;
+		}
+
+		partsToAnimate.forEach((part, index) => {
+			this.animateDoor(part, true, index * 100);
+		});
+
+		return true;
+	}
+
+	closeAllDoors() {
+		if (!this.currentModel) return false;
+
+		const modelData = this.modelData || this.currentModel?.userData?.modelData || {};
+		if (modelData.enableDoors === false) {
+			return false;
+		}
+
+		const openParts = [];
+		this.currentModel.traverse((child) => {
+			if (child.userData?.isOpen) {
+				openParts.push({
+					object: child,
+					name: child.name?.toLowerCase() || '',
+					originalRotation: child.userData.originalRotation || child.rotation.clone(),
+					originalPosition: child.userData.originalPosition || child.position.clone()
+				});
+			}
+		});
+
+		if (openParts.length === 0) return false;
+
+		openParts.forEach((part, index) => {
+			this.animateDoorClose(part, index * 100);
+		});
+
+		return true;
+	}
+	
+	animateDoor(partData, open, delay = 0) {
+		const object = partData.object;
+		const name = partData.name.toLowerCase();
+
+		const modelData = this.modelData || this.currentModel?.userData?.modelData || {};
+		const doorAngles = modelData.doorAngles || {};
+
+		const defaults = {
+			'door_lf_dummy': { angle: -60, axis: 'z', offset: 0 },
+			'door_rf_dummy': { angle: 60, axis: 'z', offset: 0 },
+			'door_lr_dummy': { angle: -60, axis: 'z', offset: 0 },
+			'door_rr_dummy': { angle: 60, axis: 'z', offset: 0 },
+			'bonnet_dummy': { angle: 45, axis: 'x', offset: 0 },
+			'boot_dummy': { angle: -45, axis: 'x', offset: 0 }
+		};
+
+		let partType = name;
+		if (partType.endsWith('_dummy')) {
+			partType = partType.slice(0, -6);
+		}
+
+		let config = null;
+
+		if (doorAngles[name]) {
+			config = doorAngles[name];
+		} else if (doorAngles[partType]) {
+			config = doorAngles[partType];
+		}
+
+		if (!config && defaults[name]) {
+			config = defaults[name];
+		}
+
+		if (!config) {
+			return;
+		}
+		
+		const axis = config.axis || 'y';
+		const angle = open ? config.angle * Math.PI / 180 : 0;
+		const offset = config.offset || 0;
+
+		if (open) {
+			object.userData.originalRotation = object.rotation.clone();
+			object.userData.originalPosition = object.position.clone();
+			object.userData.originalScale = object.scale.clone();
+		}
+
+		const startTime = Date.now() + delay;
+		const duration = 500;
+		const startAngle = object.rotation[axis] || 0;
+		const targetAngle = angle;
+		
+		object.userData.isOpen = open;
+		object.userData.animating = true;
+
+		const animate = () => {
+			const elapsed = Date.now() - startTime;
+			const progress = Math.min(elapsed / duration, 1);
+			
+			const ease = progress < 0.5 
+				? 2 * progress * progress 
+				: 1 - Math.pow(-2 * progress + 2, 2) / 2;
+			
+			const currentAngle = startAngle + (targetAngle - startAngle) * ease;
+
+			if (axis === 'x') {
+				object.rotation.x = currentAngle;
+			} else if (axis === 'y') {
+				object.rotation.y = currentAngle;
+			} else if (axis === 'z') {
+				object.rotation.z = currentAngle;
+			}
+
+			if (offset !== 0) {
+				object.position.y = (object.userData.originalPosition?.y || 0) + offset * ease;
+			}
+
+			if (progress < 1) {
+				requestAnimationFrame(animate);
+			} else {
+				object.userData.animating = false;
+				if (axis === 'x') {
+					object.rotation.x = targetAngle;
+				} else if (axis === 'y') {
+					object.rotation.y = targetAngle;
+				} else if (axis === 'z') {
+					object.rotation.z = targetAngle;
+				}
+			}
+		};
+
+		setTimeout(animate, delay);
+	}
+	
+    animateDoorClose(partData, delay = 0) {
+		const object = partData.object;
+		const name = partData.name.toLowerCase();
+		
+		const startTime = Date.now() + delay;
+		const duration = 500;
+		
+		const startRotX = object.rotation.x;
+		const startRotY = object.rotation.y;
+		const startRotZ = object.rotation.z;
+		const startPosY = object.position.y;
+		
+		const targetRotX = partData.originalRotation?.x || 0;
+		const targetRotY = partData.originalRotation?.y || 0;
+		const targetRotZ = partData.originalRotation?.z || 0;
+		const targetPosY = partData.originalPosition?.y || object.position.y;
+
+		object.userData.animating = true;
+
+		const animate = () => {
+			const elapsed = Date.now() - startTime;
+			const progress = Math.min(elapsed / duration, 1);
+			
+			const ease = progress < 0.5 
+				? 2 * progress * progress 
+				: 1 - Math.pow(-2 * progress + 2, 2) / 2;
+			
+			object.rotation.x = startRotX + (targetRotX - startRotX) * ease;
+			object.rotation.y = startRotY + (targetRotY - startRotY) * ease;
+			object.rotation.z = startRotZ + (targetRotZ - startRotZ) * ease;
+			object.position.y = startPosY + (targetPosY - startPosY) * ease;
+
+			if (progress < 1) {
+				requestAnimationFrame(animate);
+			} else {
+				object.rotation.x = targetRotX;
+				object.rotation.y = targetRotY;
+				object.rotation.z = targetRotZ;
+				object.position.y = targetPosY;
+				object.userData.isOpen = false;
+				object.userData.animating = false;
+				delete object.userData.originalRotation;
+				delete object.userData.originalPosition;
+				delete object.userData.originalScale;
+			}
+		};
+
+		setTimeout(animate, delay);
+	}
+
+	areDoorsOpen() {
+		let openCount = 0;
+		this.currentModel?.traverse((child) => {
+			if (child.userData?.isOpen) openCount++;
+		});
+		return openCount > 0;
+	}
+
+	toggleDoors() {
+		if (this.areDoorsOpen()) {
+			return this.closeAllDoors();
+		} else {
+			return this.openAllDoors();
+		}
 	}
 }

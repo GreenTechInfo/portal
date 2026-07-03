@@ -1,0 +1,1327 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактор аксессуаров МЧС</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #1a1a2e;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        .editor-layout {
+            display: flex;
+            height: 100vh;
+        }
+
+        .control-panel {
+            width: 420px;
+            min-width: 420px;
+            background: rgba(26, 26, 46, 0.95);
+            border-right: 2px solid rgba(46, 164, 79, 0.3);
+            padding: 20px 18px;
+            overflow-y: auto;
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .control-panel::-webkit-scrollbar {
+            width: 4px;
+        }
+        .control-panel::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .control-panel::-webkit-scrollbar-thumb {
+            background: #2ea44f;
+            border-radius: 2px;
+        }
+
+        .panel-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #fff;
+            border-bottom: 2px solid rgba(46, 164, 79, 0.3);
+            padding-bottom: 12px;
+            margin-bottom: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .panel-title .badge {
+            font-size: 12px;
+            background: rgba(46, 164, 79, 0.2);
+            color: #2ea44f;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-weight: 400;
+        }
+
+        .uniform-selector {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .uniform-selector button {
+            flex: 1;
+            padding: 8px 12px;
+            border: 2px solid rgba(255,255,255,0.1);
+            background: rgba(255,255,255,0.05);
+            color: #aaa;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-size: 13px;
+            font-weight: 500;
+            min-width: 80px;
+        }
+        .uniform-selector button:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+        .uniform-selector button.active {
+            border-color: #2ea44f;
+            background: rgba(46, 164, 79, 0.15);
+            color: #fff;
+        }
+
+        .accessories-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 12px 14px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .accessories-section h4 {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .accessory-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 10px;
+            margin-bottom: 4px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: rgba(255,255,255,0.02);
+        }
+        .accessory-item:hover {
+            background: rgba(255,255,255,0.06);
+        }
+        .accessory-item.active {
+            background: rgba(46, 164, 79, 0.12);
+            border-left: 3px solid #2ea44f;
+        }
+        .accessory-item label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            flex: 1;
+        }
+        .accessory-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: #2ea44f;
+            cursor: pointer;
+        }
+        .accessory-item .name {
+            font-size: 14px;
+            color: #ddd;
+        }
+        .accessory-item .status {
+            font-size: 11px;
+            color: #666;
+            padding: 2px 8px;
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+        .accessory-item .status.equipped {
+            color: #2ea44f;
+            background: rgba(46, 164, 79, 0.15);
+        }
+
+        .selected-info {
+            font-size: 13px;
+            color: #888;
+            padding: 4px 0;
+        }
+        .selected-info strong {
+            color: #ddd;
+        }
+
+        .transform-section {
+            background: rgba(255,255,255,0.03);
+            border-radius: 10px;
+            padding: 14px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+        .transform-section h4 {
+            font-size: 13px;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+        }
+        .transform-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px 12px;
+        }
+        .transform-group .full-width {
+            grid-column: 1 / -1;
+        }
+        .transform-group .input-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .transform-group .slider-with-value {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex: 1;
+        }
+        .transform-group input[type="range"] {
+            flex: 1;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 2px;
+            outline: none;
+            -webkit-appearance: none;
+            min-width: 40px;
+        }
+        .transform-group input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            background: #2ea44f;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .transform-group input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            background: #2ea44f;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        .transform-group .value-display {
+            font-size: 12px;
+            color: #aaa;
+            min-width: 45px;
+            text-align: right;
+            font-family: 'Consolas', monospace;
+        }
+        .transform-group .axis-label {
+            font-size: 10px;
+            color: #666;
+            min-width: 14px;
+            font-weight: 700;
+        }
+        .transform-group .number-input {
+            width: 52px;
+            padding: 2px 4px;
+            background: rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 4px;
+            color: #fff;
+            font-size: 11px;
+            font-family: 'Consolas', monospace;
+            text-align: center;
+            transition: border-color 0.3s;
+        }
+        .transform-group .number-input:focus {
+            outline: none;
+            border-color: #2ea44f;
+        }
+        .transform-group .number-input:hover {
+            border-color: rgba(255,255,255,0.2);
+        }
+        .transform-group .number-input::-webkit-inner-spin-button,
+        .transform-group .number-input::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        .transform-group .number-input[type="number"] {
+            -moz-appearance: textfield;
+        }
+        .transform-group .separator {
+            grid-column: 1 / -1;
+            height: 1px;
+            background: rgba(255,255,255,0.06);
+            margin: 4px 0;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .action-buttons button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 500;
+            transition: all 0.3s;
+            flex: 1;
+            min-width: 80px;
+        }
+        .btn-copy {
+            background: #2ea44f;
+            color: #fff;
+        }
+        .btn-copy:hover {
+            background: #3cb85c;
+        }
+        .btn-copy.copied {
+            background: #1a7a37;
+        }
+        .btn-reset {
+            background: rgba(255,255,255,0.08);
+            color: #aaa;
+        }
+        .btn-reset:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
+        .btn-clear-all {
+            background: rgba(255,68,68,0.15);
+            color: #ff4444;
+            border: 1px solid rgba(255,68,68,0.2);
+        }
+        .btn-clear-all:hover {
+            background: rgba(255,68,68,0.25);
+        }
+        .btn-gear {
+            background: rgba(46, 164, 79, 0.15);
+            color: #2ea44f;
+            border: 1px solid rgba(46, 164, 79, 0.2);
+            flex: 1;
+        }
+        .btn-gear:hover {
+            background: rgba(46, 164, 79, 0.25);
+        }
+        .btn-gear i {
+            margin-right: 6px;
+        }
+
+        .code-output {
+            background: rgba(0,0,0,0.4);
+            border-radius: 8px;
+            padding: 10px 12px;
+            font-family: 'Consolas', 'Courier New', monospace;
+            font-size: 12px;
+            color: #aaa;
+            border: 1px solid rgba(255,255,255,0.06);
+            max-height: 120px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            line-height: 1.6;
+        }
+        .code-output .highlight {
+            color: #2ea44f;
+        }
+        .code-output .key {
+            color: #e6b450;
+        }
+
+        .viewer-container {
+            flex: 1;
+            height: 100vh;
+            background: #0d0d1a;
+            position: relative;
+        }
+        #uniform3dContainer {
+            width: 100%;
+            height: 100%;
+        }
+        #uniform3dLoading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            color: #666;
+        }
+        #uniform3dLoading i {
+            font-size: 48px;
+            color: #2ea44f;
+            animation: spin 1.5s linear infinite;
+        }
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        .viewer-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.7);
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+            pointer-events: none;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        @media (max-width: 768px) {
+            .editor-layout {
+                flex-direction: column;
+            }
+            .control-panel {
+                width: 100%;
+                min-width: unset;
+                height: 50vh;
+                border-right: none;
+                border-bottom: 2px solid rgba(46, 164, 79, 0.3);
+            }
+            .viewer-container {
+                height: 50vh;
+            }
+        }
+
+        /* Модалка */
+        .gear-modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 10002;
+            align-items: center;
+            justify-content: center;
+        }
+        .gear-modal-overlay.active {
+            display: flex;
+        }
+        .gear-modal {
+            background: #1e1e32;
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            max-width: 500px;
+            width: 92%;
+            max-height: 85vh;
+            position: relative;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+        }
+        .gear-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px 12px 24px;
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            flex-shrink: 0;
+        }
+        .gear-modal-header h3 {
+            margin: 0;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .gear-modal-header h3 i {
+            color: #2ea44f;
+            font-size: 24px;
+        }
+        .gear-modal-close {
+            background: none;
+            border: none;
+            color: #888;
+            font-size: 28px;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .gear-modal-close:hover {
+            color: #fff;
+        }
+        .gear-modal-body {
+            padding: 16px 24px 24px 24px;
+            flex: 1;
+            overflow-y: auto;
+        }
+        .gear-modal-body .no-accessories-msg {
+            text-align: center;
+            padding: 30px 0;
+            color: #666;
+        }
+        .gear-modal-body .no-accessories-msg i {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 12px;
+            color: #444;
+        }
+        .gear-modal-footer {
+            padding: 16px 24px 24px 24px;
+            border-top: 1px solid rgba(255,255,255,0.06);
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .gear-modal-footer button {
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s;
+            border: none;
+        }
+        .btn-clear-all-gear {
+            background: transparent;
+            border: 1px solid #ff4444;
+            color: #ff4444;
+        }
+        .btn-clear-all-gear:hover {
+            background: rgba(255,68,68,0.1);
+        }
+        .btn-close-gear {
+            background: #2ea44f;
+            color: #fff;
+            font-weight: 600;
+            padding: 8px 24px;
+        }
+        .btn-close-gear:hover {
+            background: #3cb85c;
+        }
+    </style>
+</head>
+<body>
+
+<div class="editor-layout">
+    <!-- Панель управления -->
+    <div class="control-panel">
+        <div class="panel-title">
+            🎮 Редактор аксессуаров МЧС
+            <span class="badge">BETA</span>
+        </div>
+
+        <!-- Выбор формы -->
+        <div class="uniform-selector" id="uniformSelector">
+            <button class="active" data-uniform="kombinezon">Комбинезон</button>
+            <button data-uniform="bop1">БОП 1</button>
+            <button data-uniform="bop2">БОП 2</button>
+            <button data-uniform="bop_spt">БОП (СПТ)</button>
+            <button data-uniform="everyday">Повседневная</button>
+            <button data-uniform="medic">Медицинская</button>
+            <button data-uniform="office">ТОК-200</button>
+            <button data-uniform="gks_form">ГКС</button>
+            <button data-uniform="leader_form">Лидер</button>
+            <button data-uniform="female_form">Женская</button>
+        </div>
+
+        <!-- КНОПКА СНАРЯЖЕНИЯ - ТЕПЕРЬ ОНА ЗДЕСЬ И БОЛЬШАЯ -->
+        <button class="btn-gear" id="gearButton" style="padding: 12px; font-size: 16px; width: 100%;">
+            <i class="fas fa-tshirt"></i> 🎒 ОТКРЫТЬ СНАРЯЖЕНИЕ
+        </button>
+
+        <!-- Список надетых аксессуаров (краткий) -->
+        <div class="accessories-section">
+            <h4>📦 Надето</h4>
+            <div id="accessoriesListShort">
+                <span style="color:#666; font-size:13px;">Нет надетого снаряжения</span>
+            </div>
+        </div>
+
+        <!-- Информация о выбранном -->
+        <div class="selected-info" id="selectedInfo">
+            <span style="color:#666;">Выберите аксессуар</span>
+        </div>
+
+        <!-- Трансформации -->
+        <div class="transform-section">
+            <h4>🔄 Позиция / Вращение / Масштаб</h4>
+            <div class="transform-group">
+                <div class="full-width input-row">
+                    <span class="axis-label">X</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="posX" min="-1" max="1" step="0.001" value="0" disabled>
+                        <input type="number" class="number-input" id="posXNum" step="0.001" disabled>
+                        <span class="value-display" id="posXVal">0.000</span>
+                    </div>
+                </div>
+                <div class="full-width input-row">
+                    <span class="axis-label">Y</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="posY" min="-1" max="1" step="0.001" value="0" disabled>
+                        <input type="number" class="number-input" id="posYNum" step="0.001" disabled>
+                        <span class="value-display" id="posYVal">0.000</span>
+                    </div>
+                </div>
+                <div class="full-width input-row">
+                    <span class="axis-label">Z</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="posZ" min="-1" max="1" step="0.001" value="0" disabled>
+                        <input type="number" class="number-input" id="posZNum" step="0.001" disabled>
+                        <span class="value-display" id="posZVal">0.000</span>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="full-width input-row">
+                    <span class="axis-label">RX</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="rotX" min="-180" max="180" step="1" value="0" disabled>
+                        <input type="number" class="number-input" id="rotXNum" step="1" disabled>
+                        <span class="value-display" id="rotXVal">0°</span>
+                    </div>
+                </div>
+                <div class="full-width input-row">
+                    <span class="axis-label">RY</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="rotY" min="-180" max="180" step="1" value="0" disabled>
+                        <input type="number" class="number-input" id="rotYNum" step="1" disabled>
+                        <span class="value-display" id="rotYVal">0°</span>
+                    </div>
+                </div>
+                <div class="full-width input-row">
+                    <span class="axis-label">RZ</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="rotZ" min="-180" max="180" step="1" value="0" disabled>
+                        <input type="number" class="number-input" id="rotZNum" step="1" disabled>
+                        <span class="value-display" id="rotZVal">0°</span>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <div class="full-width input-row">
+                    <span class="axis-label">SX</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="scaleX" min="0.5" max="2" step="0.005" value="1" disabled>
+                        <input type="number" class="number-input" id="scaleXNum" step="0.005" disabled>
+                        <span class="value-display" id="scaleXVal">1.000</span>
+                    </div>
+                </div>
+                <div class="full-width input-row">
+                    <span class="axis-label">SY</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="scaleY" min="0.5" max="2" step="0.005" value="1" disabled>
+                        <input type="number" class="number-input" id="scaleYNum" step="0.005" disabled>
+                        <span class="value-display" id="scaleYVal">1.000</span>
+                    </div>
+                </div>
+                <div class="full-width input-row">
+                    <span class="axis-label">SZ</span>
+                    <div class="slider-with-value">
+                        <input type="range" id="scaleZ" min="0.5" max="2" step="0.005" value="1" disabled>
+                        <input type="number" class="number-input" id="scaleZNum" step="0.005" disabled>
+                        <span class="value-display" id="scaleZVal">1.000</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Кнопки -->
+        <div class="action-buttons">
+            <button class="btn-clear-all" id="clearAllBtn"><i class="fas fa-times"></i> Снять всё</button>
+            <button class="btn-reset" id="resetSelectedBtn"><i class="fas fa-undo"></i> Сброс</button>
+        </div>
+        <div class="action-buttons">
+            <button class="btn-copy" id="copyCodeBtn"><i class="fas fa-copy"></i> Скопировать код</button>
+        </div>
+
+        <!-- Вывод кода -->
+        <div class="code-output" id="codeOutput">
+            <span style="color:#666;">// Настройки текущего аксессуара</span>
+        </div>
+    </div>
+
+    <!-- 3D контейнер -->
+    <div class="viewer-container">
+        <div id="uniform3dContainer">
+            <div id="uniform3dLoading">
+                <i class="fas fa-cube"></i>
+                <p>Загрузка 3D просмотрщика...</p>
+            </div>
+        </div>
+        <div class="viewer-hint">🖱 ЛКМ — вращение | ПКМ — перемещение | Колесо — масштаб | R — сброс камеры</div>
+    </div>
+</div>
+
+<!-- Модалка снаряжения -->
+<div class="gear-modal-overlay" id="gearModal">
+    <div class="gear-modal">
+        <div class="gear-modal-header">
+            <h3><i class="fas fa-tshirt"></i> Снаряжение МЧС</h3>
+            <button class="gear-modal-close" id="closeGearModal">&times;</button>
+        </div>
+        <div class="gear-modal-body" id="gearModalBody">
+            <div id="accessoriesListFull">
+                <div class="no-accessories-msg">
+                    <i class="fas fa-spinner fa-spin"></i>
+                    <p>Загрузка...</p>
+                </div>
+            </div>
+        </div>
+        <div class="gear-modal-footer">
+            <button class="btn-clear-all-gear" id="clearAllGearBtn"><i class="fas fa-times"></i> Снять всё</button>
+            <button class="btn-close-gear" id="closeGearModalBtn">Закрыть</button>
+        </div>
+    </div>
+</div>
+
+<script type="importmap">
+{
+    "imports": {
+        "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+        "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+    }
+}
+</script>
+
+<script src="../js/common.js"></script>
+<script type="module">
+    import { GTACharacterViewer } from '../js/gta-viewer.js';
+    import { DFFReader } from '../js/DFFReader.js';
+    import { TXDReader } from '../js/TXDReader.js';
+
+    // ==================== КОНФИГ ====================
+    const MODELS_BASE_PATH = '../models/uniforms/mchs/';
+    const ACCESSORIES_BASE_PATH = '../models/uniforms/mchs/accessories/';
+    const ANIM_IFP_PATH = `${MODELS_BASE_PATH}anim.ifp`;
+
+    const UNIFORM_MODELS = {
+        kombinezon: { name: "Комбинезон", dff: `${MODELS_BASE_PATH}kombinezon.dff`, txd: `${MODELS_BASE_PATH}kombinezon.txd`, gender: "male" },
+        bop1: { name: "БОП 1", dff: `${MODELS_BASE_PATH}bop1.dff`, txd: `${MODELS_BASE_PATH}bop1.txd`, gender: "male" },
+        bop2: { name: "БОП 2", dff: `${MODELS_BASE_PATH}bop2.dff`, txd: `${MODELS_BASE_PATH}bop2.txd`, gender: "male" },
+        bop_spt: { name: "БОП (СПТ)", dff: `${MODELS_BASE_PATH}bop_spt.dff`, txd: `${MODELS_BASE_PATH}bop_spt.txd`, gender: "male" },
+        everyday: { name: "Повседневная", dff: `${MODELS_BASE_PATH}everyday.dff`, txd: `${MODELS_BASE_PATH}everyday.txd`, gender: "male" },
+        medic: { name: "Медицинская", dff: `${MODELS_BASE_PATH}medic.dff`, txd: `${MODELS_BASE_PATH}medic.txd`, gender: "male" },
+        office: { name: "ТОК-200", dff: `${MODELS_BASE_PATH}office.dff`, txd: `${MODELS_BASE_PATH}office.txd`, gender: "male" },
+        female_form: { name: "Женская", dff: `${MODELS_BASE_PATH}female_form.dff`, txd: `${MODELS_BASE_PATH}female_form.txd`, gender: "female" },
+        gks_form: { name: "ГКС", dff: `${MODELS_BASE_PATH}gks_form.dff`, txd: `${MODELS_BASE_PATH}gks_form.txd`, gender: "male" },
+        leader_form: { name: "Лидер", dff: `${MODELS_BASE_PATH}leader_form.dff`, txd: `${MODELS_BASE_PATH}leader_form.txd`, gender: "male" }
+    };
+
+    const ACCESSORIES_INFO = [
+        { id: 'first_aid', name: 'Чемоданчик первой помощи', slot: 'body', bone: 'R Finger' },
+        { id: 'spreader', name: 'Гидравлические разжимы', slot: 'body', bone: 'R Finger' },
+        { id: 'cutter', name: 'Гидравлические ножницы', slot: 'body', bone: 'R Finger' },
+        { id: 'manhattan', name: 'Манхэттенская скатка', slot: 'body', bone: 'L UpperArm' },
+        { id: 'hooligan', name: 'Хулиган', slot: 'body', bone: 'R Finger' },
+        { id: 'bugor', name: 'Бугор пожарный', slot: 'body', bone: 'R Finger' },
+        { id: 'purga5', name: 'ПУРГА-5', slot: 'body', bone: 'R Finger' },
+        { id: 'fire_axe', name: 'Топор пожарный', slot: 'body', bone: 'R Finger' },
+        { id: 'life_vest', name: 'Спасательный жилет', slot: 'body', bone: 'Neck' },
+        { id: 'load_vest', name: 'Разгрузочный жилет', slot: 'body', bone: 'Neck' },
+        { id: 'sizod', name: 'СИЗОД', slot: 'body', bone: 'Neck' },
+        { id: 'helmet_spt', name: 'Каска СПТ', slot: 'head', bone: 'head' },
+        { id: 'helmet_upsch', name: 'Каска УПСЧ', slot: 'head', bone: 'head' },
+        { id: 'helmet_11', name: 'Каска 11 ПСЧ', slot: 'head', bone: 'head' },
+        { id: 'helmet_spsc', name: 'Каска СПСЧ', slot: 'head', bone: 'head' },
+        { id: 'mask_sizod', name: 'Маска СИЗОД', slot: 'head', bone: 'head' },
+        { id: 'moto_helmet', name: 'Мото-шлем', slot: 'head', bone: 'head' },
+        { id: 'peak_cap', name: 'Фуражка', slot: 'head', bone: 'head' },
+        { id: 'cap1', name: 'Кепка 1', slot: 'head', bone: 'head' },
+        { id: 'cap2', name: 'Кепка 2', slot: 'head', bone: 'head' }
+    ];
+
+    const ACCESSORY_TXD_MAP = {
+        mask_sizod: 'mask_sizod.txd',
+        moto_helmet: 'moto_helmet.txd',
+        sizod: 'sizod.txd',
+        life_vest: 'vests.txd',
+        load_vest: 'vests.txd',
+        helmet_spt: 'hats.txd',
+        helmet_upsch: 'hats.txd',
+        helmet_11: 'hats.txd',
+        peak_cap: 'hats.txd',
+        helmet_spsc: 'hats.txd',
+        cap1: 'hats.txd',
+        cap2: 'hats.txd',
+        first_aid: 'textures2.txd',
+        spreader: 'textures2.txd',
+        cutter: 'textures2.txd',
+        manhattan: 'textures2.txd',
+        bugor: 'textures3.txd',
+        purga5: 'textures3.txd',
+        hooligan: 'textures3.txd',
+        fire_axe: 'textures3.txd'
+    };
+
+    // ==================== СОСТОЯНИЕ ====================
+    let viewer = null;
+    let currentUniform = 'kombinezon';
+    let accessoryGroups = {};
+    let loadedAccessories = {};
+    let equippedAccessories = {};
+    let accessorySlots = { head: null, body: null };
+    let accessoryAttachments = {};
+    let selectedAccessoryId = null;
+    let isUpdating = false;
+    let loadedTextures = {};
+    const defaultTransforms = {};
+
+    // ==================== ЗАГРУЗКА ТЕКСТУР ====================
+    async function loadAllAccessoriesTxd() {
+        const txdFiles = [...new Set(Object.values(ACCESSORY_TXD_MAP))];
+        for (const txdFile of txdFiles) {
+            try {
+                const path = `${ACCESSORIES_BASE_PATH}${txdFile}`;
+                const response = await fetch(path);
+                if (!response.ok) throw new Error(`TXD not found: ${path}`);
+                const buffer = await response.arrayBuffer();
+                const txd = new TXDReader().parse(buffer);
+                loadedTextures[txdFile] = txd;
+                if (viewer) {
+                    for (const tex of txd.textures) {
+                        if (tex.imageData) {
+                            const texture = viewer.createTexture(tex);
+                            viewer.textures.set(tex.name.toLowerCase(), texture);
+                        }
+                    }
+                }
+            } catch (error) {
+                console.error(`Failed to load TXD: ${txdFile}`, error);
+            }
+        }
+    }
+
+    function applyTexturesToAccessory(group, accessoryId) {
+        const txdFileName = ACCESSORY_TXD_MAP[accessoryId];
+        if (!txdFileName) return;
+        const txd = loadedTextures[txdFileName];
+        if (!txd) return;
+        try {
+            viewer.applyTexturesToModel(group);
+            viewer.makeMatte(group);
+        } catch (e) {}
+    }
+
+    // ==================== ЗАГРУЗКА АКСЕССУАРОВ ====================
+    async function loadAllAccessories() {
+        for (const info of ACCESSORIES_INFO) {
+            try {
+                const dffPath = `${ACCESSORIES_BASE_PATH}${info.id}.dff`;
+                const dffResponse = await fetch(dffPath);
+                if (!dffResponse.ok) throw new Error(`DFF not found: ${dffPath}`);
+                const dffBuffer = await dffResponse.arrayBuffer();
+                const dff = new DFFReader().parse(dffBuffer);
+                if (!dff) throw new Error("Failed to parse DFF");
+                const meshGroup = viewer.createMesh(dff);
+                applyTexturesToAccessory(meshGroup, info.id);
+                meshGroup.visible = false;
+                viewer.scene.add(meshGroup);
+                accessoryGroups[info.id] = meshGroup;
+                loadedAccessories[info.id] = true;
+                accessoryAttachments[info.id] = { group: meshGroup, bone: info.bone || 'spine', isAttached: false };
+                defaultTransforms[info.id] = { position: { x: 0, y: 0, z: 0 }, rotation: { x: 0, y: 0, z: 0 }, scale: { x: 1, y: 1, z: 1 } };
+            } catch (error) {
+                console.error(`Failed to load accessory "${info.id}":`, error);
+                loadedAccessories[info.id] = false;
+            }
+        }
+        updateAccessoriesUI();
+    }
+
+    // ==================== ЗАГРУЗКА ФОРМЫ ====================
+    async function loadUniform(uniformId) {
+        const config = UNIFORM_MODELS[uniformId];
+        if (!config) return;
+        clearAllAccessories();
+        const loadingEl = document.getElementById('uniform3dLoading');
+        if (loadingEl) loadingEl.style.display = 'flex';
+        try {
+            await viewer.loadModel(config.dff, config.txd, ANIM_IFP_PATH);
+            const availableAnims = viewer.getAnimationNames();
+            let targetAnim = null;
+            if (config.gender === "female") {
+                const femaleAnims = ["woman_idlestance", "woman_idle", "idle_female", "female_idle", "IDLE"];
+                for (const a of femaleAnims) { if (availableAnims.includes(a)) { targetAnim = a; break; } }
+            } else {
+                const maleAnims = ["IDLE_stance", "idle", "stand_idle", "idle_armed", "IDLE"];
+                for (const a of maleAnims) { if (availableAnims.includes(a)) { targetAnim = a; break; } }
+            }
+            if (!targetAnim && availableAnims.length > 0) targetAnim = availableAnims[0];
+            if (targetAnim) viewer.playAnimation(targetAnim);
+        } catch (error) {
+            console.error('Failed to load uniform:', error);
+        } finally {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }
+        updateAccessoriesUI();
+        updateSelectedInfo();
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    // ==================== УПРАВЛЕНИЕ АКСЕССУАРАМИ ====================
+    function toggleAccessory(accessoryId) {
+        const info = ACCESSORIES_INFO.find(a => a.id === accessoryId);
+        if (!info) return;
+        const group = accessoryGroups[accessoryId];
+        if (!group || !loadedAccessories[accessoryId]) return;
+        const slot = info.slot || 'body';
+
+        if (equippedAccessories[accessoryId]) {
+            const att = accessoryAttachments[accessoryId];
+            if (att && att.isAttached) { viewer.detachAccessoryFromBone(group); att.isAttached = false; }
+            group.visible = false;
+            delete equippedAccessories[accessoryId];
+            if (accessorySlots[slot] === accessoryId) accessorySlots[slot] = null;
+            if (selectedAccessoryId === accessoryId) selectedAccessoryId = null;
+        } else {
+            if (accessorySlots[slot]) {
+                const oldId = accessorySlots[slot];
+                if (accessoryGroups[oldId]) {
+                    const oldAtt = accessoryAttachments[oldId];
+                    if (oldAtt && oldAtt.isAttached) { viewer.detachAccessoryFromBone(accessoryGroups[oldId]); oldAtt.isAttached = false; }
+                    accessoryGroups[oldId].visible = false;
+                }
+                delete equippedAccessories[oldId];
+            }
+            const att = accessoryAttachments[accessoryId];
+            if (att) {
+                group.visible = true;
+                applySavedTransform(accessoryId);
+                const success = viewer.attachAccessoryToBone(group, att.bone || 'spine');
+                att.isAttached = success;
+            }
+            equippedAccessories[accessoryId] = true;
+            accessorySlots[slot] = accessoryId;
+            selectedAccessoryId = accessoryId;
+        }
+        updateAccessoriesUI();
+        updateSelectedInfo();
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    function clearAllAccessories() {
+        for (const info of ACCESSORIES_INFO) {
+            const group = accessoryGroups[info.id];
+            if (group) {
+                const att = accessoryAttachments[info.id];
+                if (att && att.isAttached) { viewer.detachAccessoryFromBone(group); att.isAttached = false; }
+                group.visible = false;
+            }
+        }
+        equippedAccessories = {};
+        accessorySlots = { head: null, body: null };
+        selectedAccessoryId = null;
+        updateAccessoriesUI();
+        updateSelectedInfo();
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    function selectAccessory(accessoryId) {
+        if (!equippedAccessories[accessoryId]) { toggleAccessory(accessoryId); return; }
+        selectedAccessoryId = accessoryId;
+        updateAccessoriesUI();
+        updateSelectedInfo();
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    // ==================== ТРАНСФОРМАЦИИ ====================
+    function getCurrentTransform(accessoryId) {
+        const group = accessoryGroups[accessoryId];
+        if (!group) return null;
+        return {
+            position: { x: group.position.x, y: group.position.y, z: group.position.z },
+            rotation: { x: group.rotation.x * 180 / Math.PI, y: group.rotation.y * 180 / Math.PI, z: group.rotation.z * 180 / Math.PI },
+            scale: { x: group.scale.x, y: group.scale.y, z: group.scale.z }
+        };
+    }
+
+    function applySavedTransform(accessoryId) {
+        const group = accessoryGroups[accessoryId];
+        if (!group) return;
+        const def = defaultTransforms[accessoryId];
+        if (!def) return;
+        group.position.set(def.position.x, def.position.y, def.position.z);
+        group.rotation.set(def.rotation.x * Math.PI / 180, def.rotation.y * Math.PI / 180, def.rotation.z * Math.PI / 180);
+        group.scale.set(def.scale.x, def.scale.y, def.scale.z);
+    }
+
+    function updateTransformFromValue(accessoryId, type, axis, value) {
+        if (isUpdating) return;
+        if (!accessoryId || !equippedAccessories[accessoryId]) return;
+        const group = accessoryGroups[accessoryId];
+        if (!group) return;
+        const val = parseFloat(value);
+        if (isNaN(val)) return;
+        const slider = document.getElementById(type + axis);
+        if (slider) slider.value = val;
+        const num = document.getElementById(type + axis + 'Num');
+        if (num) num.value = val;
+        const display = document.getElementById(type + axis + 'Val');
+        if (display) {
+            if (type === 'rot') display.textContent = `${Math.round(val)}°`;
+            else display.textContent = val.toFixed(3);
+        }
+        if (type === 'pos') group.position[axis.toLowerCase()] = val;
+        else if (type === 'rot') group.rotation[axis.toLowerCase()] = val * Math.PI / 180;
+        else if (type === 'scale') group.scale[axis.toLowerCase()] = val;
+        const t = getCurrentTransform(accessoryId);
+        if (t) defaultTransforms[accessoryId] = t;
+        updateCodeOutput();
+    }
+
+    function updateTransformFromSliders(accessoryId) {
+        if (isUpdating) return;
+        if (!accessoryId || !equippedAccessories[accessoryId]) return;
+        const group = accessoryGroups[accessoryId];
+        if (!group) return;
+        const posX = parseFloat(document.getElementById('posX').value);
+        const posY = parseFloat(document.getElementById('posY').value);
+        const posZ = parseFloat(document.getElementById('posZ').value);
+        const rotX = parseFloat(document.getElementById('rotX').value);
+        const rotY = parseFloat(document.getElementById('rotY').value);
+        const rotZ = parseFloat(document.getElementById('rotZ').value);
+        const scaleX = parseFloat(document.getElementById('scaleX').value);
+        const scaleY = parseFloat(document.getElementById('scaleY').value);
+        const scaleZ = parseFloat(document.getElementById('scaleZ').value);
+        group.position.set(posX, posY, posZ);
+        group.rotation.set(rotX * Math.PI / 180, rotY * Math.PI / 180, rotZ * Math.PI / 180);
+        group.scale.set(scaleX, scaleY, scaleZ);
+        isUpdating = true;
+        updateNumberDisplay('posX', posX);
+        updateNumberDisplay('posY', posY);
+        updateNumberDisplay('posZ', posZ);
+        updateNumberDisplay('rotX', rotX);
+        updateNumberDisplay('rotY', rotY);
+        updateNumberDisplay('rotZ', rotZ);
+        updateNumberDisplay('scaleX', scaleX);
+        updateNumberDisplay('scaleY', scaleY);
+        updateNumberDisplay('scaleZ', scaleZ);
+        isUpdating = false;
+        const t = getCurrentTransform(accessoryId);
+        if (t) defaultTransforms[accessoryId] = t;
+        updateCodeOutput();
+    }
+
+    function updateNumberDisplay(id, value) {
+        const num = document.getElementById(id + 'Num');
+        if (num) num.value = value;
+        const display = document.getElementById(id + 'Val');
+        if (display) {
+            if (id.startsWith('rot')) display.textContent = `${Math.round(value)}°`;
+            else display.textContent = value.toFixed(3);
+        }
+    }
+
+    function updateTransformSliders() {
+        isUpdating = true;
+        const disabled = !selectedAccessoryId || !equippedAccessories[selectedAccessoryId];
+        document.querySelectorAll('.transform-group input[type="range"], .transform-group .number-input').forEach(el => {
+            el.disabled = disabled;
+        });
+        if (!disabled) {
+            const t = getCurrentTransform(selectedAccessoryId);
+            if (t) {
+                const ids = ['posX','posY','posZ','rotX','rotY','rotZ','scaleX','scaleY','scaleZ'];
+                const vals = [t.position.x, t.position.y, t.position.z, t.rotation.x, t.rotation.y, t.rotation.z, t.scale.x, t.scale.y, t.scale.z];
+                ids.forEach((id, i) => {
+                    const slider = document.getElementById(id);
+                    if (slider) slider.value = vals[i];
+                    const num = document.getElementById(id + 'Num');
+                    if (num) num.value = vals[i];
+                    const display = document.getElementById(id + 'Val');
+                    if (display) {
+                        if (id.startsWith('rot')) display.textContent = `${Math.round(vals[i])}°`;
+                        else display.textContent = vals[i].toFixed(3);
+                    }
+                });
+            }
+        }
+        isUpdating = false;
+    }
+
+    function resetSelectedTransform() {
+        if (!selectedAccessoryId) return;
+        const def = defaultTransforms[selectedAccessoryId];
+        if (!def) return;
+        const group = accessoryGroups[selectedAccessoryId];
+        if (!group) return;
+        group.position.set(def.position.x, def.position.y, def.position.z);
+        group.rotation.set(def.rotation.x * Math.PI / 180, def.rotation.y * Math.PI / 180, def.rotation.z * Math.PI / 180);
+        group.scale.set(def.scale.x, def.scale.y, def.scale.z);
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    // ==================== UI ====================
+    function updateAccessoriesUI() {
+        // Короткий список в панели
+        const containerShort = document.getElementById('accessoriesListShort');
+        if (containerShort) {
+            let html = '';
+            const equippedIds = Object.keys(equippedAccessories);
+            if (equippedIds.length === 0) {
+                html = '<span style="color:#666; font-size:13px;">Нет надетого снаряжения</span>';
+            } else {
+                for (const id of equippedIds) {
+                    const info = ACCESSORIES_INFO.find(a => a.id === id);
+                    if (info) {
+                        const isSelected = selectedAccessoryId === id;
+                        html += `<div class="accessory-item ${isSelected ? 'active' : ''}" data-id="${id}" style="cursor:pointer; padding:4px 8px;">
+                            <span class="name">${info.name}</span>
+                            <span class="status equipped">✓</span>
+                        </div>`;
+                    }
+                }
+            }
+            containerShort.innerHTML = html;
+            containerShort.querySelectorAll('.accessory-item').forEach(el => {
+                el.addEventListener('click', () => {
+                    const id = el.dataset.id;
+                    if (equippedAccessories[id]) selectAccessory(id);
+                });
+            });
+        }
+
+        // Полный список в модалке
+        const containerFull = document.getElementById('accessoriesListFull');
+        if (containerFull) {
+            let html = '';
+            // Для модалки показываем все аксессуары, которые есть в папке
+            const filtered = ACCESSORIES_INFO;
+            if (filtered.length === 0) {
+                html = `<div class="no-accessories-msg"><i class="fas fa-tshirt"></i><p>Для этой формы снаряжение не предусмотрено</p></div>`;
+            } else {
+                for (const info of filtered) {
+                    const isLoaded = loadedAccessories[info.id];
+                    const isEquipped = !!equippedAccessories[info.id];
+                    html += `<div class="accessory-item" data-id="${info.id}">
+                        <label>
+                            <input type="checkbox" data-accessory-id="${info.id}" ${isEquipped ? 'checked' : ''} ${!isLoaded ? 'disabled' : ''}>
+                            <span class="name">${info.name}</span>
+                        </label>
+                        <span class="status ${isEquipped ? 'equipped' : ''}">${isEquipped ? '✓ Надето' : (isLoaded ? 'Снято' : '❌')}</span>
+                    </div>`;
+                }
+            }
+            containerFull.innerHTML = html;
+            containerFull.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', (e) => {
+                    const id = e.target.dataset.accessoryId;
+                    toggleAccessory(id);
+                    updateAccessoriesUI();
+                    updateSelectedInfo();
+                    updateTransformSliders();
+                    updateCodeOutput();
+                });
+            });
+            containerFull.querySelectorAll('.accessory-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'INPUT') return;
+                    const id = item.dataset.id;
+                    if (equippedAccessories[id]) selectAccessory(id);
+                    else toggleAccessory(id);
+                    updateAccessoriesUI();
+                    updateSelectedInfo();
+                    updateTransformSliders();
+                    updateCodeOutput();
+                });
+            });
+        }
+    }
+
+    function updateSelectedInfo() {
+        const el = document.getElementById('selectedInfo');
+        if (!selectedAccessoryId || !equippedAccessories[selectedAccessoryId]) {
+            el.innerHTML = '<span style="color:#666;">Выберите аксессуар</span>';
+            return;
+        }
+        const info = ACCESSORIES_INFO.find(a => a.id === selectedAccessoryId);
+        el.innerHTML = `<strong>${info ? info.name : selectedAccessoryId}</strong> <span style="color:#666;">— настройка позиции</span>`;
+    }
+
+    function updateCodeOutput() {
+        const output = document.getElementById('codeOutput');
+        if (!selectedAccessoryId || !equippedAccessories[selectedAccessoryId]) {
+            output.innerHTML = '<span style="color:#666;">// Выберите аксессуар</span>';
+            return;
+        }
+        const t = getCurrentTransform(selectedAccessoryId);
+        if (!t) {
+            output.innerHTML = '<span style="color:#666;">// Нет данных</span>';
+            return;
+        }
+        const data = {
+            position: { x: Math.round(t.position.x*1000)/1000, y: Math.round(t.position.y*1000)/1000, z: Math.round(t.position.z*1000)/1000 },
+            rotation: { x: Math.round(t.rotation.x), y: Math.round(t.rotation.y), z: Math.round(t.rotation.z) },
+            scale: { x: Math.round(t.scale.x*1000)/1000, y: Math.round(t.scale.y*1000)/1000, z: Math.round(t.scale.z*1000)/1000 },
+            bone: accessoryAttachments[selectedAccessoryId]?.bone || 'spine'
+        };
+        const json = JSON.stringify(data, null, 2);
+        output.innerHTML = `<span class="key">${selectedAccessoryId}</span>: <span class="highlight">${json}</span>`;
+    }
+
+    // ==================== КОПИРОВАНИЕ ====================
+    function copyCode() {
+        const output = document.getElementById('codeOutput');
+        const text = output.textContent;
+        navigator.clipboard.writeText(text).then(() => {
+            const btn = document.getElementById('copyCodeBtn');
+            btn.textContent = '✅ Скопировано!';
+            btn.classList.add('copied');
+            setTimeout(() => {
+                btn.innerHTML = '<i class="fas fa-copy"></i> Скопировать код';
+                btn.classList.remove('copied');
+            }, 2000);
+        }).catch(() => {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            document.body.removeChild(ta);
+        });
+    }
+
+    function resetCamera() { if (viewer) viewer.resetCamera(); }
+
+    // ==================== МОДАЛКА ====================
+    function showGearModal() {
+        const modal = document.getElementById('gearModal');
+        if (modal) {
+            modal.classList.add('active');
+            updateAccessoriesUI();
+        }
+    }
+    function hideGearModal() {
+        const modal = document.getElementById('gearModal');
+        if (modal) modal.classList.remove('active');
+    }
+
+    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+    async function initViewer() {
+        const container = document.getElementById('uniform3dContainer');
+        const loadingEl = document.getElementById('uniform3dLoading');
+        viewer = new GTACharacterViewer(container);
+        setTimeout(() => { if (loadingEl) loadingEl.style.display = 'none'; }, 500);
+        await loadAllAccessoriesTxd();
+        await loadAllAccessories();
+        await loadUniform(currentUniform);
+        updateAccessoriesUI();
+        updateSelectedInfo();
+        updateTransformSliders();
+        updateCodeOutput();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initViewer();
+
+        // Выбор формы
+        document.querySelectorAll('.uniform-selector button').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.uniform-selector button').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentUniform = btn.dataset.uniform;
+                loadUniform(currentUniform);
+                setTimeout(() => {
+                    updateAccessoriesUI();
+                    updateSelectedInfo();
+                    updateTransformSliders();
+                    updateCodeOutput();
+                }, 200);
+            });
+        });
+
+        // Слайдеры
+        const sliderIds = ['posX','posY','posZ','rotX','rotY','rotZ','scaleX','scaleY','scaleZ'];
+        sliderIds.forEach(id => {
+            const slider = document.getElementById(id);
+            if (slider) {
+                slider.addEventListener('input', () => {
+                    if (selectedAccessoryId) {
+                        const num = document.getElementById(id + 'Num');
+                        if (num) num.value = slider.value;
+                        updateTransformFromSliders(selectedAccessoryId);
+                    }
+                });
+            }
+            const num = document.getElementById(id + 'Num');
+            if (num) {
+                num.addEventListener('input', (e) => {
+                    if (selectedAccessoryId) {
+                        const val = parseFloat(e.target.value);
+                        if (!isNaN(val)) {
+                            const slider = document.getElementById(id);
+                            if (slider) {
+                                const min = parseFloat(slider.min);
+                                const max = parseFloat(slider.max);
+                                slider.value = Math.max(min, Math.min(max, val));
+                            }
+                            let type = 'pos';
+                            if (id.startsWith('rot')) type = 'rot';
+                            else if (id.startsWith('scale')) type = 'scale';
+                            const axis = id.slice(-1);
+                            updateTransformFromValue(selectedAccessoryId, type, axis, val);
+                        }
+                    }
+                });
+                num.addEventListener('blur', (e) => {
+                    const val = parseFloat(e.target.value);
+                    if (!isNaN(val)) {
+                        const id = e.target.id.replace('Num', '');
+                        let step = id.startsWith('rot') ? 1 : (id.startsWith('scale') ? 0.005 : 0.001);
+                        const rounded = Math.round(val / step) * step;
+                        e.target.value = rounded;
+                        const slider = document.getElementById(id);
+                        if (slider) slider.value = rounded;
+                        let type = 'pos';
+                        if (id.startsWith('rot')) type = 'rot';
+                        else if (id.startsWith('scale')) type = 'scale';
+                        const axis = id.slice(-1);
+                        updateTransformFromValue(selectedAccessoryId, type, axis, rounded);
+                    }
+                });
+            }
+        });
+
+        // Кнопки
+        document.getElementById('resetSelectedBtn').addEventListener('click', resetSelectedTransform);
+        document.getElementById('clearAllBtn').addEventListener('click', clearAllAccessories);
+        document.getElementById('copyCodeBtn').addEventListener('click', copyCode);
+
+        // Модалка
+        document.getElementById('gearButton').addEventListener('click', showGearModal);
+        document.getElementById('closeGearModal').addEventListener('click', hideGearModal);
+        document.getElementById('closeGearModalBtn').addEventListener('click', hideGearModal);
+        document.getElementById('clearAllGearBtn').addEventListener('click', () => {
+            clearAllAccessories();
+            updateAccessoriesUI();
+            updateSelectedInfo();
+            updateTransformSliders();
+            updateCodeOutput();
+        });
+        document.getElementById('gearModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) hideGearModal();
+        });
+
+        // Сброс камеры R
+        document.addEventListener('keydown', (e) => {
+            if ((e.key === 'r' || e.key === 'R') && !e.ctrlKey && !e.metaKey && !e.target.closest('input')) {
+                resetCamera();
+            }
+        });
+    });
+</script>
+</body>
+</html>

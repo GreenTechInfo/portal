@@ -1,5 +1,3 @@
-// js/vehicles/tuning.js
-
 import { escapeHtml, getValue, getDealerDisplay, getNumericValue } from './helpers.js';
 import { addImageModal, initImageModalClicks } from './image-modal.js';
 
@@ -11,7 +9,10 @@ export function renderTuningPage(container) {
         "Lada Niva", "Mercedes G-Class", "Lexus GS F", "Ford Mustang Shelby", "Mercedes C63 AMG",
         "BMW M2", "BMW M3 E46", "Toyota Land Cruiser 300", "BMW 5 Series E39", "Toyota Land Cruiser 200",
         "BMW 5 Series E34", "Lada 2106", "Mercedes E-Class W210", "Lexus IS", "Cadillac Escalade",
-        "Ford F-150 Raptor", "Mercedes AMG GT"
+        "Ford F-150 Raptor", "Mercedes AMG GT",
+        "Audi RS6", "Toyota Camry V70", "Mitsubishi Lancer Evo X", "Mazda RX-7",
+        "Subaru Impreza WRX STI Sedan", "Subaru Impreza WRX STI Hatchback", "Lexus LX570",
+        "Nissan Silvia S15", "BMW 750e xDrive G70", "BMW M5 F90", "Nissan Skyline R34"
     ];
 
     const visualItems = [
@@ -26,7 +27,10 @@ export function renderTuningPage(container) {
         "Тонировка — затемнение стёкол"
     ];
 
-    const carsListHtml = visualTuningCars.map(car => `<li>${escapeHtml(car)}</li>`).join('');
+    // Создаём HTML для списка автомобилей в 2 колонки
+    const carsListHtml = visualTuningCars.map(car => 
+        `<div class="car-item">${escapeHtml(car)}</div>`
+    ).join('');
 
     container.innerHTML = `
         <h1 class="page-title">Тюнинг ателье</h1>
@@ -91,15 +95,12 @@ export function renderTuningPage(container) {
 
         <div class="info-block">
             <h3>Модели, на которые доступен визуальный тюнинг</h3>
-            <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 8px;">
-                <ul class="info-list" style="margin: 0;">
-                    ${carsListHtml}
-                </ul>
+            <div class="cars-grid">
+                ${carsListHtml}
             </div>
         </div>
     `;
 
-    // Инициализируем модальное окно
     addImageModal();
     initImageModalClicks();
 }

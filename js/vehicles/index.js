@@ -1,5 +1,3 @@
-// js/vehicles/index.js
-
 import { renderVehicleList } from './vehicle-list.js';
 import { renderTuningPage } from './tuning.js';
 import { renderPaintJobPage } from './paintjob.js';

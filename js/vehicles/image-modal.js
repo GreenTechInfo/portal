@@ -1,5 +1,3 @@
-// js/vehicles/image-modal.js
-
 export function addImageModal() {
     if (document.getElementById('imageModal')) return;
 
@@ -76,7 +74,6 @@ export function addImageModal() {
         }
     });
 
-    // Инициализируем клики на уже существующих изображениях
     initImageModalClicks();
 }
 
@@ -89,7 +86,6 @@ export function initImageModalClicks() {
     const modalCaption = document.getElementById('modalCaption');
 
     images.forEach(img => {
-        // Убираем старые слушатели, если они были
         const newImg = img.cloneNode(true);
         img.parentNode.replaceChild(newImg, img);
 

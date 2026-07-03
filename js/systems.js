@@ -48,8 +48,7 @@ const SYSTEMS_DATA = [
 						"Для получения паспорта Вам нужно проследовать в МФЦ.",
 						'Отметьте МФЦ на карте: /gps → 1 "Государственные учреждения" → 2 "Мои документы г. Южный", 3 "Мои документы г. Арзамас", 4 "Мои документы г. Нижегородск"',
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-							${renderImage("../images/systems/documents/mfc_gps1.png", null, '300px')}
-							${renderImage("../images/systems/documents/mfc_gps2.png", null, '300px')}
+							${renderImage("../images/systems/documents/mfc_gps2.png", null, '600px')}
 						</div>`,
 						"Подойдите к двери МФЦ и нажмите ALT, чтобы зайти внутрь."
 					],
@@ -96,8 +95,7 @@ const SYSTEMS_DATA = [
                         "Для открытия категорий в водительском удостоверении Вам нужно проследовать в Автошколу.",
                         'Отметьте автошколу на карте: /gps → 1 "Государственные учреждения" → 6 "Автошкола"',
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-							${renderImage("../images/systems/documents/mfc_gps1.png",  null, '300px')}
-							${renderImage("../images/systems/documents/driving_school_gps2.png", null, '300px')}
+							${renderImage("../images/systems/documents/driving_school_gps2.png", null, '600px')}
 						</div>`,
                         "Зайдите внутрь автошколы и подойдите к стойке информации. Выберите категорию, которую хотите открыть.",
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
@@ -117,8 +115,7 @@ const SYSTEMS_DATA = [
                         "После сдачи практического экзамена направляйтесь в ГИБДД.",
                         'Отметьте отделение ГИБДД на карте: /gps → 1 "Государственные учреждения" → 11 "МРЭО (Экзамены)"',
                         `<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-							${renderImage("../images/systems/documents/mfc_gps1.png",  null, '300px')}
-							${renderImage("../images/systems/documents/gibdd_gps_2.png", null, '300px')}
+							${renderImage("../images/systems/documents/gibdd_gps_2.png", null, '600px')}
 						</div>`,
 						"Зайдите внутрь и пройдите в комнату сдачи экзаменов.",
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
@@ -144,8 +141,7 @@ const SYSTEMS_DATA = [
                         "Для получения медицинской карты Вам нужно проследовать в городскую больницу Арзамаса.",
                         'Отметьте больницу на карте: /gps → 1 "Государственные учреждения" → 8 "Городская больница"',
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-							${renderImage("../images/systems/documents/mfc_gps1.png",  null, '300px')}
-							${renderImage("../images/systems/documents/hospital_gps2.png", null, '300px')}
+							${renderImage("../images/systems/documents/hospital_gps2.png", null, '600px')}
 						</div>`,
 						"Зайдите внутрь больницы, подойдите к регистратуре и нажмите ALT. Медицинская карта будет получена.",
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
@@ -166,8 +162,7 @@ const SYSTEMS_DATA = [
                         "Для получения повестки Вам нужно проследовать в военкомат.",
                         'Отметьте военкомат на карте: /gps → 1 "Государственные учреждения" → 10 "Военкомат"',
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-							${renderImage("../images/systems/documents/mfc_gps1.png",  null, '300px')}
-							${renderImage("../images/systems/documents/voenkomat_gps2.png", null, '300px')}
+							${renderImage("../images/systems/documents/voenkomat_gps2.png", null, '600px')}
 						</div>`,
 						"Зайдите внутрь военкомата, подойдите к дежурному и нажмите ALT. Повестка будет получена.",
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
@@ -216,7 +211,7 @@ const SYSTEMS_DATA = [
                         "Для получения страхового полиса Вам нужно проследовать в любой из трёх доступных офисов страховых компаний.",
                         'Найти офис на карте: /gps → 16 "Найти ближайшую страховую компанию"',
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-							${renderImage("../images/systems/documents/insurance_gps.png",  null, '300px')}
+							${renderImage("../images/systems/documents/insurance_gps.png",  null, '600px')}
 						</div>`,
                         "После прибытия в офис страховой компании Вам нужно подойти к пикапу оформления полисов и нажать ALT.",
 						`<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
@@ -568,7 +563,7 @@ const SYSTEMS_DATA = [
 						<li><strong>Продажа другому игроку</strong> — возможна только через нотариуса.</li>
 					</ul>
 					<p><strong>Как найти нотариуса:</strong> <code>/gps → 19. Найти ближайшего нотариуса</code></p>
-					${renderImage("../images/systems/houses/notary_gps.png", null, "450px")}
+					${renderImage("../images/systems/houses/notary_gps.png", null, "600px")}
 					<p>У нотариуса вы можете продать свой дом другому игроку, либо обменять его на другой дом или бизнес.</p>
 					<div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center; margin: 16px 0;">
 						${renderImage("../images/systems/houses/notary_interior.png", null, "500px")}
@@ -779,7 +774,7 @@ const SYSTEMS_DATA = [
 						<li><strong>Продажа другому игроку</strong> — возможна только через нотариуса.</li>
 					</ul>
 					<p><strong>Как найти нотариуса:</strong> <code>/gps → 19. Найти ближайшего нотариуса</code></p>
-					${renderImage("../images/systems/business/notary_gps.png", null, "450px")}
+					${renderImage("../images/systems/business/notary_gps.png", null, "600px")}
 					<p>У нотариуса Вы можете продать свой бизнес другому игроку, либо же обменять на другой бизнес.</p>
 					<div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
 						${renderImage("../images/systems/business/notary_interior.png", null, "600px")}
@@ -1026,8 +1021,7 @@ const SYSTEMS_DATA = [
             </ul>
             
             <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-                ${renderImage("../images/systems/vehicle_trade/mreo_gps_1.png", null, "300px")}
-                ${renderImage("../images/systems/vehicle_trade/mreo_gps_2.png", null, "300px")}
+                ${renderImage("../images/systems/vehicle_trade/mreo_gps_2.png", null, "600px")}
             </div>
             
             <p>Здание МРЭО находится у автовокзала в Батырево.</p>
@@ -1198,8 +1192,7 @@ const SYSTEMS_DATA = [
                         <li>Выберите <strong>2. Утилизация авто</strong></li>
                     </ul>
                     <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-                        ${renderImage("../images/systems/car-selling/utilization_gps_1.png", null, "300px")}
-                        ${renderImage("../images/systems/car-selling/utilization_gps_2.png", null, "300px")}
+                        ${renderImage("../images/systems/car-selling/utilization_gps_2.png", null, "600px")}
                     </div>
                     
                     <div class="note-block">
@@ -1235,8 +1228,7 @@ const SYSTEMS_DATA = [
                         <li>Выберите <strong>3. БУ Рынок</strong></li>
                     </ul>
                     <div style="display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; margin: 16px 0;">
-                        ${renderImage("../images/systems/car-selling/buyer_gps_1.png", null, "300px")}
-                        ${renderImage("../images/systems/car-selling/buyer_gps_2.png", null, "300px")}
+                        ${renderImage("../images/systems/car-selling/buyer_gps_2.png", null, "600px")}
                     </div>
                     
                     <p><strong>Процесс продажи скупщику:</strong></p>

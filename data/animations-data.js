@@ -460,7 +460,6 @@ const ANIMATIONS_DATA = [
     ] }
 ];
 
-// Категории для фильтрации
 const ANIMATION_CATEGORIES = {
     all: "Все анимации",
     control: "Управление",

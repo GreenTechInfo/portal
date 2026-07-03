@@ -1,5 +1,3 @@
-// js/vehicles/vehicle-list.js
-
 import { escapeHtml, getValue, getDealerDisplay, getNumericValue } from './helpers.js';
 import { initVehicleModalClicks } from './vehicle-modal.js';
 
@@ -7,9 +5,6 @@ let currentVehicles = [];
 let currentSort = { field: 'price', order: 'asc' };
 let currentSearchTerm = '';
 
-/**
- * Нормализует данные автомобиля, добавляя значения по умолчанию для отсутствующих полей
- */
 function normalizeVehicle(vehicle) {
     return {
         ...vehicle,
@@ -60,7 +55,6 @@ export function renderVehicleList(container) {
         }
 
         const vehiclesHtml = vehicles.map(v => {
-            // Нормализуем данные для отображения в карточке
             const normalizedV = normalizeVehicle(v);
             
             const maxSpeed = getValue(v.maxSpeed);
@@ -113,11 +107,13 @@ export function renderVehicleList(container) {
                                 <i class="fas fa-stopwatch"></i>
                                 <span class="spec-label">0-100</span>
                                 <span class="spec-value">${zeroToHundred}</span>
+								<span class="spec-label">с.</span>
                             </div>
                             <div class="spec-item">
                                 <i class="fas fa-stopwatch-20"></i>
                                 <span class="spec-label">0-MAX</span>
                                 <span class="spec-value">${maxAccel}</span>
+								<span class="spec-label">с.</span>
                             </div>
                             <div class="spec-item">
                                 <i class="fas ${fuelIcon}"></i>
@@ -150,8 +146,7 @@ export function renderVehicleList(container) {
         }).join('');
 
         grid.innerHTML = vehiclesHtml;
-        
-        // Инициализируем клики для открытия модального окна
+
         initVehicleModalClicks();
     };
 

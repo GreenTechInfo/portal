@@ -1,6 +1,3 @@
-/*-----------------------------------------------
-  Root Variables & Reset
------------------------------------------------*/
 :root {
     --bg: #0a0e14;
     --header-bg: #111820;
@@ -36,14 +33,10 @@ body {
     flex-direction: column;
 }
 
-/* Scrollbar */
 ::-webkit-scrollbar { width: 8px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
 
-/*-----------------------------------------------
-  Typography & Utils
------------------------------------------------*/
 .page-title {
     text-align: center;
     font-size: 2rem;
@@ -59,9 +52,6 @@ body {
     font-size: 1rem;
 }
 
-/*-----------------------------------------------
-  Header & Navigation
------------------------------------------------*/
 .header {
     background: var(--header-bg);
     border-bottom: 1px solid var(--border);
@@ -110,12 +100,8 @@ body {
     cursor: pointer;
 }
 
-/* Main Layout */
 .main-layout { display: flex; flex: 1; }
 
-/*-----------------------------------------------
-  Sidebar
------------------------------------------------*/
 .sidebar {
     width: var(--sidebar-width);
     background: var(--header-bg);
@@ -152,7 +138,6 @@ body {
     border-left-color: var(--accent);
 }
 
-/* Nav icons */
 .nav-icon {
     width: 20px;
     height: 20px;
@@ -166,7 +151,6 @@ body {
     filter: brightness(1) invert(0.4) sepia(1) hue-rotate(80deg) saturate(500%);
 }
 
-/* Arrow for dropdown */
 .arrow {
     margin-left: auto;
     font-size: 0.7rem;
@@ -178,7 +162,6 @@ body {
     transform: rotate(180deg);
 }
 
-/* Submenu */
 .submenu {
     list-style: none;
     padding-left: 0;
@@ -223,9 +206,6 @@ body {
     font-weight: 700;
 }
 
-/*-----------------------------------------------
-  Content & Pages
------------------------------------------------*/
 .content {
     flex: 1;
     padding: 32px 48px;
@@ -241,9 +221,6 @@ body {
     to { opacity: 1; transform: translateY(0); }
 }
 
-/*-----------------------------------------------
-  Cards (Unified)
------------------------------------------------*/
 .card,
 .info-block,
 .mature-block,
@@ -271,7 +248,6 @@ body {
 .card h3 { font-size: 1.1rem; color: #fff; margin-bottom: 8px; text-align: center; }
 .card p { color: var(--text-secondary); font-size: 0.9rem; text-align: center; }
 
-/* Card tags */
 .card-tag {
     display: inline-block;
     padding: 4px 10px;
@@ -285,7 +261,6 @@ body {
 .tag-green { background: rgba(46, 164, 79, 0.2); color: var(--accent); }
 .tag-blue { background: rgba(88, 166, 255, 0.2); color: var(--link); }
 
-/* Info block */
 .info-block { padding: 24px; margin-bottom: 24px; }
 .info-block h3 { color: #fff; margin-bottom: 16px; font-size: 1.2rem; }
 
@@ -308,7 +283,6 @@ body {
     text-transform: uppercase;
 }
 
-/* Info list (unified bullet) */
 .info-list {
     list-style: none;
     padding-left: 0;
@@ -327,7 +301,6 @@ body {
     left: 0;
 }
 
-/* Grids */
 .card-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -335,9 +308,6 @@ body {
     margin-bottom: 24px;
 }
 
-/*-----------------------------------------------
-  Animations Page
------------------------------------------------*/
 .anim-search-bar {
     display: flex;
     gap: 16px;
@@ -436,7 +406,6 @@ body {
     margin-bottom: 4px;
 }
 
-/* Mature block */
 .mature-block {
     padding: 24px;
     margin-bottom: 24px;
@@ -461,7 +430,6 @@ body {
 
 .mature-warning:hover { background: rgba(210, 153, 29, 0.25); }
 
-/* Category tags unified */
 [class^="tag-"] {
     background: rgba(88, 166, 255, 0.15);
     color: var(--link);
@@ -485,9 +453,6 @@ body {
 .tag-walk { background: rgba(88, 166, 255, 0.15); color: var(--link); }
 .tag-mature { background: rgba(210, 153, 29, 0.2); color: var(--warning); }
 
-/*-----------------------------------------------
-  Vehicles Page
------------------------------------------------*/
 .vehicle-category-nav {
     display: flex;
     flex-wrap: wrap;
@@ -526,7 +491,6 @@ body {
     margin-top: 16px;
 }
 
-/* Vehicle card (enhanced) */
 .vehicle-card {
     background: linear-gradient(145deg, var(--card-bg), #141a24);
     border-radius: 16px;
@@ -655,7 +619,7 @@ body {
 .vehicle-card-price {
     padding: 12px 16px;
     display: flex;
-    justify-content: flex-end;  /* цена будет справа */
+    justify-content: flex-end; 
     background: rgba(0, 0, 0, 0.2);
     border-top: 1px solid var(--border);
 }
@@ -677,7 +641,6 @@ body {
 
 .gov-price-tip:hover { color: var(--accent); }
 
-/* Tuning */
 .tuning-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -708,7 +671,6 @@ body {
 
 .tuning-category li:last-child { border-bottom: none; }
 
-/* Wheels */
 .wheels-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
@@ -731,7 +693,6 @@ body {
     color: var(--warning);
 }
 
-/* Weapon/Vehicle items */
 .weapon-grid,
 .vehicle-grid {
     display: flex;
@@ -747,7 +708,6 @@ body {
     font-size: 0.8rem;
 }
 
-/* Salary control */
 .salary-control {
     display: flex;
     align-items: center;
@@ -763,9 +723,6 @@ body {
     border-radius: 8px;
 }
 
-/*-----------------------------------------------
-  Scroll to Top Button
------------------------------------------------*/
 .scroll-top-btn {
     position: fixed;
     bottom: 30px;
@@ -812,7 +769,6 @@ body {
     border-color: var(--accent);
 }
 
-/* Стили для галереи винилов */
 .vinyl-gallery {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
@@ -855,9 +811,6 @@ body {
     padding: 20px;
 }
 
-/*-----------------------------------------------
-  Footer
------------------------------------------------*/
 .footer {
     text-align: center;
     padding: 20px;
@@ -867,9 +820,6 @@ body {
     background: var(--header-bg);
 }
 
-/*-----------------------------------------------
-  Mobile Overlay
------------------------------------------------*/
 .sidebar-overlay {
     display: none;
     position: fixed;
@@ -883,9 +833,6 @@ body {
 
 .sidebar-overlay.show { display: block; }
 
-/*-----------------------------------------------
-  Responsive
------------------------------------------------*/
 @media (max-width: 900px) {
     .mobile-menu-btn { display: block; }
     .sidebar {
@@ -912,7 +859,6 @@ body {
     .vehicle-category-nav { gap: 6px; }
     .vehicle-cat-btn { padding: 6px 12px; font-size: 0.8rem; }
 
-    /* Vehicle card body column fix */
     .vehicle-card-body {
         flex-direction: column;
         gap: 0;
@@ -1248,9 +1194,6 @@ transform: translateY(0);
     }
 }
 
-/* ============================================
-   3D ПРОСМОТР ФОРМЫ (Армия)
-============================================ */
 .uniform-3d-block {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -1309,7 +1252,7 @@ transform: translateY(0);
 
 .uniform-3d-container {
     width: 100%;
-    aspect-ratio: 2 / 1; /* Квадратное окно */
+    aspect-ratio: 2 / 1; 
     background: var(--bg);
     border-radius: 12px;
     overflow: hidden;
@@ -1354,7 +1297,6 @@ transform: translateY(0);
     border-radius: 8px;
 }
 
-/* Адаптив для мобильных */
 @media (max-width: 768px) {
     .uniform-controls {
         flex-direction: column;
@@ -1438,7 +1380,6 @@ transform: translateY(0);
     }
 }
 
-/* Footer с центрированной надписью и кнопкой справа */
 .footer {
     text-align: center;
     padding: 20px;
@@ -1489,7 +1430,6 @@ transform: translateY(0);
     }
 }
 
-/* Дополнительные стили для 3D просмотрщика на странице армии */
 .uniform-viewer {
     background: linear-gradient(135deg, #0a0a1a 0%, #0d1117 100%);
     border-radius: 16px;
@@ -1568,7 +1508,6 @@ height: 350px;
     }
 }
 
-/* Адаптивность изображений в системах и других разделах */
 .content img {
     max-width: 100%;
     height: auto;
@@ -1577,7 +1516,6 @@ height: 350px;
     margin-right: auto;
 }
 
-/* Специально для контейнеров с изображениями в системах */
 .content .flex-images,
 .content .image-row,
 .content div[style*="display: flex"] img {
@@ -1585,45 +1523,38 @@ height: 350px;
     height: auto;
 }
 
-/* Горизонтальные скроллы для контейнеров с множеством изображений */
 .content .image-gallery,
 .content div[style*="display: flex"][style*="gap"] {
     flex-wrap: wrap;
     justify-content: center;
 }
 
-/* Для мобильных - убираем горизонтальный скролл у таблиц и контейнеров */
 @media (max-width: 768px) {
     .system-detail-body {
         padding: 20px 16px;
         overflow-x: auto;
 		}
-    
-    /* Таблицы на мобильных */
+
     .commands-table,
     .info-table {
         display: block;
         overflow-x: auto;
         white-space: nowrap;
     }
-    
-    /* Изображения в локациях */
+
     .locations-grid {
         grid-template-columns: 1fr;
     }
-    
-    /* Любые flex-контейнеры с изображениями */
+
     [style*="display: flex"][style*="gap"] {
         flex-wrap: wrap;
     }
-    
-    /* Убираем фиксированные ширины у inline-стилей изображений */
+
     .content img[style*="width"] {
         max-width: 100% !important;
         height: auto !important;
     }
-    
-    /* Контейнеры с overflow: auto должны нормально работать */
+
     [style*="overflow-x: auto"] {
         max-width: 100%;
     }
@@ -1754,7 +1685,6 @@ height: 350px;
     color: var(--accent);
 }
 
-/* Детальная страница правил */
 .rules-detail-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -1836,7 +1766,6 @@ height: 350px;
     color: var(--accent);
 }
 
-/* Адаптив */
 @media (max-width: 768px) {
     .rules-detail-body {
         padding: 20px 16px;
@@ -1936,7 +1865,6 @@ height: 350px;
     display: block;
 }
 
-/* быстрые доработки для новых блоков */
 .highlight-box {
     background: rgba(46, 164, 79, 0.07);
     border-left: 4px solid var(--accent, #2ea44f);
@@ -2005,11 +1933,6 @@ height: 350px;
     color: var(--accent, #2ea44f);
 }
 
-/*-----------------------------------------------
-  Главная страница (Quick Links, Servers, News)
------------------------------------------------*/
-
-/* Сетка быстрых ссылок */
 .quick-links-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
@@ -2059,7 +1982,6 @@ height: 350px;
     transition: color 0.2s ease;
 }
 
-/* Сетка серверов */
 .servers-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
@@ -2117,7 +2039,6 @@ height: 350px;
     font-weight: 700;
 }
 
-/* Блок новостей */
 .news-item {
     display: flex;
     gap: 20px;
@@ -2154,7 +2075,6 @@ height: 350px;
     line-height: 1.4;
 }
 
-/* Ресурсы (соцсети) */
 .resources-grid {
     display: flex;
     flex-wrap: wrap;
@@ -2186,7 +2106,6 @@ height: 350px;
     font-size: 1rem;
 }
 
-/* Адаптив для мобильных */
 @media (max-width: 600px) {
     .quick-links-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -2655,11 +2574,6 @@ text-align: center;
 	
 }
 
-/* ============================================
-   РАБОТЫ (JOBS)
-============================================ */
-
-/* Сетка карточек работ */
 .jobs-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -2667,7 +2581,6 @@ text-align: center;
     margin-bottom: 16px;
 }
 
-/* Карточка работы */
 .job-card {
     background: var(--card-bg);
     border: 1px solid var(--border);
@@ -2685,7 +2598,6 @@ text-align: center;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
 }
 
-/* Изображение в карточке */
 .job-card-image {
     width: 100%;
     aspect-ratio: 16 / 9;
@@ -2716,7 +2628,6 @@ text-align: center;
     opacity: 0.4;
 }
 
-/* Контент карточки */
 .job-card-content {
     padding: 16px 18px 18px;
     display: flex;
@@ -2740,7 +2651,6 @@ text-align: center;
     color: var(--accent);
 }
 
-/* Информация в карточке (уровень, город, описание) - ТОЛЬКО ЗНАЧКИ */
 .job-card-info {
     display: flex;
     flex-direction: column;
@@ -2784,7 +2694,6 @@ text-align: center;
     font-size: 0.82rem;
 }
 
-/* Адаптив для карточек работ */
 @media (max-width: 600px) {
     .jobs-grid {
         grid-template-columns: 1fr;
@@ -2793,5 +2702,159 @@ text-align: center;
     
     .job-card-info {
         font-size: 0.8rem;
+    }
+}
+
+.skin-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+    margin: 16px 0 24px;
+    flex-wrap: wrap;
+}
+.skin-nav-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.4rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.skin-nav-btn:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(46, 164, 79, 0.1);
+}
+.skin-nav-btn:disabled {
+    opacity: 0.3;
+    cursor: not-allowed;
+    border-color: var(--border);
+    color: var(--text-secondary);
+}
+.skin-info {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px 24px;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+}
+.skin-info-item {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    font-size: 1rem;
+}
+.skin-info-item .label {
+    color: var(--text-secondary);
+    font-weight: 400;
+}
+.skin-info-item .value {
+    color: #fff;
+    font-weight: 600;
+}
+.skin-info-item .value.price {
+    color: #50c878;
+}
+.skin-id-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 4px 4px 4px 12px;
+    border-radius: 25px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s;
+}
+.skin-id-input-wrap:focus-within {
+    border-color: var(--accent);
+}
+#skinIdInput {
+    width: 60px;
+    background: transparent;
+    border: none;
+    color: var(--text);
+    font-size: 0.95rem;
+    padding: 6px 0;
+    outline: none;
+}
+#skinIdInput::placeholder {
+    color: var(--text-secondary);
+    font-size: 0.8rem;
+}
+#skinIdInput::-webkit-inner-spin-button,
+#skinIdInput::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+#skinIdInput[type="number"] {
+    -moz-appearance: textfield;
+}
+@media (max-width: 600px) {
+    .skin-id-input-wrap {
+padding: 2px 2px 2px 10px;
+    }
+    #skinIdInput {
+width: 50px;
+font-size: 0.8rem;
+    }
+    .skin-controls {
+gap: 12px;
+    }
+    .skin-nav-btn {
+width: 40px;
+height: 40px;
+font-size: 1rem;
+    }
+    .skin-info {
+gap: 16px;
+padding: 12px 16px;
+flex-direction: column;
+align-items: center;
+width: 100%;
+    }
+    .skin-info-item {
+font-size: 0.85rem;
+    }
+}
+
+.cars-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px 30px;
+    padding: 5px 0;
+}
+
+.car-item {
+    padding: 6px 0;
+    padding-left: 20px;
+    position: relative;
+    font-size: 15px;
+    line-height: 1.5;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.car-item::before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    color: #2ea44f;
+    font-weight: bold;
+}
+
+@media (max-width: 600px) {
+    .cars-grid {
+        grid-template-columns: 1fr;
+        gap: 4px;
     }
 }
