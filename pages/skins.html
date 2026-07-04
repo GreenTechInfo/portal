@@ -48,6 +48,10 @@
                     <button id="nextSkinBtn" class="skin-nav-btn" aria-label="Следующий скин">
                         <i class="fas fa-chevron-right"></i>
                     </button>
+					
+					<button id="screenshotBtn" class="skin-nav-btn" style="background: #2a2a3e; padding: 0 20px;">
+						скрин
+					</button>
                 </div>
 
                 <div id="skin3dContainer" class="uniform-3d-container">
@@ -95,17 +99,17 @@
             { id: 2, name: "maccer", dff: "../models/skins/maccer.dff", txd: "../models/skins/maccer.txd", gender: "male" },
             { id: 3, name: "andre", dff: "../models/skins/andre.dff", txd: "../models/skins/andre.txd", gender: "male" },
             { id: 4, name: "bbthin", dff: "../models/skins/bbthin.dff", txd: "../models/skins/bbthin.txd", gender: "male" },
-            // { id: 5, name: "bb", dff: "../models/skins/bb.dff", txd: "../models/skins/bb.txd", gender: "male" },
+            { id: 5, name: "bb", dff: "../models/skins/bb.dff", txd: "../models/skins/bb.txd", gender: "male", rotation: { x: 0, y: 0, z: Math.PI / 2}},
             { id: 6, name: "emmet", dff: "../models/skins/emmet.dff", txd: "../models/skins/emmet.txd", gender: "male" },
             { id: 7, name: "male01", dff: "../models/skins/male01.dff", txd: "../models/skins/male01.txd", gender: "male" },
-            // { id: 8, name: "sweeper", dff: "../models/skins/sweeper.dff", txd: "../models/skins/sweeper.txd", gender: "male" },
+            { id: 8, name: "janitor", dff: "../models/skins/janitor.dff", txd: "../models/skins/janitor.txd", gender: "male" },
             { id: 9, name: "bfori", dff: "../models/skins/bfori.dff", txd: "../models/skins/bfori.txd", gender: "male" },
             { id: 10, name: "bfost", dff: "../models/skins/bfost.dff", txd: "../models/skins/bfost.txd", gender: "male" },
             { id: 11, name: "vbfycrp", dff: "../models/skins/vbfycrp.dff", txd: "../models/skins/vbfycrp.txd", gender: "male" },
             { id: 12, name: "bfyri", dff: "../models/skins/bfyri.dff", txd: "../models/skins/bfyri.txd", gender: "female" },
             { id: 13, name: "bfyst", dff: "../models/skins/bfyst.dff", txd: "../models/skins/bfyst.txd", gender: "female" },
             { id: 14, name: "bmori", dff: "../models/skins/bmori.dff", txd: "../models/skins/bmori.txd", gender: "male" },
-            // { id: 15, name: "bmost", dff: "../models/skins/bmost.dff", txd: "../models/skins/bmost.txd", gender: "male" },
+            { id: 15, name: "bmost", dff: "../models/skins/bmost.dff", txd: "../models/skins/bmost.txd", gender: "male" },
             { id: 16, name: "bmyap", dff: "../models/skins/bmyap.dff", txd: "../models/skins/bmyap.txd", gender: "male" },
             { id: 17, name: "bmybu", dff: "../models/skins/bmybu.dff", txd: "../models/skins/bmybu.txd", gender: "male" },
             { id: 18, name: "bmybe", dff: "../models/skins/bmybe.dff", txd: "../models/skins/bmybe.txd", gender: "male" },
@@ -118,7 +122,7 @@
             { id: 25, name: "wbdyg2", dff: "../models/skins/wbdyg2.dff", txd: "../models/skins/wbdyg2.txd", gender: "male" },
             { id: 26, name: "wmybp", dff: "../models/skins/wmybp.dff", txd: "../models/skins/wmybp.txd", gender: "male" },
             { id: 27, name: "wmycon", dff: "../models/skins/wmycon.dff", txd: "../models/skins/wmycon.txd", gender: "male" },
-            // { id: 28, name: "bmydrug", dff: "../models/skins/bmydrug.dff", txd: "../models/skins/bmydrug.txd", gender: "male" },
+            { id: 28, name: "bmydrug", dff: "../models/skins/bmydrug.dff", txd: "../models/skins/bmydrug.txd", gender: "male" },
             { id: 29, name: "wmydrug", dff: "../models/skins/wmydrug.dff", txd: "../models/skins/wmydrug.txd", gender: "male" },
             { id: 30, name: "hmydrug", dff: "../models/skins/hmydrug.dff", txd: "../models/skins/hmydrug.txd", gender: "female" },
             { id: 31, name: "dwfolc", dff: "../models/skins/dwfolc.dff", txd: "../models/skins/dwfolc.txd", gender: "female" },
@@ -130,16 +134,15 @@
             { id: 37, name: "wmygol2", dff: "../models/skins/wmygol2.dff", txd: "../models/skins/wmygol2.txd", gender: "male" },
             { id: 38, name: "hfori", dff: "../models/skins/hfori.dff", txd: "../models/skins/hfori.txd", gender: "male" },
             { id: 40, name: "hfyri", dff: "../models/skins/hfyri.dff", txd: "../models/skins/hfyri.txd", gender: "female" },
-            // { id: 41, name: "hfyst", dff: "../models/skins/hfyst.dff", txd: "../models/skins/hfyst.txd", gender: "female" },
+            { id: 41, name: "hfyst", dff: "../models/skins/hfyst.dff", txd: "../models/skins/hfyst.txd", gender: "female" },
             { id: 42, name: "jethro", dff: "../models/skins/jethro.dff", txd: "../models/skins/jethro.txd", gender: "male" },
             { id: 43, name: "hmori", dff: "../models/skins/hmori.dff", txd: "../models/skins/hmori.txd", gender: "female" },
             { id: 44, name: "hmost", dff: "../models/skins/hmost.dff", txd: "../models/skins/hmost.txd", gender: "male" },
-            // { id: 45, name: "hmybe", dff: "../models/skins/hmybe.dff", txd: "../models/skins/hmybe.txd", gender: "male" },
+            { id: 45, name: "hmybe", dff: "../models/skins/hmybe.dff", txd: "../models/skins/hmybe.txd", gender: "male" },
             { id: 46, name: "hmyri", dff: "../models/skins/hmyri.dff", txd: "../models/skins/hmyri.txd", gender: "male" },
             { id: 47, name: "hmycr", dff: "../models/skins/hmycr.dff", txd: "../models/skins/hmycr.txd", gender: "male" },
             { id: 48, name: "hmyst", dff: "../models/skins/hmyst.dff", txd: "../models/skins/hmyst.txd", gender: "male" },
-            // { id: 49, name: "omokung", dff: "../models/skins/omokung.dff", txd: "../models/skins/omokung.txd", gender: "male" },
-            // { id: 50, name: "wmymech", dff: "../models/skins/wmymech.dff", txd: "../models/skins/wmymech.txd", gender: "male" },
+            { id: 49, name: "omokung", dff: "../models/skins/omokung.dff", txd: "../models/skins/omokung.txd", gender: "male" },
             { id: 51, name: "bmymoun", dff: "../models/skins/bmymoun.dff", txd: "../models/skins/bmymoun.txd", gender: "male" },
             { id: 52, name: "wmymoun", dff: "../models/skins/wmymoun.dff", txd: "../models/skins/wmymoun.txd", gender: "male" },
             { id: 53, name: "ofori", dff: "../models/skins/ofori.dff", txd: "../models/skins/ofori.txd", gender: "female" },
@@ -151,13 +154,13 @@
             { id: 59, name: "omyri", dff: "../models/skins/omyri.dff", txd: "../models/skins/omyri.txd", gender: "male" },
             { id: 60, name: "omyst", dff: "../models/skins/omyst.dff", txd: "../models/skins/omyst.txd", gender: "female" },
             { id: 61, name: "wmyplt", dff: "../models/skins/wmyplt.dff", txd: "../models/skins/wmyplt.txd", gender: "male" },
-            // { id: 62, name: "wmopj", dff: "../models/skins/wmopj.dff", txd: "../models/skins/wmopj.txd", gender: "male" },
+            { id: 62, name: "wmopj", dff: "../models/skins/wmopj.dff", txd: "../models/skins/wmopj.txd", gender: "male" },
             { id: 63, name: "bfypro", dff: "../models/skins/bfypro.dff", txd: "../models/skins/bfypro.txd", gender: "male" },
             { id: 64, name: "hfypro", dff: "../models/skins/hfypro.dff", txd: "../models/skins/hfypro.txd", gender: "male" },
             { id: 65, name: "kendl", dff: "../models/skins/kendl.dff", txd: "../models/skins/kendl.txd", gender: "male" },
             { id: 66, name: "bmypol1", dff: "../models/skins/bmypol1.dff", txd: "../models/skins/bmypol1.txd", gender: "male" },
             { id: 67, name: "bmypol2", dff: "../models/skins/bmypol2.dff", txd: "../models/skins/bmypol2.txd", gender: "male" },
-            // { id: 68, name: "wmoprea", dff: "../models/skins/wmoprea.dff", txd: "../models/skins/wmoprea.txd", gender: "male" },
+            { id: 68, name: "wmoprea", dff: "../models/skins/wmoprea.dff", txd: "../models/skins/wmoprea.txd", gender: "male" },
             { id: 69, name: "sbfyst", dff: "../models/skins/sbfyst.dff", txd: "../models/skins/sbfyst.txd", gender: "female" },
             { id: 70, name: "wmosci", dff: "../models/skins/wmosci.dff", txd: "../models/skins/wmosci.txd", gender: "male" },
             { id: 71, name: "wmysgrd", dff: "../models/skins/wmysgrd.dff", txd: "../models/skins/wmysgrd.txd", gender: "male" },
@@ -174,48 +177,46 @@
             { id: 83, name: "vbmyelv", dff: "../models/skins/vbmyelv.dff", txd: "../models/skins/vbmyelv.txd", gender: "male" },
             { id: 84, name: "vimyelv", dff: "../models/skins/vimyelv.dff", txd: "../models/skins/vimyelv.txd", gender: "male" },
             { id: 85, name: "vwfypro", dff: "../models/skins/vwfypro.dff", txd: "../models/skins/vwfypro.txd", gender: "male" },
-            // { id: 86, name: "ryder3", dff: "../models/skins/ryder3.dff", txd: "../models/skins/ryder3.txd", gender: "male" },
+            { id: 86, name: "ryder3", dff: "../models/skins/ryder3.dff", txd: "../models/skins/ryder3.txd", gender: "male", rotation: { x: 0, y: -Math.PI / 2, z: 0} },
             { id: 87, name: "vwfyst1", dff: "../models/skins/vwfyst1.dff", txd: "../models/skins/vwfyst1.txd", gender: "male" },
             { id: 88, name: "wfori", dff: "../models/skins/wfori.dff", txd: "../models/skins/wfori.txd", gender: "female" },
             { id: 89, name: "wfost", dff: "../models/skins/wfost.dff", txd: "../models/skins/wfost.txd", gender: "male" },
             { id: 90, name: "wfyjg", dff: "../models/skins/wfyjg.dff", txd: "../models/skins/wfyjg.txd", gender: "female" },
             { id: 91, name: "wfyri", dff: "../models/skins/wfyri.dff", txd: "../models/skins/wfyri.txd", gender: "female" },
-            // { id: 92, name: "wfyro", dff: "../models/skins/wfyro.dff", txd: "../models/skins/wfyro.txd", gender: "female" },
             { id: 93, name: "wfyst", dff: "../models/skins/wfyst.dff", txd: "../models/skins/wfyst.txd", gender: "female" },
-            // { id: 94, name: "wmori", dff: "../models/skins/wmori.dff", txd: "../models/skins/wmori.txd", gender: "male" },
             { id: 95, name: "wmost", dff: "../models/skins/wmost.dff", txd: "../models/skins/wmost.txd", gender: "male" },
             { id: 96, name: "wmyjg", dff: "../models/skins/wmyjg.dff", txd: "../models/skins/wmyjg.txd", gender: "male" },
             { id: 97, name: "wmylg", dff: "../models/skins/wmylg.dff", txd: "../models/skins/wmylg.txd", gender: "male" },
             { id: 98, name: "wmyri", dff: "../models/skins/wmyri.dff", txd: "../models/skins/wmyri.txd", gender: "male" },
-            // { id: 99, name: "wmyro", dff: "../models/skins/wmyro.dff", txd: "../models/skins/wmyro.txd", gender: "male" },
+            { id: 99, name: "wmyro", dff: "../models/skins/wmyro.dff", txd: "../models/skins/wmyro.txd", gender: "male" },
             { id: 100, name: "wmycr", dff: "../models/skins/wmycr.dff", txd: "../models/skins/wmycr.txd", gender: "male" },
             { id: 101, name: "wmyst", dff: "../models/skins/wmyst.dff", txd: "../models/skins/wmyst.txd", gender: "male" },
-            // { id: 102, name: "ballas1", dff: "../models/skins/ballas1.dff", txd: "../models/skins/ballas1.txd", gender: "male" },
-            // { id: 103, name: "ballas2", dff: "../models/skins/ballas2.dff", txd: "../models/skins/ballas2.txd", gender: "male" },
-            // { id: 104, name: "ballas3", dff: "../models/skins/ballas3.dff", txd: "../models/skins/ballas3.txd", gender: "male" },
-            // { id: 105, name: "fam1", dff: "../models/skins/fam1.dff", txd: "../models/skins/fam1.txd", gender: "male" },
+            { id: 102, name: "ballas1", dff: "../models/skins/ballas1.dff", txd: "../models/skins/ballas1.txd", gender: "male" },
+            { id: 103, name: "ballas2", dff: "../models/skins/ballas2.dff", txd: "../models/skins/ballas2.txd", gender: "male" },
+            { id: 104, name: "ballas3", dff: "../models/skins/ballas3.dff", txd: "../models/skins/ballas3.txd", gender: "male" },
+            { id: 105, name: "fam1", dff: "../models/skins/fam1.dff", txd: "../models/skins/fam1.txd", gender: "male" },
             { id: 106, name: "fam2", dff: "../models/skins/fam2.dff", txd: "../models/skins/fam2.txd", gender: "male" },
             { id: 107, name: "fam3", dff: "../models/skins/fam3.dff", txd: "../models/skins/fam3.txd", gender: "male" },
             { id: 108, name: "lsv1", dff: "../models/skins/lsv1.dff", txd: "../models/skins/lsv1.txd", gender: "male" },
             { id: 109, name: "lsv2", dff: "../models/skins/lsv2.dff", txd: "../models/skins/lsv2.txd", gender: "male" },
             { id: 110, name: "lsv3", dff: "../models/skins/lsv3.dff", txd: "../models/skins/lsv3.txd", gender: "male" },
             { id: 111, name: "maffa", dff: "../models/skins/maffa.dff", txd: "../models/skins/maffa.txd", gender: "male" },
-            // { id: 112, name: "maffb", dff: "../models/skins/maffb.dff", txd: "../models/skins/maffb.txd", gender: "male" },
+            { id: 112, name: "maffb", dff: "../models/skins/maffb.dff", txd: "../models/skins/maffb.txd", gender: "male" },
             { id: 113, name: "mafboss", dff: "../models/skins/mafboss.dff", txd: "../models/skins/mafboss.txd", gender: "male" },
             { id: 114, name: "vla1", dff: "../models/skins/vla1.dff", txd: "../models/skins/vla1.txd", gender: "male" },
-            // { id: 115, name: "vla2", dff: "../models/skins/vla2.dff", txd: "../models/skins/vla2.txd", gender: "male" },
+            { id: 115, name: "vla2", dff: "../models/skins/vla2.dff", txd: "../models/skins/vla2.txd", gender: "male" },
             { id: 116, name: "vla3", dff: "../models/skins/vla3.dff", txd: "../models/skins/vla3.txd", gender: "male" },
-            // { id: 117, name: "triada", dff: "../models/skins/triada.dff", txd: "../models/skins/triada.txd", gender: "male" },
-            // { id: 118, name: "triadb", dff: "../models/skins/triadb.dff", txd: "../models/skins/triadb.txd", gender: "male" },
-            // { id: 119, name: "sindaco", dff: "../models/skins/sindaco.dff", txd: "../models/skins/sindaco.txd", gender: "male" },
+            { id: 117, name: "triada", dff: "../models/skins/triada.dff", txd: "../models/skins/triada.txd", gender: "male" },
+            { id: 118, name: "triadb", dff: "../models/skins/triadb.dff", txd: "../models/skins/triadb.txd", gender: "male" },
+            { id: 119, name: "sindaco", dff: "../models/skins/sindaco.dff", txd: "../models/skins/sindaco.txd", gender: "male" },
             { id: 120, name: "triboss", dff: "../models/skins/triboss.dff", txd: "../models/skins/triboss.txd", gender: "male" },
             { id: 121, name: "dnb1", dff: "../models/skins/dnb1.dff", txd: "../models/skins/dnb1.txd", gender: "male" },
-            // { id: 122, name: "dnb2", dff: "../models/skins/dnb2.dff", txd: "../models/skins/dnb2.txd", gender: "male" },
-            // { id: 123, name: "dnb3", dff: "../models/skins/dnb3.dff", txd: "../models/skins/dnb3.txd", gender: "male" },
+            { id: 122, name: "dnb2", dff: "../models/skins/dnb2.dff", txd: "../models/skins/dnb2.txd", gender: "male" },
+            { id: 123, name: "dnb3", dff: "../models/skins/dnb3.dff", txd: "../models/skins/dnb3.txd", gender: "male" },
             { id: 124, name: "vmaff1", dff: "../models/skins/vmaff1.dff", txd: "../models/skins/vmaff1.txd", gender: "male" },
             { id: 125, name: "vmaff2", dff: "../models/skins/vmaff2.dff", txd: "../models/skins/vmaff2.txd", gender: "male" },
-            // { id: 126, name: "vmaff3", dff: "../models/skins/vmaff3.dff", txd: "../models/skins/vmaff3.txd", gender: "male" },
-            // { id: 127, name: "vmaff4", dff: "../models/skins/vmaff4.dff", txd: "../models/skins/vmaff4.txd", gender: "male" },
+            { id: 126, name: "vmaff3", dff: "../models/skins/vmaff3.dff", txd: "../models/skins/vmaff3.txd", gender: "male" },
+            { id: 127, name: "vmaff4", dff: "../models/skins/vmaff4.dff", txd: "../models/skins/vmaff4.txd", gender: "male" },
             { id: 128, name: "dnmylc", dff: "../models/skins/dnmylc.dff", txd: "../models/skins/dnmylc.txd", gender: "male" },
             { id: 129, name: "dnfolc1", dff: "../models/skins/dnfolc1.dff", txd: "../models/skins/dnfolc1.txd", gender: "male" },
             { id: 130, name: "dnfolc2", dff: "../models/skins/dnfolc2.dff", txd: "../models/skins/dnfolc2.txd", gender: "male" },
@@ -227,18 +228,17 @@
             { id: 136, name: "sbmytr3", dff: "../models/skins/sbmytr3.dff", txd: "../models/skins/sbmytr3.txd", gender: "male" },
             { id: 137, name: "swmotr3", dff: "../models/skins/swmotr3.dff", txd: "../models/skins/swmotr3.txd", gender: "male" },
             { id: 138, name: "wfybe", dff: "../models/skins/wfybe.dff", txd: "../models/skins/wfybe.txd", gender: "female" },
-            // { id: 139, name: "bfybe", dff: "../models/skins/bfybe.dff", txd: "../models/skins/bfybe.txd", gender: "female" },
-            // { id: 140, name: "hfybe", dff: "../models/skins/hfybe.dff", txd: "../models/skins/hfybe.txd", gender: "female" },
+            { id: 139, name: "bfybe", dff: "../models/skins/bfybe.dff", txd: "../models/skins/bfybe.txd", gender: "female" },
+            { id: 140, name: "hfybe", dff: "../models/skins/hfybe.dff", txd: "../models/skins/hfybe.txd", gender: "female" },
             { id: 141, name: "sofybu", dff: "../models/skins/sofybu.dff", txd: "../models/skins/sofybu.txd", gender: "female" },
             { id: 142, name: "sbmyst", dff: "../models/skins/sbmyst.dff", txd: "../models/skins/sbmyst.txd", gender: "male" },
             { id: 143, name: "sbmycr", dff: "../models/skins/sbmycr.dff", txd: "../models/skins/sbmycr.txd", gender: "male" },
-            // { id: 144, name: "bmycg", dff: "../models/skins/bmycg.dff", txd: "../models/skins/bmycg.txd", gender: "male" },
             { id: 146, name: "hmycm", dff: "../models/skins/hmycm.dff", txd: "../models/skins/hmycm.txd", gender: "female" },
             { id: 147, name: "wmybu", dff: "../models/skins/wmybu.dff", txd: "../models/skins/wmybu.txd", gender: "male" },
             { id: 148, name: "bfybu", dff: "../models/skins/bfybu.dff", txd: "../models/skins/bfybu.txd", gender: "female" },
-            // { id: 149, name: "smokev", dff: "../models/skins/smokev.dff", txd: "../models/skins/smokev.txd", gender: "male" },
+            { id: 149, name: "smokev", dff: "../models/skins/smokev.dff", txd: "../models/skins/smokev.txd", gender: "male" },
             { id: 150, name: "wfybu", dff: "../models/skins/wfybu.dff", txd: "../models/skins/wfybu.txd", gender: "female" },
-            // { id: 151, name: "dwfylc1", dff: "../models/skins/dwfylc1.dff", txd: "../models/skins/dwfylc1.txd", gender: "female" },
+            { id: 151, name: "dwfylc1", dff: "../models/skins/dwfylc1.dff", txd: "../models/skins/dwfylc1.txd", gender: "female" },
             { id: 152, name: "wfypro", dff: "../models/skins/wfypro.dff", txd: "../models/skins/wfypro.txd", gender: "male" },
             { id: 153, name: "wmyconb", dff: "../models/skins/wmyconb.dff", txd: "../models/skins/wmyconb.txd", gender: "male" },
             { id: 154, name: "wmybe", dff: "../models/skins/wmybe.dff", txd: "../models/skins/wmybe.txd", gender: "male" },
@@ -248,12 +248,12 @@
             { id: 158, name: "cwmofr", dff: "../models/skins/cwmofr.dff", txd: "../models/skins/cwmofr.txd", gender: "male" },
             { id: 159, name: "cwmohb1", dff: "../models/skins/cwmohb1.dff", txd: "../models/skins/cwmohb1.txd", gender: "male" },
             { id: 160, name: "cwmohb2", dff: "../models/skins/cwmohb2.dff", txd: "../models/skins/cwmohb2.txd", gender: "male" },
-            // { id: 161, name: "cwmyfr", dff: "../models/skins/cwmyfr.dff", txd: "../models/skins/cwmyfr.txd", gender: "male" },
+            { id: 161, name: "cwmyfr", dff: "../models/skins/cwmyfr.dff", txd: "../models/skins/cwmyfr.txd", gender: "male" },
             { id: 162, name: "cwmyhb1", dff: "../models/skins/cwmyhb1.dff", txd: "../models/skins/cwmyhb1.txd", gender: "male" },
             { id: 163, name: "bmyboun", dff: "../models/skins/bmyboun.dff", txd: "../models/skins/bmyboun.txd", gender: "male" },
-            // { id: 164, name: "wmyboun", dff: "../models/skins/wmyboun.dff", txd: "../models/skins/wmyboun.txd", gender: "male" },
+            { id: 164, name: "wmyboun", dff: "../models/skins/wmyboun.dff", txd: "../models/skins/wmyboun.txd", gender: "male" },
             { id: 165, name: "wmomib", dff: "../models/skins/wmomib.dff", txd: "../models/skins/wmomib.txd", gender: "male" },
-            // { id: 166, name: "bmymib", dff: "../models/skins/bmymib.dff", txd: "../models/skins/bmymib.txd", gender: "male" },
+            { id: 166, name: "bmymib", dff: "../models/skins/bmymib.dff", txd: "../models/skins/bmymib.txd", gender: "male" },
             { id: 167, name: "wmybell", dff: "../models/skins/wmybell.dff", txd: "../models/skins/wmybell.txd", gender: "male" },
             { id: 168, name: "bmochil", dff: "../models/skins/bmochil.dff", txd: "../models/skins/bmochil.txd", gender: "male" },
             { id: 169, name: "sofyri", dff: "../models/skins/sofyri.dff", txd: "../models/skins/sofyri.txd", gender: "female" },
@@ -271,65 +271,65 @@
             { id: 181, name: "vwmycr", dff: "../models/skins/vwmycr.dff", txd: "../models/skins/vwmycr.txd", gender: "male" },
             { id: 182, name: "vbmocd", dff: "../models/skins/vbmocd.dff", txd: "../models/skins/vbmocd.txd", gender: "male" },
             { id: 183, name: "vbmycr", dff: "../models/skins/vbmycr.dff", txd: "../models/skins/vbmycr.txd", gender: "male" },
-            // { id: 184, name: "vhmycr", dff: "../models/skins/vhmycr.dff", txd: "../models/skins/vhmycr.txd", gender: "male" },
-            // { id: 185, name: "sbmyri", dff: "../models/skins/sbmyri.dff", txd: "../models/skins/sbmyri.txd", gender: "male" },
-            // { id: 186, name: "somyri", dff: "../models/skins/somyri.dff", txd: "../models/skins/somyri.txd", gender: "male" },
+            { id: 184, name: "vhmycr", dff: "../models/skins/vhmycr.dff", txd: "../models/skins/vhmycr.txd", gender: "male" },
+            { id: 185, name: "sbmyri", dff: "../models/skins/sbmyri.dff", txd: "../models/skins/sbmyri.txd", gender: "male" },
+            { id: 186, name: "somyri", dff: "../models/skins/somyri.dff", txd: "../models/skins/somyri.txd", gender: "male" },
             { id: 187, name: "somybu", dff: "../models/skins/somybu.dff", txd: "../models/skins/somybu.txd", gender: "male" },
             { id: 188, name: "swmyst", dff: "../models/skins/swmyst.dff", txd: "../models/skins/swmyst.txd", gender: "male" },
             { id: 189, name: "wmyva", dff: "../models/skins/wmyva.dff", txd: "../models/skins/wmyva.txd", gender: "male" },
             { id: 190, name: "copgrl3", dff: "../models/skins/copgrl3.dff", txd: "../models/skins/copgrl3.txd", gender: "female" },
             { id: 191, name: "gungrl3", dff: "../models/skins/gungrl3.dff", txd: "../models/skins/gungrl3.txd", gender: "female" },
-            // { id: 192, name: "mecgrl3", dff: "../models/skins/mecgrl3.dff", txd: "../models/skins/mecgrl3.txd", gender: "female" },
+            { id: 192, name: "mecgrl3", dff: "../models/skins/mecgrl3.dff", txd: "../models/skins/mecgrl3.txd", gender: "female" },
             { id: 193, name: "nurgrl3", dff: "../models/skins/nurgrl3.dff", txd: "../models/skins/nurgrl3.txd", gender: "female" },
             { id: 194, name: "crogrl3", dff: "../models/skins/crogrl3.dff", txd: "../models/skins/crogrl3.txd", gender: "male" },
-            // { id: 195, name: "gangrl3", dff: "../models/skins/gangrl3.dff", txd: "../models/skins/gangrl3.txd", gender: "female" },
+            { id: 195, name: "gangrl3", dff: "../models/skins/gangrl3.dff", txd: "../models/skins/gangrl3.txd", gender: "female" },
             { id: 196, name: "cwfofr", dff: "../models/skins/cwfofr.dff", txd: "../models/skins/cwfofr.txd", gender: "male" },
             { id: 197, name: "cwfohb", dff: "../models/skins/cwfohb.dff", txd: "../models/skins/cwfohb.txd", gender: "female" },
             { id: 198, name: "cwfyfr1", dff: "../models/skins/cwfyfr1.dff", txd: "../models/skins/cwfyfr1.txd", gender: "female" },
             { id: 199, name: "cwfyfr2", dff: "../models/skins/cwfyfr2.dff", txd: "../models/skins/cwfyfr2.txd", gender: "male" },
             { id: 200, name: "cwmyhb2", dff: "../models/skins/cwmyhb2.dff", txd: "../models/skins/cwmyhb2.txd", gender: "female" },
             { id: 201, name: "dwfylc2", dff: "../models/skins/dwfylc2.dff", txd: "../models/skins/dwfylc2.txd", gender: "female" },
-            // { id: 202, name: "dwmylc2", dff: "../models/skins/dwmylc2.dff", txd: "../models/skins/dwmylc2.txd", gender: "male" },
-            // { id: 203, name: "omykara", dff: "../models/skins/omykara.dff", txd: "../models/skins/omykara.txd", gender: "male" },
-            // { id: 204, name: "wmykara", dff: "../models/skins/wmykara.dff", txd: "../models/skins/wmykara.txd", gender: "male" },
+            { id: 202, name: "dwmylc2", dff: "../models/skins/dwmylc2.dff", txd: "../models/skins/dwmylc2.txd", gender: "male" },
+            { id: 203, name: "omykara", dff: "../models/skins/omykara.dff", txd: "../models/skins/omykara.txd", gender: "male" },
+            { id: 204, name: "wmykara", dff: "../models/skins/wmykara.dff", txd: "../models/skins/wmykara.txd", gender: "male" },
             { id: 205, name: "wfyburg", dff: "../models/skins/wfyburg.dff", txd: "../models/skins/wfyburg.txd", gender: "male" },
-            // { id: 206, name: "vwmycd", dff: "../models/skins/vwmycd.dff", txd: "../models/skins/vwmycd.txd", gender: "male" },
-            // { id: 207, name: "vhfypro", dff: "../models/skins/vhfypro.dff", txd: "../models/skins/vhfypro.txd", gender: "female" },
-            // { id: 208, name: "susie", dff: "../models/skins/susie.dff", txd: "../models/skins/susie.txd", gender: "female" },
-            // { id: 209, name: "omonood", dff: "../models/skins/omonood.dff", txd: "../models/skins/omonood.txd", gender: "male" },
-            // { id: 210, name: "omoboat", dff: "../models/skins/omoboat.dff", txd: "../models/skins/omoboat.txd", gender: "male" },
+            { id: 206, name: "vwmycd", dff: "../models/skins/vwmycd.dff", txd: "../models/skins/vwmycd.txd", gender: "male" },
+            { id: 207, name: "vhfypro", dff: "../models/skins/vhfypro.dff", txd: "../models/skins/vhfypro.txd", gender: "female" },
+            { id: 208, name: "susie", dff: "../models/skins/susie.dff", txd: "../models/skins/susie.txd", gender: "female" },
+            { id: 209, name: "omonood", dff: "../models/skins/omonood.dff", txd: "../models/skins/omonood.txd", gender: "male" },
+            { id: 210, name: "omoboat", dff: "../models/skins/omoboat.dff", txd: "../models/skins/omoboat.txd", gender: "male" },
             { id: 211, name: "wfyclot", dff: "../models/skins/wfyclot.dff", txd: "../models/skins/wfyclot.txd", gender: "female" },
             { id: 212, name: "vwmotr1", dff: "../models/skins/vwmotr1.dff", txd: "../models/skins/vwmotr1.txd", gender: "male" },
             { id: 213, name: "vwmotr2", dff: "../models/skins/vwmotr2.dff", txd: "../models/skins/vwmotr2.txd", gender: "male" },
             { id: 214, name: "vwfywai", dff: "../models/skins/vwfywai.dff", txd: "../models/skins/vwfywai.txd", gender: "female" },
-            // { id: 215, name: "sbfori", dff: "../models/skins/sbfori.dff", txd: "../models/skins/sbfori.txd", gender: "male" },
-            // { id: 216, name: "swfyri", dff: "../models/skins/swfyri.dff", txd: "../models/skins/swfyri.txd", gender: "female" },
-            // { id: 217, name: "wmyclot", dff: "../models/skins/wmyclot.dff", txd: "../models/skins/wmyclot.txd", gender: "male" },
-            // { id: 218, name: "sbfost", dff: "../models/skins/sbfost.dff", txd: "../models/skins/sbfost.txd", gender: "male" },
-            // { id: 219, name: "sbfyri", dff: "../models/skins/sbfyri.dff", txd: "../models/skins/sbfyri.txd", gender: "female" },
+            { id: 215, name: "sbfori", dff: "../models/skins/sbfori.dff", txd: "../models/skins/sbfori.txd", gender: "male" },
+            { id: 216, name: "swfyri", dff: "../models/skins/swfyri.dff", txd: "../models/skins/swfyri.txd", gender: "female" },
+            { id: 217, name: "wmyclot", dff: "../models/skins/wmyclot.dff", txd: "../models/skins/wmyclot.txd", gender: "male" },
+            { id: 218, name: "sbfost", dff: "../models/skins/sbfost.dff", txd: "../models/skins/sbfost.txd", gender: "male" },
+            { id: 219, name: "sbfyri", dff: "../models/skins/sbfyri.dff", txd: "../models/skins/sbfyri.txd", gender: "female" },
             { id: 220, name: "sbmocd", dff: "../models/skins/sbmocd.dff", txd: "../models/skins/sbmocd.txd", gender: "male" },
             { id: 221, name: "sbmori", dff: "../models/skins/sbmori.dff", txd: "../models/skins/sbmori.txd", gender: "male" },
-            // { id: 222, name: "sbmost", dff: "../models/skins/sbmost.dff", txd: "../models/skins/sbmost.txd", gender: "male" },
-            // { id: 223, name: "shmycr", dff: "../models/skins/shmycr.dff", txd: "../models/skins/shmycr.txd", gender: "male" },
-            // { id: 224, name: "sofori", dff: "../models/skins/sofori.dff", txd: "../models/skins/sofori.txd", gender: "male" },
-            // { id: 225, name: "sofost", dff: "../models/skins/sofost.dff", txd: "../models/skins/sofost.txd", gender: "male" },
-            // { id: 226, name: "sofyst", dff: "../models/skins/sofyst.dff", txd: "../models/skins/sofyst.txd", gender: "female" },
+            { id: 222, name: "sbmost", dff: "../models/skins/sbmost.dff", txd: "../models/skins/sbmost.txd", gender: "male" },
+            { id: 223, name: "shmycr", dff: "../models/skins/shmycr.dff", txd: "../models/skins/shmycr.txd", gender: "male" },
+            { id: 224, name: "sofori", dff: "../models/skins/sofori.dff", txd: "../models/skins/sofori.txd", gender: "male" },
+            { id: 225, name: "sofost", dff: "../models/skins/sofost.dff", txd: "../models/skins/sofost.txd", gender: "male" },
+            { id: 226, name: "sofyst", dff: "../models/skins/sofyst.dff", txd: "../models/skins/sofyst.txd", gender: "female" },
             { id: 227, name: "somobu", dff: "../models/skins/somobu.dff", txd: "../models/skins/somobu.txd", gender: "male" },
-            // { id: 228, name: "somori", dff: "../models/skins/somori.dff", txd: "../models/skins/somori.txd", gender: "male" },
+            { id: 228, name: "somori", dff: "../models/skins/somori.dff", txd: "../models/skins/somori.txd", gender: "male" },
             { id: 229, name: "somost", dff: "../models/skins/somost.dff", txd: "../models/skins/somost.txd", gender: "male" },
             { id: 230, name: "swmotr5", dff: "../models/skins/swmotr5.dff", txd: "../models/skins/swmotr5.txd", gender: "male" },
-            // { id: 231, name: "swfori", dff: "../models/skins/swfori.dff", txd: "../models/skins/swfori.txd", gender: "male" },
-            // { id: 232, name: "swfost", dff: "../models/skins/swfost.dff", txd: "../models/skins/swfost.txd", gender: "male" },
-            // { id: 233, name: "swfyst", dff: "../models/skins/swfyst.dff", txd: "../models/skins/swfyst.txd", gender: "female" },
-            // { id: 234, name: "swmocd", dff: "../models/skins/swmocd.dff", txd: "../models/skins/swmocd.txd", gender: "male" },
-            // { id: 235, name: "swmori", dff: "../models/skins/swmori.dff", txd: "../models/skins/swmori.txd", gender: "male" },
+            { id: 231, name: "swfori", dff: "../models/skins/swfori.dff", txd: "../models/skins/swfori.txd", gender: "male" },
+            { id: 232, name: "swfost", dff: "../models/skins/swfost.dff", txd: "../models/skins/swfost.txd", gender: "male" },
+            { id: 233, name: "swfyst", dff: "../models/skins/swfyst.dff", txd: "../models/skins/swfyst.txd", gender: "female" },
+            { id: 234, name: "swmocd", dff: "../models/skins/swmocd.dff", txd: "../models/skins/swmocd.txd", gender: "male" },
+            { id: 235, name: "swmori", dff: "../models/skins/swmori.dff", txd: "../models/skins/swmori.txd", gender: "male" },
             { id: 236, name: "swmost", dff: "../models/skins/swmost.dff", txd: "../models/skins/swmost.txd", gender: "male" },
             { id: 237, name: "shfypro", dff: "../models/skins/shfypro.dff", txd: "../models/skins/shfypro.txd", gender: "male" },
             { id: 238, name: "sbfypro", dff: "../models/skins/sbfypro.dff", txd: "../models/skins/sbfypro.txd", gender: "male" },
             { id: 239, name: "swmotr4", dff: "../models/skins/swmotr4.dff", txd: "../models/skins/swmotr4.txd", gender: "male" },
             { id: 240, name: "swmyri", dff: "../models/skins/swmyri.dff", txd: "../models/skins/swmyri.txd", gender: "male" },
-            // { id: 241, name: "smyst", dff: "../models/skins/smyst.dff", txd: "../models/skins/smyst.txd", gender: "male" },
-            // { id: 242, name: "smyst2", dff: "../models/skins/smyst2.dff", txd: "../models/skins/smyst2.txd", gender: "male" },
+            { id: 241, name: "smyst", dff: "../models/skins/smyst.dff", txd: "../models/skins/smyst.txd", gender: "male" },
+            { id: 242, name: "smyst2", dff: "../models/skins/smyst2.dff", txd: "../models/skins/smyst2.txd", gender: "male" },
             { id: 243, name: "sfypro", dff: "../models/skins/sfypro.dff", txd: "../models/skins/sfypro.txd", gender: "male" },
             { id: 244, name: "vbfyst2", dff: "../models/skins/vbfyst2.dff", txd: "../models/skins/vbfyst2.txd", gender: "male" },
             { id: 245, name: "vbfypro", dff: "../models/skins/vbfypro.dff", txd: "../models/skins/vbfypro.txd", gender: "male" },
@@ -338,19 +338,19 @@
             { id: 248, name: "bikerb", dff: "../models/skins/bikerb.dff", txd: "../models/skins/bikerb.txd", gender: "male" },
             { id: 249, name: "bmypimp", dff: "../models/skins/bmypimp.dff", txd: "../models/skins/bmypimp.txd", gender: "male" },
             { id: 250, name: "swmycr", dff: "../models/skins/swmycr.dff", txd: "../models/skins/swmycr.txd", gender: "male" },
-            // { id: 251, name: "wfylg", dff: "../models/skins/wfylg.dff", txd: "../models/skins/wfylg.txd", gender: "female" },
-            // { id: 252, name: "wmyva2", dff: "../models/skins/wmyva2.dff", txd: "../models/skins/wmyva2.txd", gender: "male" },
+            { id: 251, name: "wfylg", dff: "../models/skins/wfylg.dff", txd: "../models/skins/wfylg.txd", gender: "female" },
+            { id: 252, name: "wmyva2", dff: "../models/skins/wmyva2.dff", txd: "../models/skins/wmyva2.txd", gender: "male" },
             { id: 253, name: "bmosec", dff: "../models/skins/bmosec.dff", txd: "../models/skins/bmosec.txd", gender: "male" },
             { id: 254, name: "bikdrug", dff: "../models/skins/bikdrug.dff", txd: "../models/skins/bikdrug.txd", gender: "male" },
             { id: 255, name: "wmych", dff: "../models/skins/wmych.dff", txd: "../models/skins/wmych.txd", gender: "male" },
             { id: 256, name: "sbfystr", dff: "../models/skins/sbfystr.dff", txd: "../models/skins/sbfystr.txd", gender: "male" },
             { id: 257, name: "swfystr", dff: "../models/skins/swfystr.dff", txd: "../models/skins/swfystr.txd", gender: "male" },
-            // { id: 258, name: "heck1", dff: "../models/skins/heck1.dff", txd: "../models/skins/heck1.txd", gender: "male" },
+            { id: 258, name: "heck1", dff: "../models/skins/heck1.dff", txd: "../models/skins/heck1.txd", gender: "male" },
             { id: 259, name: "heck2", dff: "../models/skins/heck2.dff", txd: "../models/skins/heck2.txd", gender: "male" },
             { id: 260, name: "bmycon", dff: "../models/skins/bmycon.dff", txd: "../models/skins/bmycon.txd", gender: "male" },
             { id: 261, name: "wmycd1", dff: "../models/skins/wmycd1.dff", txd: "../models/skins/wmycd1.txd", gender: "male" },
             { id: 262, name: "bmocd", dff: "../models/skins/bmocd.dff", txd: "../models/skins/bmocd.txd", gender: "male" },
-            // { id: 263, name: "vwfywa2", dff: "../models/skins/vwfywa2.dff", txd: "../models/skins/vwfywa2.txd", gender: "female" },
+            { id: 263, name: "vwfywa2", dff: "../models/skins/vwfywa2.dff", txd: "../models/skins/vwfywa2.txd", gender: "female" },
             { id: 264, name: "wmoice", dff: "../models/skins/wmoice.dff", txd: "../models/skins/wmoice.txd", gender: "male" },
             { id: 265, name: "tenpen", dff: "../models/skins/tenpen.dff", txd: "../models/skins/tenpen.txd", gender: "male" },
             { id: 266, name: "pulaski", dff: "../models/skins/pulaski.dff", txd: "../models/skins/pulaski.txd", gender: "male" },
@@ -358,12 +358,11 @@
             { id: 268, name: "dwayne", dff: "../models/skins/dwayne.dff", txd: "../models/skins/dwayne.txd", gender: "male" },
             { id: 269, name: "smoke", dff: "../models/skins/smoke.dff", txd: "../models/skins/smoke.txd", gender: "female" },
             { id: 270, name: "sweet", dff: "../models/skins/sweet.dff", txd: "../models/skins/sweet.txd", gender: "male" },
-            // { id: 271, name: "ryder", dff: "../models/skins/ryder.dff", txd: "../models/skins/ryder.txd", gender: "male" },
+            { id: 271, name: "ryder", dff: "../models/skins/ryder.dff", txd: "../models/skins/ryder.txd", gender: "male", rotation: { x: 0, y: -Math.PI / 2, z: 0} },
             { id: 272, name: "forelli", dff: "../models/skins/forelli.dff", txd: "../models/skins/forelli.txd", gender: "male" },
             { id: 273, name: "tbone", dff: "../models/skins/tbone.dff", txd: "../models/skins/tbone.txd", gender: "male" },
             { id: 274, name: "laemt1", dff: "../models/skins/laemt1.dff", txd: "../models/skins/laemt1.txd", gender: "male" },
             { id: 275, name: "lvemt1", dff: "../models/skins/lvemt1.dff", txd: "../models/skins/lvemt1.txd", gender: "male" },
-            // { id: 276, name: "sfemt1", dff: "../models/skins/sfem t1.dff", txd: "../models/skins/sfem t1.txd", gender: "male" },
             { id: 277, name: "lafd1", dff: "../models/skins/lafd1.dff", txd: "../models/skins/lafd1.txd", gender: "male" },
             { id: 278, name: "lvfd1", dff: "../models/skins/lvfd1.dff", txd: "../models/skins/lvfd1.txd", gender: "male" },
             { id: 279, name: "sffd1", dff: "../models/skins/sffd1.dff", txd: "../models/skins/sffd1.txd", gender: "male" },
@@ -377,13 +376,13 @@
             { id: 287, name: "army", dff: "../models/skins/army.dff", txd: "../models/skins/army.txd", gender: "male" },
             { id: 288, name: "dsher", dff: "../models/skins/dsher.dff", txd: "../models/skins/dsher.txd", gender: "male" },
             { id: 289, name: "zero", dff: "../models/skins/zero.dff", txd: "../models/skins/zero.txd", gender: "male" },
-            // { id: 290, name: "rose", dff: "../models/skins/rose.dff", txd: "../models/skins/rose.txd", gender: "female" },
+            { id: 290, name: "rose", dff: "../models/skins/rose.dff", txd: "../models/skins/rose.txd", gender: "male" },
             { id: 291, name: "paul", dff: "../models/skins/paul.dff", txd: "../models/skins/paul.txd", gender: "male" },
-            // { id: 292, name: "cesar", dff: "../models/skins/cesar.dff", txd: "../models/skins/cesar.txd", gender: "male" },
+            { id: 292, name: "cesar", dff: "../models/skins/cesar.dff", txd: "../models/skins/cesar.txd", gender: "male" },
             { id: 293, name: "ogloc", dff: "../models/skins/ogloc.dff", txd: "../models/skins/ogloc.txd", gender: "male" },
             { id: 294, name: "wuzimu", dff: "../models/skins/wuzimu.dff", txd: "../models/skins/wuzimu.txd", gender: "male" },
-            // { id: 295, name: "torino", dff: "../models/skins/torino.dff", txd: "../models/skins/torino.txd", gender: "male" },
-            // { id: 296, name: "jizzy", dff: "../models/skins/jizzy.dff", txd: "../models/skins/jizzy.txd", gender: "male" },
+            { id: 295, name: "torino", dff: "../models/skins/torino.dff", txd: "../models/skins/torino.txd", gender: "male" },
+            { id: 296, name: "jizzy", dff: "../models/skins/jizzy.dff", txd: "../models/skins/jizzy.txd", gender: "male" },
             { id: 297, name: "maddogg", dff: "../models/skins/maddogg.dff", txd: "../models/skins/maddogg.txd", gender: "male" },
             { id: 298, name: "cat", dff: "../models/skins/cat.dff", txd: "../models/skins/cat.txd", gender: "male" },
             { id: 299, name: "claude", dff: "../models/skins/claude.dff", txd: "../models/skins/claude.txd", gender: "male" },
@@ -420,21 +419,33 @@
         }
 
         async function loadSkin(index) {
-            const skin = SKIN_DATA[index];
-            if (!skin) {
-                console.warn('Скин не найден:', index);
-                return;
-            }
-            if (loadingEl) loadingEl.style.display = 'flex';
-            try {
-                await viewer.loadModel(skin.dff, skin.txd, ANIM_IFP_PATH);
-                if (viewer.currentModel) {
-                    const pos = viewer.currentModel.position.clone();
-                    viewer.currentModel.rotation.set(-Math.PI / 2, 0, -Math.PI / 2);
-                    viewer.currentModel.position.copy(pos);
-                    viewer.controls.target.set(0, viewer.modelCenterY || 0, 0);
-                    viewer.controls.update();
-                }
+			const skin = SKIN_DATA[index];
+			if (!skin) {
+				console.warn('Скин не найден:', index);
+				return;
+			}
+			if (loadingEl) loadingEl.style.display = 'flex';
+			try {
+				await viewer.loadModel(skin.dff, skin.txd, ANIM_IFP_PATH);
+				if (viewer.currentModel) {
+					const pos = viewer.currentModel.position.clone();
+					
+					// Если у скина задан свой поворот - используем его
+					if (skin.rotation) {
+						viewer.currentModel.rotation.set(
+							skin.rotation.x || 0,
+							skin.rotation.y || 0,
+							skin.rotation.z || 0
+						);
+					} else {
+						// Стандартный поворот для всех остальных
+						viewer.currentModel.rotation.set(-Math.PI / 2, 0, Math.PI );
+					}
+					
+					viewer.currentModel.position.copy(pos);
+					viewer.controls.target.set(0, viewer.modelCenterY || 0, 0);
+					viewer.controls.update();
+				}
                 if (skin.id === 21) {
                     console.log('Анимация отключена для скина ID 21');
                 } else {
@@ -542,6 +553,49 @@
             });
             container.addEventListener('dblclick', resetCamera);
         });
+		
+		const screenshotBtn = document.getElementById('screenshotBtn');
+
+	screenshotBtn.addEventListener('click', async () => {
+		if (!viewer) return;
+		
+		const skin = SKIN_DATA[currentIndex];
+		const filename = `${skin.id}.png`;
+		
+		screenshotBtn.disabled = true;
+		screenshotBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Генерация...';
+		
+		try {
+			await viewer.captureAndDownloadScreenshot(filename);
+		} catch (error) {
+			console.error('Ошибка создания скриншота:', error);
+		} finally {
+			screenshotBtn.disabled = false;
+			screenshotBtn.innerHTML = '<i class="fas fa-camera"></i> Сделать скрин';
+		}
+	});
+	
+	window.getCameraPos = function() {
+    if (!viewer) {
+        console.log('Viewer не инициализирован');
+        return;
+    }
+    const pos = viewer.camera.position;
+    const target = viewer.controls.target;
+    console.log(`
+    📷 Положение камеры:
+    position: { x: ${pos.x.toFixed(3)}, y: ${pos.y.toFixed(3)}, z: ${pos.z.toFixed(3)} }
+    target:   { x: ${target.x.toFixed(3)}, y: ${target.y.toFixed(3)}, z: ${target.z.toFixed(3)} }
+    расстояние: ${pos.distanceTo(target).toFixed(3)}
+    `);
+    return {
+        position: { x: pos.x, y: pos.y, z: pos.z },
+        target: { x: target.x, y: target.y, z: target.z }
+    };
+};
+	
     </script>
 </body>
 </html>
+
+

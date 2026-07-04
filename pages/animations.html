@@ -7,6 +7,323 @@
     <link rel="icon" type="image/png" sizes="16x16" href="../images/icons/favicon.png">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <link rel="stylesheet" href="../css/style.css">
+    <style>
+        .anim-viewer-controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .custom-select-wrapper {
+            position: relative;
+            flex: 1 1 auto;
+            min-width: 200px;
+        }
+
+        .custom-select {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-select-trigger {
+            width: 100%;
+            padding: 10px 40px 10px 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.95rem;
+            cursor: pointer;
+            text-align: left;
+            transition: border-color 0.2s, background 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .custom-select-trigger:hover {
+            background: rgba(255,255,255,0.08);
+        }
+
+        .custom-select-trigger.active {
+            border-color: var(--accent);
+            background: rgba(255,255,255,0.08);
+            border-radius: 8px 8px 0 0;
+        }
+
+        .custom-select-trigger .arrow {
+            position: absolute;
+            right: 12px;
+            transition: transform 0.3s;
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+        }
+
+        .custom-select-trigger.active .arrow {
+            transform: rotate(180deg);
+        }
+
+        .custom-select-trigger .placeholder {
+            color: var(--text-secondary);
+        }
+
+        .custom-select-search {
+            position: sticky;
+            top: 0;
+            z-index: 2;
+            padding: 8px;
+            background: #1a1f2a;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .custom-select-search input {
+            width: 100%;
+            padding: 8px 12px 8px 32px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--border);
+            border-radius: 6px;
+            color: #fff;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .custom-select-search input:focus {
+            border-color: var(--accent);
+        }
+
+        .custom-select-search .search-icon {
+            position: absolute;
+            left: 18px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 0.85rem;
+            z-index: 3;
+        }
+
+        .custom-options {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: #1a1f2a;
+            border: 1px solid var(--accent);
+            border-top: none;
+            border-radius: 0 0 8px 8px;
+            max-height: 520px;
+            overflow-y: auto;
+            z-index: 1000;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+        }
+
+        .custom-options.open {
+            display: block;
+        }
+
+        .custom-options::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .custom-options::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        .custom-options::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.15);
+            border-radius: 3px;
+        }
+
+        .custom-option {
+            padding: 10px 14px;
+            cursor: pointer;
+            transition: background 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #ccc;
+            font-size: 0.9rem;
+            border-bottom: 1px solid rgba(255,255,255,0.03);
+        }
+
+        .custom-option:last-child {
+            border-bottom: none;
+        }
+
+        .custom-option:hover {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+        }
+
+        .custom-option.selected {
+            background: rgba(0, 200, 150, 0.1);
+            color: var(--accent);
+        }
+
+        .custom-option.hidden {
+            display: none;
+        }
+
+        .custom-option .option-cmd {
+            font-family: 'Courier New', monospace;
+            color: var(--accent);
+            font-weight: 600;
+            min-width: 100px;
+            white-space: nowrap;
+        }
+
+        .custom-option .option-desc {
+            color: var(--text-secondary);
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .custom-option .option-category {
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 4px;
+            background: rgba(255,255,255,0.08);
+            color: var(--text-secondary);
+            white-space: nowrap;
+        }
+
+        .custom-optgroup-label {
+            padding: 8px 14px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--accent);
+            background: rgba(255,255,255,0.03);
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .custom-optgroup-label.hidden {
+            display: none;
+        }
+
+        .no-results {
+            padding: 20px;
+            text-align: center;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+
+        .highlight {
+            background: rgba(0, 200, 150, 0.3);
+            border-radius: 2px;
+            padding: 0 1px;
+        }
+
+        .viewer-buttons-group {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+        }
+
+        .viewer-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background: var(--accent);
+            color: #fff;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: opacity 0.2s, transform 0.2s, background 0.2s;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-family: inherit;
+            line-height: 1.4;
+        }
+
+        .viewer-btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+            background: var(--accent-hover, var(--accent));
+        }
+
+        .viewer-btn:active {
+            transform: translateY(0);
+        }
+
+        .viewer-btn.secondary {
+            background: rgba(255,255,255,0.1);
+            color: #fff;
+        }
+
+        .viewer-btn.secondary:hover {
+            background: rgba(255,255,255,0.2);
+            opacity: 1;
+        }
+
+        .viewer-btn i {
+            font-size: 0.9rem;
+        }
+
+        .anim-viewer-status {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 16px;
+            background: rgba(255,255,255,0.03);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+
+        .anim-viewer-status .status-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--accent);
+            animation: pulse-dot 1.5s ease-in-out infinite;
+        }
+
+        .anim-viewer-status .status-dot.idle {
+            background: var(--text-secondary);
+            animation: none;
+        }
+
+        @keyframes pulse-dot {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(0.8); }
+        }
+
+        @media (max-width: 900px) {
+            .anim-viewer-controls {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .custom-select-wrapper {
+                flex: 1 1 auto;
+                min-width: 100%;
+            }
+
+            .viewer-buttons-group {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .viewer-btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -44,9 +361,667 @@
     </div>
 </footer>
 
+<script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js",
+            "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"
+        }
+    }
+</script>
+
 <script src="../data/animations-data.js"></script>
 <script src="../js/common.js"></script>
 <script src="../js/navigation.js"></script>
-<script src="../js/animations.js"></script>
+
+<script type="module">
+    import { GTACharacterViewer } from '../js/gta-viewer.js';
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return String(str).replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+
+    function highlightMatch(text, query) {
+        if (!query) return escapeHtml(text);
+        const escapedQuery = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const regex = new RegExp(`(${escapedQuery})`, 'gi');
+        return escapeHtml(text).replace(regex, '<span class="highlight">$1</span>');
+    }
+
+    const VIEWER_CONFIG = {
+        skin: {
+            dff: '../models/skins/wmost.dff',
+            txd: '../models/skins/wmost.txd'
+        },
+        animIfp: '../models/skins/anim.ifp'
+    };
+
+    let viewer = null;
+    let currentSearchTerm = "";
+    let currentCategory = "all";
+    let mainContainer = null;
+    let customSelectInstance = null;
+
+    class CustomSelect {
+        constructor(wrapperElement, options, onChange) {
+            this.wrapper = wrapperElement;
+            this.options = options;
+            this.onChange = onChange;
+            this.isOpen = false;
+            this.searchTerm = '';
+            this.selectedValue = null;
+            this.selectedLabel = null;
+            
+            this.render();
+            this.attachEvents();
+        }
+        
+        render() {
+            const categories = {};
+            for (const opt of this.options) {
+                const cat = opt.category || 'other';
+                if (!categories[cat]) categories[cat] = [];
+                categories[cat].push(opt);
+            }
+            
+            const sortedCategories = Object.keys(categories).sort((a, b) => {
+                const order = {
+                    'movement': 1, 'interaction': 2, 'emotes': 3,
+                    'combat': 4, 'work': 5, 'dance': 6,
+                    'walk': 7, 'vehicle': 8, 'sports': 9,
+                    'military': 10, 'other': 99
+                };
+                return (order[a] || 99) - (order[b] || 99);
+            });
+            
+            this.wrapper.innerHTML = `
+                <div class="custom-select">
+                    <div class="custom-select-trigger" tabindex="0">
+                        <span class="trigger-text placeholder">— Выберите анимацию —</span>
+                        <i class="fas fa-chevron-down arrow"></i>
+                    </div>
+                    <div class="custom-options">
+                        <div class="custom-select-search">
+                            <i class="fas fa-search search-icon"></i>
+                            <input type="text" class="custom-search-input" placeholder="Поиск анимации...">
+                        </div>
+                        <div class="custom-options-list">
+                            ${sortedCategories.map(cat => {
+                                const catName = ANIMATION_CATEGORIES?.[cat] || cat.charAt(0).toUpperCase() + cat.slice(1);
+                                let groupHtml = `<div class="custom-optgroup" data-category="${cat}">
+                                    <div class="custom-optgroup-label">${escapeHtml(catName)}</div>`;
+                                
+                                for (const opt of categories[cat]) {
+                                    groupHtml += `
+                                        <div class="custom-option" data-value="${escapeHtml(opt.cmd)}">
+                                            <span class="option-cmd">${escapeHtml(opt.cmd)}</span>
+                                            <span class="option-desc">${escapeHtml(opt.desc)}</span>
+                                            <span class="option-category">${escapeHtml(catName)}</span>
+                                        </div>`;
+                                }
+                                groupHtml += '</div>';
+                                return groupHtml;
+                            }).join('')}
+                            <div class="no-results" style="display: none;">
+                                <i class="fas fa-search"></i> Ничего не найдено
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+        
+        attachEvents() {
+            const trigger = this.wrapper.querySelector('.custom-select-trigger');
+            const optionsContainer = this.wrapper.querySelector('.custom-options');
+            const searchInput = this.wrapper.querySelector('.custom-search-input');
+            const optionsList = this.wrapper.querySelector('.custom-options-list');
+            
+            trigger.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggle();
+            });
+            
+            optionsList.addEventListener('click', (e) => {
+                const option = e.target.closest('.custom-option');
+                if (!option) return;
+                
+                const value = option.dataset.value;
+                const cmd = option.querySelector('.option-cmd').textContent;
+                const desc = option.querySelector('.option-desc').textContent;
+                
+                this.select(value, `${cmd} — ${desc}`);
+                this.close();
+            });
+            
+            searchInput.addEventListener('input', (e) => {
+                this.searchTerm = e.target.value.toLowerCase();
+                this.filterOptions();
+            });
+            
+            document.addEventListener('click', (e) => {
+                if (!this.wrapper.contains(e.target)) {
+                    this.close();
+                }
+            });
+            
+            trigger.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    this.toggle();
+                }
+            });
+            
+            searchInput.addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+        }
+        
+        toggle() {
+            this.isOpen ? this.close() : this.open();
+        }
+        
+        open() {
+            this.isOpen = true;
+            const trigger = this.wrapper.querySelector('.custom-select-trigger');
+            const optionsContainer = this.wrapper.querySelector('.custom-options');
+            const searchInput = this.wrapper.querySelector('.custom-search-input');
+            
+            trigger.classList.add('active');
+            optionsContainer.classList.add('open');
+            
+            searchInput.value = '';
+            this.searchTerm = '';
+            this.filterOptions();
+            
+            setTimeout(() => searchInput.focus(), 100);
+        }
+        
+        close() {
+            this.isOpen = false;
+            const trigger = this.wrapper.querySelector('.custom-select-trigger');
+            const optionsContainer = this.wrapper.querySelector('.custom-options');
+            
+            trigger.classList.remove('active');
+            optionsContainer.classList.remove('open');
+        }
+        
+        select(value, label) {
+            this.selectedValue = value;
+            this.selectedLabel = label;
+            
+            const trigger = this.wrapper.querySelector('.trigger-text');
+            trigger.textContent = label;
+            trigger.classList.remove('placeholder');
+            
+            const allOptions = this.wrapper.querySelectorAll('.custom-option');
+            allOptions.forEach(opt => {
+                opt.classList.toggle('selected', opt.dataset.value === value);
+            });
+            
+            if (this.onChange) {
+                this.onChange(value);
+            }
+        }
+        
+        filterOptions() {
+            const term = this.searchTerm;
+            const options = this.wrapper.querySelectorAll('.custom-option');
+            const groups = this.wrapper.querySelectorAll('.custom-optgroup');
+            const noResults = this.wrapper.querySelector('.no-results');
+            
+            let visibleCount = 0;
+            
+            groups.forEach(group => {
+                let groupVisible = false;
+                const groupOptions = group.querySelectorAll('.custom-option');
+                const groupLabel = group.querySelector('.custom-optgroup-label');
+                
+                groupOptions.forEach(option => {
+                    const cmd = option.querySelector('.option-cmd').textContent.toLowerCase();
+                    const desc = option.querySelector('.option-desc').textContent.toLowerCase();
+                    const matches = !term || cmd.includes(term) || desc.includes(term);
+                    
+                    if (matches) {
+                        option.classList.remove('hidden');
+                        if (term) {
+                            option.querySelector('.option-cmd').innerHTML = highlightMatch(
+                                option.dataset.value, term
+                            );
+                        } else {
+                            option.querySelector('.option-cmd').textContent = option.dataset.value;
+                        }
+                        visibleCount++;
+                        groupVisible = true;
+                    } else {
+                        option.classList.add('hidden');
+                    }
+                });
+                
+                if (groupVisible) {
+                    group.classList.remove('hidden');
+                    if (groupLabel) groupLabel.classList.remove('hidden');
+                } else {
+                    group.classList.add('hidden');
+                    if (groupLabel) groupLabel.classList.add('hidden');
+                }
+            });
+            
+            if (noResults) {
+                noResults.style.display = visibleCount === 0 ? 'block' : 'none';
+            }
+        }
+        
+        getValue() {
+            return this.selectedValue;
+        }
+        
+        clear() {
+            this.selectedValue = null;
+            this.selectedLabel = null;
+            const trigger = this.wrapper.querySelector('.trigger-text');
+            trigger.textContent = '— Выберите анимацию —';
+            trigger.classList.add('placeholder');
+            
+            const allOptions = this.wrapper.querySelectorAll('.custom-option');
+            allOptions.forEach(opt => opt.classList.remove('selected'));
+        }
+    }
+
+    function createViewerBlock() {
+        return `
+            <div class="info-block uniform-3d-block" id="viewerBlock">
+                <h3>🔄 3D Просмотр анимаций</h3>
+                <p style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 16px;">
+                    Выберите анимацию из списка, чтобы увидеть её на персонаже в реальном времени
+                </p>
+                
+                <div class="anim-viewer-controls">
+                    <div class="custom-select-wrapper" id="customSelectWrapper"></div>
+                    <div class="viewer-buttons-group">
+                        <button id="playAnimBtn" class="viewer-btn">
+                            <i class="fas fa-play"></i> Воспроизвести
+                        </button>
+                        <button id="stopAnimBtn" class="viewer-btn secondary">
+                            <i class="fas fa-stop"></i> Остановить
+                        </button>
+                        <button id="resetCameraBtn" class="viewer-btn secondary">
+                            <i class="fas fa-sync-alt"></i> Сброс
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="anim-viewer-status">
+                    <span class="status-dot idle" id="viewerStatusDot"></span>
+                    <span id="viewerStatusText">Готов к просмотру</span>
+                    <span style="margin-left: auto; font-size: 0.8rem; color: var(--text-secondary);">
+                        <span id="currentAnimDisplay">—</span>
+                    </span>
+                </div>
+                
+                <div id="animViewer3dContainer" class="uniform-3d-container">
+                    <div id="animViewerLoading" class="uniform-3d-loading">
+                        <i class="fas fa-cube"></i>
+                        <p>Загрузка 3D просмотрщика...</p>
+                    </div>
+                </div>
+                
+                <div class="uniform-3d-note">
+                    Управление: ЛКМ - вращение, ПКМ - перемещение, колесо - масштаб
+                </div>
+            </div>
+        `;
+    }
+
+    function getAnimOptions() {
+		if (typeof ANIMATIONS_DATA === 'undefined') return [];
+		
+		const options = [];
+		const seen = new Set();
+		
+		for (const anim of ANIMATIONS_DATA) {
+			// Пропускаем только info и control
+			if (anim.category === 'info' || anim.category === 'control') continue;
+			
+			// Если есть subitems - добавляем каждый subitem как отдельную опцию
+			if (anim.subitems && anim.subitems.length > 0) {
+				// Извлекаем базовое имя команды (без [1-N])
+				const baseCmd = anim.cmd.split(' [')[0];
+				const baseDesc = anim.desc;
+				
+				for (const subitem of anim.subitems) {
+					// Извлекаем номер из subitem (например "1. Описание..." -> "1")
+					const match = subitem.match(/^(\d+)\./);
+					if (match) {
+						const num = match[1];
+						const subDesc = subitem.replace(/^\d+\.\s*/, '').trim();
+						const fullCmd = `${baseCmd} ${num}`;
+						const fullDesc = `${baseDesc} — ${subDesc}`;
+						
+						if (!seen.has(fullCmd)) {
+							seen.add(fullCmd);
+							options.push({
+								cmd: fullCmd,
+								desc: fullDesc,
+								category: anim.category
+							});
+						}
+					}
+				}
+			} else {
+				// Одиночная анимация без subitems
+				const key = anim.cmd;
+				if (!seen.has(key)) {
+					seen.add(key);
+					options.push({
+						cmd: anim.cmd,
+						desc: anim.desc,
+						category: anim.category
+					});
+				}
+			}
+		}
+		
+		options.sort((a, b) => a.cmd.localeCompare(b.cmd));
+		return options;
+	}
+
+    function initCustomSelect() {
+        const wrapper = document.getElementById('customSelectWrapper');
+        if (!wrapper) return;
+        
+        const options = getAnimOptions();
+        
+        customSelectInstance = new CustomSelect(wrapper, options, (value) => {
+            if (value) {
+                playSelectedAnimation(value);
+            }
+        });
+    }
+
+    async function initViewer() {
+        const container = document.getElementById('animViewer3dContainer');
+        const loadingEl = document.getElementById('animViewerLoading');
+        if (!container) return;
+        
+        viewer = new GTACharacterViewer(container);
+        setTimeout(() => { if (loadingEl) loadingEl.style.display = 'none'; }, 500);
+        await loadSkin();
+        updateStatus('Готов к просмотру', 'idle');
+    }
+
+    async function loadSkin() {
+        if (!viewer) return;
+        const loadingEl = document.getElementById('animViewerLoading');
+        if (loadingEl) loadingEl.style.display = 'flex';
+        
+        try {
+            const { dff, txd } = VIEWER_CONFIG.skin;
+            await viewer.loadModel(dff, txd, VIEWER_CONFIG.animIfp);
+            
+            const availableAnims = viewer.getAnimationNames();
+            const idleAnims = ['IDLE_stance', 'idle', 'stand_idle', 'idle_armed', 'IDLE'];
+            let foundIdle = null;
+            for (const anim of idleAnims) {
+                if (availableAnims.includes(anim)) { foundIdle = anim; break; }
+            }
+            if (foundIdle) viewer.playAnimation(foundIdle);
+            else if (availableAnims.length > 0) viewer.playAnimation(availableAnims[0]);
+            
+            updateStatus('Скин загружен', 'idle');
+        } catch (error) {
+            console.error('Failed to load skin:', error);
+            updateStatus('Ошибка загрузки скина', 'idle');
+        } finally {
+            if (loadingEl) loadingEl.style.display = 'none';
+        }
+    }
+
+    function playSelectedAnimation(animCmd) {
+        if (!animCmd) {
+            updateStatus('Выберите анимацию из списка', 'idle');
+            return;
+        }
+        if (!viewer) {
+            updateStatus('Просмотрщик не загружен', 'idle');
+            return;
+        }
+        
+        let foundDesc = '';
+        if (typeof ANIMATIONS_DATA !== 'undefined') {
+            for (const anim of ANIMATIONS_DATA) {
+                if (anim.cmd === animCmd) { foundDesc = anim.desc; break; }
+            }
+        }
+        
+        const availableAnims = viewer.getAnimationNames();
+        let matchedAnim = null;
+        if (availableAnims.includes(animCmd)) {
+            matchedAnim = animCmd;
+        } else {
+            const baseCmd = animCmd.split(' ')[0];
+            for (const avail of availableAnims) {
+                if (avail.toLowerCase() === baseCmd.toLowerCase()) {
+                    matchedAnim = avail;
+                    break;
+                }
+            }
+        }
+        
+        if (matchedAnim) {
+            viewer.playAnimation(matchedAnim);
+            const displayName = foundDesc ? `${animCmd} — ${foundDesc}` : animCmd;
+            document.getElementById('currentAnimDisplay').textContent = `▶ ${displayName}`;
+            updateStatus(`Воспроизведение: ${matchedAnim}`, 'playing');
+        } else {
+            updateStatus(`Анимация "${animCmd}" не найдена в модели`, 'idle');
+            document.getElementById('currentAnimDisplay').textContent = `✗ ${animCmd}`;
+        }
+    }
+
+    function stopAnimation() {
+        if (!viewer) return;
+        if (viewer.mixer) viewer.mixer.stopAllAction();
+        
+        const availableAnims = viewer.getAnimationNames();
+        const idleAnims = ['IDLE_stance', 'idle', 'stand_idle', 'idle_armed', 'IDLE'];
+        let foundIdle = null;
+        for (const anim of idleAnims) {
+            if (availableAnims.includes(anim)) { foundIdle = anim; break; }
+        }
+        if (foundIdle) viewer.playAnimation(foundIdle);
+        
+        document.getElementById('currentAnimDisplay').textContent = '⏹ Остановлено';
+        updateStatus('Анимация остановлена', 'idle');
+        
+        if (customSelectInstance) {
+            customSelectInstance.clear();
+        }
+    }
+
+    function updateStatus(text, state = 'idle') {
+        const statusText = document.getElementById('viewerStatusText');
+        const statusDot = document.getElementById('viewerStatusDot');
+        if (statusText) statusText.textContent = text;
+        if (statusDot) statusDot.className = `status-dot ${state}`;
+    }
+
+    function resetCamera() {
+        if (viewer) viewer.resetCamera();
+    }
+
+    function renderAnimationsPage(container) {
+        if (typeof ANIMATIONS_DATA === 'undefined') {
+            container.innerHTML = `<div class="info-block"><p>❌ Ошибка: Данные анимаций не загружены.</p></div>`;
+            return;
+        }
+        
+        mainContainer = container;
+        
+        const filteredAnims = getFilteredAnimations();
+        const visibleAnims = filteredAnims.filter(anim => !anim.hidden);
+        const matureAnims = filteredAnims.filter(anim => anim.hidden);
+        
+        const categoriesList = Object.entries(ANIMATION_CATEGORIES).map(([key, name]) => 
+            `<option value="${key}" ${currentCategory === key ? 'selected' : ''}>${name}</option>`
+        ).join('');
+        
+        let animsHtml = visibleAnims.map(anim => {
+            let subitemsHtml = "";
+            if (anim.subitems && anim.subitems.length) {
+                subitemsHtml = `<div class="anim-subitems">
+                    <div class="anim-subitems-title">Подробнее:</div>
+                    <ul class="info-list">${anim.subitems.map(si => `<li>${escapeHtml(si)}</li>`).join('')}</ul>
+                </div>`;
+            }
+            return `
+                <div class="anim-card">
+                    <div class="anim-card-header">
+                        <code class="anim-command">${escapeHtml(anim.cmd)}</code>
+                        <span class="anim-category-tag tag-${anim.category}">${ANIMATION_CATEGORIES[anim.category] || anim.category}</span>
+                    </div>
+                    <div class="anim-description">${escapeHtml(anim.desc)}</div>
+                    ${subitemsHtml}
+                </div>
+            `;
+        }).join('');
+        
+        const matureHtml = matureAnims.length ? `
+            <div class="info-block mature-block">
+                <details>
+                    <summary><span class="mature-warning">🔞 Контент 18+ (нажмите чтобы раскрыть)</span></summary>
+                    <div style="margin-top: 16px;">
+                        ${matureAnims.map(anim => `
+                            <div class="anim-card mature">
+                                <div class="anim-card-header">
+                                    <code class="anim-command">${escapeHtml(anim.cmd)}</code>
+                                    <span class="anim-category-tag tag-mature">18+</span>
+                                </div>
+                                <div class="anim-description">${escapeHtml(anim.desc)}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </details>
+            </div>
+        ` : "";
+        
+        container.innerHTML = `
+            <h1 class="page-title">Анимации GreenTech RP</h1>
+            <p class="page-subtitle">Полный список доступных анимаций на сервере</p>
+            
+            ${createViewerBlock()}
+            
+            <div class="info-block">
+                <div class="anim-search-bar">
+                    <input type="text" id="animSearchInput" placeholder="Поиск анимаций по команде или описанию..." value="${escapeHtml(currentSearchTerm)}">
+                    <select id="animCategorySelect">${categoriesList}</select>
+                </div>
+            </div>
+            
+            <div class="anims-grid">
+                ${animsHtml || '<div class="info-block"><p>😔 По вашему запросу ничего не найдено. Попробуйте изменить поиск или категорию.</p></div>'}
+            </div>
+            
+            ${matureHtml}
+            
+            <div class="info-block">
+                <h3>Как использовать анимации</h3>
+                <ul class="info-list">
+                    <li><code>/animlist</code> или <code>/anims</code> - показать список доступных анимаций в игре</li>
+                    <li><code>/sa</code> или <code>/animstop</code> - остановить текущую анимацию</li>
+                    <li>Для анимаций с параметрами используйте команду с номером, например: <code>/sit 1</code></li>
+                    <li>Некоторые анимации можно комбинировать с движением (WASD)</li>
+                </ul>
+            </div>
+        `;
+        
+        setTimeout(() => {
+            initCustomSelect();
+            initViewer();
+            attachEvents();
+        }, 50);
+    }
+
+    function getFilteredAnimations() {
+        let filtered = [...ANIMATIONS_DATA];
+        if (currentCategory !== "all") {
+            filtered = filtered.filter(anim => anim.category === currentCategory);
+        }
+        if (currentSearchTerm) {
+            const term = currentSearchTerm.toLowerCase();
+            filtered = filtered.filter(anim => {
+                if (anim.cmd.toLowerCase().includes(term) || anim.desc.toLowerCase().includes(term)) return true;
+                if (anim.subitems && anim.subitems.length) {
+                    return anim.subitems.some(si => si.toLowerCase().includes(term));
+                }
+                return false;
+            });
+        }
+        return filtered;
+    }
+
+    function attachEvents() {
+        const searchInput = document.getElementById('animSearchInput');
+        if (searchInput) {
+            const newInput = searchInput.cloneNode(true);
+            searchInput.parentNode.replaceChild(newInput, searchInput);
+            newInput.addEventListener('input', (e) => {
+                currentSearchTerm = e.target.value;
+                renderAnimationsPage(mainContainer);
+            });
+        }
+        
+        const categorySelect = document.getElementById('animCategorySelect');
+        if (categorySelect) {
+            const newSelect = categorySelect.cloneNode(true);
+            categorySelect.parentNode.replaceChild(newSelect, categorySelect);
+            newSelect.addEventListener('change', (e) => {
+                currentCategory = e.target.value;
+                renderAnimationsPage(mainContainer);
+            });
+        }
+        
+        const playBtn = document.getElementById('playAnimBtn');
+        const stopBtn = document.getElementById('stopAnimBtn');
+        const resetBtn = document.getElementById('resetCameraBtn');
+        
+        if (playBtn) {
+            const newBtn = playBtn.cloneNode(true);
+            playBtn.parentNode.replaceChild(newBtn, playBtn);
+            newBtn.addEventListener('click', () => {
+                const selectedValue = customSelectInstance ? customSelectInstance.getValue() : null;
+                if (selectedValue) {
+                    playSelectedAnimation(selectedValue);
+                } else {
+                    updateStatus('Выберите анимацию из списка', 'idle');
+                }
+            });
+        }
+        if (stopBtn) {
+            const newBtn = stopBtn.cloneNode(true);
+            stopBtn.parentNode.replaceChild(newBtn, stopBtn);
+            newBtn.addEventListener('click', stopAnimation);
+        }
+        if (resetBtn) {
+            const newBtn = resetBtn.cloneNode(true);
+            resetBtn.parentNode.replaceChild(newBtn, resetBtn);
+            newBtn.addEventListener('click', resetCamera);
+        }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const container = document.getElementById('animationsContent');
+        if (container) {
+            renderAnimationsPage(container);
+        }
+    });
+</script>
+
 </body>
 </html>

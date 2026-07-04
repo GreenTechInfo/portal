@@ -69,13 +69,6 @@ export function renderPaintJobPage(container) {
         </div>
 
         ${carsGalleryHtml}
-
-        <div class="info-block">
-            <h3>Важная информация</h3>
-            <ul class="info-list">
-                <li>Тут может быть важная информация.</li>
-            </ul>
-        </div>
     `;
 
     addImageModal();
