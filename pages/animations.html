@@ -686,23 +686,18 @@
 		const seen = new Set();
 		
 		for (const anim of ANIMATIONS_DATA) {
-			// Пропускаем только info и control
 			if (anim.category === 'info' || anim.category === 'control') continue;
-			
-			// Если есть subitems - добавляем каждый subitem как отдельную опцию
+
 			if (anim.subitems && anim.subitems.length > 0) {
-				// Извлекаем базовое имя команды (без [1-N])
 				const baseCmd = anim.cmd.split(' [')[0];
-				const baseDesc = anim.desc;
 				
 				for (const subitem of anim.subitems) {
-					// Извлекаем номер из subitem (например "1. Описание..." -> "1")
 					const match = subitem.match(/^(\d+)\./);
 					if (match) {
 						const num = match[1];
 						const subDesc = subitem.replace(/^\d+\.\s*/, '').trim();
 						const fullCmd = `${baseCmd} ${num}`;
-						const fullDesc = `${baseDesc} — ${subDesc}`;
+						const fullDesc = subDesc;
 						
 						if (!seen.has(fullCmd)) {
 							seen.add(fullCmd);
@@ -715,7 +710,6 @@
 					}
 				}
 			} else {
-				// Одиночная анимация без subitems
 				const key = anim.cmd;
 				if (!seen.has(key)) {
 					seen.add(key);
@@ -731,6 +725,7 @@
 		options.sort((a, b) => a.cmd.localeCompare(b.cmd));
 		return options;
 	}
+
 
     function initCustomSelect() {
         const wrapper = document.getElementById('customSelectWrapper');

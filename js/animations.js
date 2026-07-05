@@ -144,7 +144,6 @@ function updateAnimationsList() {
                     <code class="anim-command">${escapeHtml(anim.cmd)}</code>
                     <span class="anim-category-tag tag-${anim.category}">${ANIMATION_CATEGORIES[anim.category] || anim.category}</span>
                 </div>
-                <div class="anim-description">${escapeHtml(anim.desc)}</div>
                 ${subitemsHtml}
             </div>
         `;

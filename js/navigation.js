@@ -31,7 +31,7 @@ const NAVIGATION_DATA = {
             { href: "pages/fraction-gu_fsin.html", text: "ГУФСИН" },
             { href: "pages/fraction-prokuratura.html", text: "Прокуратура" },
             { href: "pages/fraction-sledstvennii_komitet.html", text: "Следственный комитет" },
-            { href: "pages/fraction-gu_mvd.html", text: "ГУ МВД" },
+            { href: "pages/fraction-gu_mvd.html", text: "МУ МВД" },
             { href: "pages/fraction-ugibdd.html", text: "УГИБДД" },
             { href: "pages/fraction-ufsvng.html", text: "УФСВНГ" },
             { href: "pages/fraction-mz.html", text: "ГК ССМП" },

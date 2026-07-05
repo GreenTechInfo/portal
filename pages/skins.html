@@ -48,10 +48,6 @@
                     <button id="nextSkinBtn" class="skin-nav-btn" aria-label="Следующий скин">
                         <i class="fas fa-chevron-right"></i>
                     </button>
-					
-					<button id="screenshotBtn" class="skin-nav-btn" style="background: #2a2a3e; padding: 0 20px;">
-						скрин
-					</button>
                 </div>
 
                 <div id="skin3dContainer" class="uniform-3d-container">
@@ -99,7 +95,7 @@
             { id: 2, name: "maccer", dff: "../models/skins/maccer.dff", txd: "../models/skins/maccer.txd", gender: "male" },
             { id: 3, name: "andre", dff: "../models/skins/andre.dff", txd: "../models/skins/andre.txd", gender: "male" },
             { id: 4, name: "bbthin", dff: "../models/skins/bbthin.dff", txd: "../models/skins/bbthin.txd", gender: "male" },
-            { id: 5, name: "bb", dff: "../models/skins/bb.dff", txd: "../models/skins/bb.txd", gender: "male", rotation: { x: 0, y: 0, z: Math.PI / 2}},
+            { id: 5, name: "bb", dff: "../models/skins/bb.dff", txd: "../models/skins/bb.txd", gender: "male", rotation: { x: 0, y: 0, z: 0}},
             { id: 6, name: "emmet", dff: "../models/skins/emmet.dff", txd: "../models/skins/emmet.txd", gender: "male" },
             { id: 7, name: "male01", dff: "../models/skins/male01.dff", txd: "../models/skins/male01.txd", gender: "male" },
             { id: 8, name: "janitor", dff: "../models/skins/janitor.dff", txd: "../models/skins/janitor.txd", gender: "male" },
@@ -177,7 +173,7 @@
             { id: 83, name: "vbmyelv", dff: "../models/skins/vbmyelv.dff", txd: "../models/skins/vbmyelv.txd", gender: "male" },
             { id: 84, name: "vimyelv", dff: "../models/skins/vimyelv.dff", txd: "../models/skins/vimyelv.txd", gender: "male" },
             { id: 85, name: "vwfypro", dff: "../models/skins/vwfypro.dff", txd: "../models/skins/vwfypro.txd", gender: "male" },
-            { id: 86, name: "ryder3", dff: "../models/skins/ryder3.dff", txd: "../models/skins/ryder3.txd", gender: "male", rotation: { x: 0, y: -Math.PI / 2, z: 0} },
+            { id: 86, name: "ryder3", dff: "../models/skins/ryder3.dff", txd: "../models/skins/ryder3.txd", gender: "male", rotation: { x: 0, y: 0, z: 0} },
             { id: 87, name: "vwfyst1", dff: "../models/skins/vwfyst1.dff", txd: "../models/skins/vwfyst1.txd", gender: "male" },
             { id: 88, name: "wfori", dff: "../models/skins/wfori.dff", txd: "../models/skins/wfori.txd", gender: "female" },
             { id: 89, name: "wfost", dff: "../models/skins/wfost.dff", txd: "../models/skins/wfost.txd", gender: "male" },
@@ -358,7 +354,7 @@
             { id: 268, name: "dwayne", dff: "../models/skins/dwayne.dff", txd: "../models/skins/dwayne.txd", gender: "male" },
             { id: 269, name: "smoke", dff: "../models/skins/smoke.dff", txd: "../models/skins/smoke.txd", gender: "female" },
             { id: 270, name: "sweet", dff: "../models/skins/sweet.dff", txd: "../models/skins/sweet.txd", gender: "male" },
-            { id: 271, name: "ryder", dff: "../models/skins/ryder.dff", txd: "../models/skins/ryder.txd", gender: "male", rotation: { x: 0, y: -Math.PI / 2, z: 0} },
+            { id: 271, name: "ryder", dff: "../models/skins/ryder.dff", txd: "../models/skins/ryder.txd", gender: "male", rotation: { x: 0, y: 0, z: 0} },
             { id: 272, name: "forelli", dff: "../models/skins/forelli.dff", txd: "../models/skins/forelli.txd", gender: "male" },
             { id: 273, name: "tbone", dff: "../models/skins/tbone.dff", txd: "../models/skins/tbone.txd", gender: "male" },
             { id: 274, name: "laemt1", dff: "../models/skins/laemt1.dff", txd: "../models/skins/laemt1.txd", gender: "male" },
@@ -429,8 +425,7 @@
 				await viewer.loadModel(skin.dff, skin.txd, ANIM_IFP_PATH);
 				if (viewer.currentModel) {
 					const pos = viewer.currentModel.position.clone();
-					
-					// Если у скина задан свой поворот - используем его
+
 					if (skin.rotation) {
 						viewer.currentModel.rotation.set(
 							skin.rotation.x || 0,
@@ -438,8 +433,7 @@
 							skin.rotation.z || 0
 						);
 					} else {
-						// Стандартный поворот для всех остальных
-						viewer.currentModel.rotation.set(-Math.PI / 2, 0, Math.PI );
+						viewer.currentModel.rotation.set(-Math.PI / 2, 0, -Math.PI / 2 );
 					}
 					
 					viewer.currentModel.position.copy(pos);
@@ -553,47 +547,6 @@
             });
             container.addEventListener('dblclick', resetCamera);
         });
-		
-		const screenshotBtn = document.getElementById('screenshotBtn');
-
-	screenshotBtn.addEventListener('click', async () => {
-		if (!viewer) return;
-		
-		const skin = SKIN_DATA[currentIndex];
-		const filename = `${skin.id}.png`;
-		
-		screenshotBtn.disabled = true;
-		screenshotBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Генерация...';
-		
-		try {
-			await viewer.captureAndDownloadScreenshot(filename);
-		} catch (error) {
-			console.error('Ошибка создания скриншота:', error);
-		} finally {
-			screenshotBtn.disabled = false;
-			screenshotBtn.innerHTML = '<i class="fas fa-camera"></i> Сделать скрин';
-		}
-	});
-	
-	window.getCameraPos = function() {
-    if (!viewer) {
-        console.log('Viewer не инициализирован');
-        return;
-    }
-    const pos = viewer.camera.position;
-    const target = viewer.controls.target;
-    console.log(`
-    📷 Положение камеры:
-    position: { x: ${pos.x.toFixed(3)}, y: ${pos.y.toFixed(3)}, z: ${pos.z.toFixed(3)} }
-    target:   { x: ${target.x.toFixed(3)}, y: ${target.y.toFixed(3)}, z: ${target.z.toFixed(3)} }
-    расстояние: ${pos.distanceTo(target).toFixed(3)}
-    `);
-    return {
-        position: { x: pos.x, y: pos.y, z: pos.z },
-        target: { x: target.x, y: target.y, z: target.z }
-    };
-};
-	
     </script>
 </body>
 </html>
