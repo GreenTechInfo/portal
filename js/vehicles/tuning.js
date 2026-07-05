@@ -1,6 +1,6 @@
 import { escapeHtml, getValue, getDealerDisplay, getNumericValue } from './helpers.js';
 import { addImageModal, initImageModalClicks } from './image-modal.js';
-import { getVehicleTuningData, TUNING_DATA } from '/data/tuning-data.js';
+import { getVehicleTuningData, TUNING_DATA } from '../../data/tuning-data.js';
 import { GTACharacterViewer } from '../gta-viewer.js';
 
 function highlightMatch(text, query) {
